@@ -136,12 +136,20 @@ specto_faker.init({ object_selector: "select"});
 
 ```
 
-### After changed content, rebuild faker
+### After changed content, rebuild selection clicks
 
 ```
 specto_faker.fakerSelection("#dropdown");
 
 //specto_faker.fakerSelection("#dropdown", after_change_function, before_change_function);
+
+```
+
+or just reinit
+
+```
+specto_faker.init({object_selector: "#dropdown"});
+//$("#dropdown").specto_faker();
 
 ```
 
