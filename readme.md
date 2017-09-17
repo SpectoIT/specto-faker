@@ -67,7 +67,7 @@ $(document).ready(function(){
 
 ```
     {
-		object_selector: ".faker", //element(s)
+		object_selector: ".faker", //element(s) - works only if called through "specto_faker.init()"
 		open_class: "open", //class for opened faker
 		init_class: "faker-init", //class for initiated faker
 		anim_class: "faker-animated", //class for animated faker
@@ -81,7 +81,7 @@ $(document).ready(function(){
 	}
 ```
 
-* Automaticaly builds html wrapper for <select> (original element is deleted, but copied)
+* Automaticaly builds html wrapper for ```<select>``` (original element is deleted, but copied)
 * Close every opened faker, if clicked outside of it.
 * Overrides click events, so you can reinit them without problems.
 * All classes are customizable only on the first init
@@ -145,8 +145,8 @@ specto_faker.fakerSelection("#dropdown");
 
 ### Get value
 
-If there is <select>, you can use js or jQuery to get current value. 
-<i>(This feature depends on browser support for changing and triggering change on <select> )</i>
+If there is ```<select>```, you can use js or jQuery to get current value. 
+<i>(This feature depends on browser support for changing and triggering change on ```<select>``` )</i>
 
 But you can also use (works for single faker)
 

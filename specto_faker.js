@@ -1,7 +1,7 @@
 var specto_faker = {
 	initiated: false,
 	config: {
-		object_selector: ".faker", //element(s)
+		object_selector: ".faker", //element(s) - works only if called through "specto_faker.init()"
 		open_class: "open", //class for opened faker
 		init_class: "faker-init", //class for initiated faker
 		anim_class: "faker-animated", //class for animated faker
