@@ -10,7 +10,7 @@ var specto_faker = {
 		animation_speed: 400,
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
 		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
-		before_change: null, //callback function before value has changed //e.g. function(newVal, jsEvent){ return true; }
+		before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value or 0
 		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){}
 	},
 	init: function(settings){
@@ -41,8 +41,8 @@ var specto_faker = {
 			});
 			//dropdown clicks
 			specto_faker.fakerSelection(fakr_elm, fakr_settings.on_change, fakr_settings.before_change);
-			//update first value
-			specto_faker.updateValue($(fakr_elm).find(".drop-selection > div").first(), "noclick");
+			//if empty, update first value
+			if(!$(fakr_elm).find(".drop-value").text()) specto_faker.updateValue($(fakr_elm).find(".drop-selection > div").first(), "noclick");
 			//faker settings
 			if(fakr_settings.animated) $(fakr_elm).addClass(specto_faker.config.anim_class);
 			$(fakr_elm).addClass(specto_faker.config.init_class);
@@ -126,7 +126,7 @@ var specto_faker = {
 	},
 	getTargetelement: function(that){ //if this is select tag, build proper html
 		if($(that).prop("tagName") === "SELECT"){
-			var fakr_html = $("<div class='faker'><div class='drop-value'></div><div class='drop-handle'>&nbsp;</div><div class='drop-selection'></div></div>");
+			var fakr_html = $("<div class='faker'><div class='drop-value'>"+ ($(that).attr("placeholder") || "") +"</div><div class='drop-handle'>&nbsp;</div><div class='drop-selection'></div></div>");
 			//fill options
 			$(that).find("option").each(function(){
 				var display = $(this).text();

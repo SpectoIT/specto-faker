@@ -78,7 +78,7 @@ $(document).ready(function(){
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){},
 		
 		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
-		before_change: null, //callback function before value has changed //e.g. function(newVal, jsEvent){ return newVal; },
+		before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value or 0
 		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){}
 	}
 ```
