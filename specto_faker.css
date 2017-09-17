@@ -1,0 +1,117 @@
+.faker {
+	cursor: default;
+	height: 78px;
+	position: relative;
+	width: 100%;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+.faker .drop-value {
+	cursor: pointer;
+	display: inline-block;
+	font-size: 14px;
+	left: 0;
+	line-height: 58px;
+	overflow: hidden;
+	padding-right: 45px;
+	position: absolute;
+	text-overflow: ellipsis;
+	top: 0;
+	vertical-align: top;
+	white-space: nowrap;
+	width: 100%;
+	z-index: 2;
+	font-weight: 400;
+	padding-left: 1em;
+	border: 1px solid #e6e7e8;
+	color: #949698;
+	font-size: 25px;
+	font-weight: 400;
+	line-height: 76px;
+}
+
+.faker .drop-value:hover, .faker.open .drop-value {color: #959698;}
+.faker .drop-value, .faker .drop-handle {height: 78px;}
+
+.faker .drop-handle {
+	cursor: pointer;
+	position: absolute;
+	right: 1px;
+	top: 1px;
+	width: 45px;
+	background-color: #fff;
+	height: 78px;
+	border-left: 1px solid #e6e7e8;
+}
+
+.faker .drop-handle:after {
+	content: "V";
+    height: 0;
+    position: absolute;
+    width: 0;
+    display: block;
+    top: 38%;
+    left: 40%;
+    font-family: sans-serif;
+    font-stretch: extra-expanded;
+    font-size: 16px;
+}
+
+.faker .drop-value:hover ~ .drop-handle:after,
+.faker.open .drop-value ~ .drop-handle:after {
+	border-color: #d77c52 transparent transparent;
+}
+
+.faker .drop-selection {
+	background-color: #fff;
+	cursor: pointer;
+	height: 0;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	top: 78px;
+	width: 100%;
+	z-index: 9;
+}
+
+.faker.open .drop-selection {
+	border-bottom: 1px solid #e7e7e7;
+	display: block;
+	height: auto;
+	max-height: 400px;
+	opacity: 1;
+	overflow: auto;
+}
+
+.faker .drop-selection div {
+	border-left: 1px solid #e7e7e7;
+	border-right: 1px solid #e7e7e7;
+	font-size: 14px;
+	height: 40px;
+	letter-spacing: 0.1em;
+	line-height: 40px;
+	overflow: hidden;
+	padding-left: 15px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 100%;
+}
+
+.faker .drop-selection div:last-of-type {
+	/*border-bottom: 1px solid #e7e7e7;*/
+}
+
+.faker .drop-selection div + div {}
+
+.faker .drop-selection div.active, 
+.faker .drop-selection div:hover {
+	background-color: #959698;
+	color: #fff;
+}
+
+.faker select {display: none;}

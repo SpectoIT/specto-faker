@@ -1,0 +1,137 @@
+var specto_faker = {
+	initiated: false,
+	config: {
+		object_selector: ".faker",
+		open_class: "open",
+		init_class: "faker-init",
+		anim_class: "faker-animated",
+		anim_progress_class: "faker-animating",
+		animated: false,
+		animation_speed: 400,
+		on_change: null,
+		before_change: null,
+	},
+	init: function(settings, elm){
+		//settings
+		var fakr_settings = $.extend({}, specto_faker.config, (settings && typeof settings === "object" ? settings : {}));
+		if(!specto_faker.initiated) { //only first time update classes
+			specto_faker.config.init_class = fakr_settings.init_class;
+			specto_faker.config.open_class = fakr_settings.open_class; 
+			specto_faker.config.anim_class = fakr_settings.anim_class; 
+			specto_faker.config.anim_progress_class = fakr_settings.anim_progress_class; 
+		}
+		
+		//add clicks
+		$(elm || fakr_settings.object_selector).each(function(){
+			//if this is select tag, build proper html
+			var fakr_elm = specto_faker.getTargetelement(this);
+			
+			//drop value & handle clicks
+			$(fakr_elm).find(".drop-value, .drop-handle").each(function(){ 
+				$(this).unbind().click(function(){
+					
+					var faker = $(this).parent();
+					if(specto_faker.isFakerOpen(faker)) specto_faker.animateFaker(faker);
+					else specto_faker.animateFaker(faker, "openme");
+				});
+			});
+			//dropdown clicks
+			specto_faker.fakerSelection(fakr_elm, fakr_settings.on_change, fakr_settings.before_change);
+			//update first value
+			specto_faker.updateValue($(fakr_elm).find(".drop-selection > div").first(), "noclick");
+			//faker settings
+			if(fakr_settings.animated) $(fakr_elm).addClass(specto_faker.config.anim_class);
+			$(fakr_elm).addClass(specto_faker.config.init_class);
+		});
+		
+		//document clicks - outside of opened fakers, close those fakers
+		if(!specto_faker.initiated) $(document).mouseup(function (e){
+			$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
+				if (!$(this).is(e.target) && $(this).has(e.target).length === 0) { 
+					specto_faker.animateFaker(this);
+				}
+			});
+		});
+		
+		specto_faker.config.animation_speed = fakr_settings.animation_speed; //update animation speed
+		specto_faker.initiated = true;
+	},
+	fakerSelection: function(fakr, after_change_fun, before_change_fun){ //dropdown clicks
+		$(fakr).find(".drop-selection div").each(function(){
+			$(this).unbind().click(function(e){
+				if(before_change_fun){ //run before change function
+					if(!before_change_fun(specto_faker.getSelectionValue(this), e)) { //prevent click
+						e.preventDefault();
+						e.stopPropagation();
+						return;
+					}
+				}
+				
+				specto_faker.updateValue(this); //update faker value
+				//if there is select present, update it's value. And trigger change event
+				var selects = $(this).parent().nextAll("select");
+				if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(this)).change();
+				if(after_change_fun) after_change_fun(specto_faker.getSelectionValue(this), e); //change function
+			});
+		});
+	},
+	updateValue: function(rel, dimm_click){ 
+		var v = $(rel).parent().prevAll(".drop-value").text($(rel).text()).attr("rel", $(rel).attr("rel")); 
+		if(!dimm_click) v.trigger("click");
+	},
+	getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); },
+	getSelectionValue: function(sel_item){ return $(sel_item).attr("rel"); },
+	isFakerOpen: function(fakr){ return $(fakr).hasClass(specto_faker.config.open_class); },
+	isFakerAnimated: function(fakr){ return $(fakr).hasClass(specto_faker.config.anim_class); },
+	animateFaker: function(fakr, openme){
+		//animated
+		if(specto_faker.isFakerAnimated(fakr)){ 
+			if($(fakr).hasClass(specto_faker.config.anim_progress_class)) return;
+			else $(fakr).addClass(specto_faker.config.anim_progress_class);
+		
+			if(openme){
+				var selection = $(fakr).find(".drop-selection").css({visibility: "hidden", opacity: "1"});
+				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().height() * $(selection).find("div").length +"px"}, {
+					duration: specto_faker.config.animation_speed,
+					always: function(){
+						$(selection).removeAttr("style");
+						$(fakr).addClass(specto_faker.config.open_class);
+						$(fakr).removeClass(specto_faker.config.anim_progress_class);
+					}
+				});
+			}
+			else {
+				var selection = $(fakr).find(".drop-selection");
+				
+				$(selection).css({"height": $(selection).height() +"px"}).animate({"height": "0px"}, {
+					duration: specto_faker.config.animation_speed,
+					always: function(){
+						$(selection).removeAttr("style");
+						$(fakr).removeClass(specto_faker.config.open_class).removeClass(specto_faker.config.anim_progress_class);
+					}
+				});
+			}
+		
+		}
+		else {
+			if(openme) $(fakr).addClass(specto_faker.config.open_class);
+			else $(fakr).removeClass(specto_faker.config.open_class);
+		}
+	},
+	getTargetelement: function(that){ //if this is select tag, build proper html
+		if($(that).prop("tagName") === "SELECT"){
+			var fakr_html = $("<div class='faker'><div class='drop-value'></div><div class='drop-handle'>&nbsp;</div><div class='drop-selection'></div></div>");
+			//fill options
+			$(that).find("option").each(function(){
+				var display = $(this).text();
+				$(fakr_html).find(".drop-selection").append("<div rel='"+ ($(this).attr("value") || display) +"'>"+display+"</div>");
+			});
+			$(fakr_html).append($(that).clone(true)); //append original select
+			$(that).after(fakr_html);
+			var final_target = $(that).next();
+			$(that).remove();
+			return final_target;
+		}
+		else return that;
+	},
+};
