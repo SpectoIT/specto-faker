@@ -155,8 +155,6 @@ But you can also use <i>(single element)</i>
 ```
 var faker_value = specto_faker.getFakerValue("#fakerId");
 
-//specto_faker.getFakerValue("#fakerId", after_change_function, before_change_function);
-
 ```
 
 ## TODO

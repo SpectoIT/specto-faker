@@ -146,5 +146,5 @@ var specto_faker = {
 (function( $ ){
 	$.fn.specto_faker = function(settings) {
 		return specto_faker.init($.extend(settings, {object_selector: this}));
-    }; 
+	}; 
 })( jQuery );
