@@ -136,3 +136,11 @@ var specto_faker = {
 		else return that;
 	},
 };
+
+//jquery wrapper
+(function( $ ){
+   $.fn.specto_faker = function(settings) {
+		specto_faker.init($.extend(settings, {object_selector: this}));
+		return this;
+   }; 
+})( jQuery );

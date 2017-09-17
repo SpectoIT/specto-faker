@@ -30,11 +30,6 @@
 						<div rel="1">Porsche Kozjansko</div>
 						<div rel="2">Porsche neki</div>
 					</div>
-					<!-- <select id="servis-selector-val" name="servis-selector">
-						<option value="0">Porsche Verovškova</option>
-						<option value="1">Porsche Kozjansko</option>
-						<option value="2">Porsche neki</option>
-					</select> -->
 				</div>
 				
 				
@@ -67,22 +62,28 @@
 	</div>
 	
 	<script>
-		function bla(a,b){
+		function onchange_callback(newVal, e){
 			console.log("bla");
-			console.log(a);
-			console.log(b);
+			console.log(newVal);
+			console.log(e);
 		};
 		$(document).ready(function(){
-			$("#test").change(function(){
+			
+			//$(".faker").specto_faker({animated: true, on_change: bla});
+			specto_faker.init({on_change: onchange_callback});
+			specto_faker.init({animated: true, object_selector: "#test", before_change: function(newVal, e){
+				if(newVal === "b") return false;
+				else return true;
+			}});
+			
+			/*$("#test").change(function(){
 				console.log("onchange_select");
 			});
 			
-			specto_faker.init({animated: true, on_change: bla});
-			specto_faker.init({animated: true, object_selector: "#test"});
 			
 			$("#aaa").click(function(){
 				console.log($("#servis-selector-val").val());
-			});
+			});*/
 		});
 	</script>
 </body>
