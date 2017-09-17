@@ -1,17 +1,18 @@
 var specto_faker = {
 	initiated: false,
 	config: {
-		object_selector: ".faker",
-		open_class: "open",
-		init_class: "faker-init",
-		anim_class: "faker-animated",
-		anim_progress_class: "faker-animating",
-		animated: false,
+		object_selector: ".faker", //element(s)
+		open_class: "open", //class for opened faker
+		init_class: "faker-init", //class for initiated faker
+		anim_class: "faker-animated", //class for animated faker
+		anim_progress_class: "faker-animating", //class while animation in progress
+		animated: false, //is faker animated
 		animation_speed: 400,
-		on_change: null,
-		before_change: null,
+		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){},
+		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
+		before_change: null, //callback function before value has changed //e.g. function(newVal, jsEvent){ return true; },
 	},
-	init: function(settings, elm){
+	init: function(settings){
 		//settings
 		var fakr_settings = $.extend({}, specto_faker.config, (settings && typeof settings === "object" ? settings : {}));
 		if(!specto_faker.initiated) { //only first time update classes
@@ -22,7 +23,7 @@ var specto_faker = {
 		}
 		
 		//add clicks
-		$(elm || fakr_settings.object_selector).each(function(){
+		$(fakr_settings.object_selector).each(function(){
 			//if this is select tag, build proper html
 			var fakr_elm = specto_faker.getTargetelement(this);
 			

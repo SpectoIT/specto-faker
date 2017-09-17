@@ -11,9 +11,7 @@
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<link href="specto_faker.css" rel="stylesheet" type="text/css">
 
-    <script src="https://code.jquery.com/jquery-2.2.4.js"
-		integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI="
-		crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="specto_faker.js"></script>
 </head>
 
@@ -80,7 +78,7 @@
 			});
 			
 			specto_faker.init({animated: true, on_change: bla});
-			specto_faker.init({animated: true}, "#test");
+			specto_faker.init({animated: true, object_selector: "#test"});
 			
 			$("#aaa").click(function(){
 				console.log($("#servis-selector-val").val());
