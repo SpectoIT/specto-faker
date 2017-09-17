@@ -8,13 +8,15 @@ var specto_faker = {
 		anim_progress_class: "faker-animating", //class while animation in progress
 		animated: false, //is faker animated
 		animation_speed: 400,
-		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){},
+		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
 		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
-		before_change: null, //callback function before value has changed //e.g. function(newVal, jsEvent){ return true; },
+		before_change: null, //callback function before value has changed //e.g. function(newVal, jsEvent){ return true; }
+		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){}
 	},
 	init: function(settings){
 		//settings
 		var fakr_settings = $.extend({}, specto_faker.config, (settings && typeof settings === "object" ? settings : {}));
+		var faker_elms = [];
 		if(!specto_faker.initiated) { //only first time update classes
 			specto_faker.config.init_class = fakr_settings.init_class;
 			specto_faker.config.open_class = fakr_settings.open_class; 
@@ -26,6 +28,7 @@ var specto_faker = {
 		$(fakr_settings.object_selector).each(function(){
 			//if this is select tag, build proper html
 			var fakr_elm = specto_faker.getTargetelement(this);
+			faker_elms.push(fakr_elm);
 			
 			//drop value & handle clicks
 			$(fakr_elm).find(".drop-value, .drop-handle").each(function(){ 
@@ -56,6 +59,8 @@ var specto_faker = {
 		
 		specto_faker.config.animation_speed = fakr_settings.animation_speed; //update animation speed
 		specto_faker.initiated = true;
+		if(fakr_settings.on_init) fakr_settings.on_init(faker_elms); //init callback
+		return faker_elms; //return all fakers
 	},
 	fakerSelection: function(fakr, after_change_fun, before_change_fun){ //dropdown clicks
 		$(fakr).find(".drop-selection div").each(function(){
@@ -139,8 +144,7 @@ var specto_faker = {
 
 //jquery wrapper
 (function( $ ){
-   $.fn.specto_faker = function(settings) {
-		specto_faker.init($.extend(settings, {object_selector: this}));
-		return this;
-   }; 
+	$.fn.specto_faker = function(settings) {
+		return specto_faker.init($.extend(settings, {object_selector: this}));
+    }; 
 })( jQuery );

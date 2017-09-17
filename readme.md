@@ -8,7 +8,7 @@ index.html
 ### HTML
 
 ```
-	<select id="test" name="test">
+	<select id="test" name="test" class="faker">
 		<option value="a">Šport</option>
 		<option value="b">Zabava</option>
 		<option value="c">Delo</option>
@@ -45,7 +45,8 @@ Use the plugin as follows:
 ```
 $(document).ready(function(){
 	specto_faker.init(); 
-	//or $(".faker").specto_faker();
+	//or 
+	//$(".faker").specto_faker();
 });
 
 ```
@@ -63,7 +64,7 @@ $(document).ready(function(){
 ## Notes
 
 * Requires jQuery (Tested on 2.2.4).
-* Customizable, with this options:
+* Customizable with options:
 
 ```
     {
@@ -78,11 +79,12 @@ $(document).ready(function(){
 		
 		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
 		before_change: null, //callback function before value has changed //e.g. function(newVal, jsEvent){ return newVal; },
+		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){}
 	}
 ```
 
 * Automaticaly builds html wrapper for ```<select>``` (original element is deleted, but copied)
-* Close every opened faker, if clicked outside of it.
+* Closes every opened faker, if clicked outside of it.
 * Overrides click events, so you can reinit them without problems.
 * All classes are customizable only on the first init
 
@@ -90,15 +92,15 @@ $(document).ready(function(){
 ## CUSTOM USE 
 
 
-### CUSTOM ELEMENT WITH ANIMATION
+### Custom element with animation
 
 ```
 specto_faker.init({animated: true, object_selector: "#testId"});
-//$(".faker").specto_faker({animated: true, object_selector: "#testId"});
+//$("#testId").specto_faker({animated: true});
 
 ```
 
-### CUSTOM CALLBACKS
+### Custom callbacks
 
 ```
 specto_faker.init({
@@ -124,7 +126,7 @@ $(".faker").specto_faker({
 
 ```
 
-### SELECT
+### Select
 
 ```
 $("select").change(function(newVal, jsEvent){ console.log("changed into"+ newVal); }); 
@@ -134,7 +136,7 @@ specto_faker.init({ object_selector: "select"});
 
 ```
 
-### AFTER CHANGED CONTENT, REBUILD FAKER
+### After changed content, rebuild faker
 
 ```
 specto_faker.fakerSelection("#dropdown");
@@ -146,14 +148,14 @@ specto_faker.fakerSelection("#dropdown");
 ### Get value
 
 If there is ```<select>```, you can use js or jQuery to get current value. 
-<i>(This feature depends on browser support for changing and triggering change on ```<select>``` )</i>
+<i>(This feature depends on browser support for changing and triggering change() on ```<select>``` )</i>
 
-But you can also use (works for single faker)
+But you can also use <i>(single element)</i>
 
 ```
-var faker_value = specto_faker.fakerSelection("#faker");
+var faker_value = specto_faker.getFakerValue("#fakerId");
 
-//specto_faker.fakerSelection("#dropdown", after_change_function, before_change_function);
+//specto_faker.getFakerValue("#fakerId", after_change_function, before_change_function);
 
 ```
 
