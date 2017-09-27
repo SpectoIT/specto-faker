@@ -170,3 +170,5 @@ var faker_value = specto_faker.getFakerValue("#fakerId");
 * index.html
 
 * Function to change content based on array of objects and make clicks
+
+* Keyboard support
