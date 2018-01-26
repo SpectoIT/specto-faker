@@ -172,3 +172,5 @@ var faker_value = specto_faker.getFakerValue("#fakerId");
 * Function to change content based on array of objects and make clicks
 
 * Keyboard support
+
+* Hide selected option from dropdown (that it not looks like duplication) + make optionable
