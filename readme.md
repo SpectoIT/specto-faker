@@ -85,6 +85,7 @@ $(document).ready(function(){
 ```
 
 * Automaticaly builds html wrapper for ```<select>``` (original element is deleted, but copied)
+* If builded from select, it's "placeholder" is set as initial value (if not present, first option is selected)
 * Closes every opened faker, if clicked outside of it.
 * Overrides click events, so you can reinit them without problems.
 * All classes are customizable only on the first init

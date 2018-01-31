@@ -1,0 +1,28 @@
+{
+  "name": "specto_faker",
+  "description": "Specto jQuery plugin for customizable / styleable select substitution.",
+  "main": [
+    "specto_faker.js",
+    "specto_faker.css"
+  ],
+  "dependencies": {
+    "jquery": "~2.2",
+  },
+  "devDependencies": {
+  },
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "specto",
+    "faker",
+    "specto_faker",
+    "select"
+  ],
+  "authors": [
+    "Specto <info@specto.si>"
+  ],
+  "license": "MIT",
+  "ignore": [],
+  "private": true
+}
