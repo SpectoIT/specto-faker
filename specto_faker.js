@@ -6,6 +6,7 @@ var specto_faker = {
 		init_class: "faker-init", //class for initiated faker
 		anim_class: "faker-animated", //class for animated faker
 		anim_progress_class: "faker-animating", //class while animation in progress
+		selected_val_class: "active", //class of selected option - default css has display:none
 		animated: false, //is faker animated
 		animation_speed: 400,
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
@@ -22,6 +23,7 @@ var specto_faker = {
 			specto_faker.config.open_class = fakr_settings.open_class; 
 			specto_faker.config.anim_class = fakr_settings.anim_class; 
 			specto_faker.config.anim_progress_class = fakr_settings.anim_progress_class; 
+			specto_faker.config.selected_val_class = fakr_settings.selected_val_class; 
 		}
 		
 		//add clicks
@@ -72,8 +74,12 @@ var specto_faker = {
 						return;
 					}
 				}
+				//find previous selected value
+				$(this).siblings().filter(function(){ return $(this).hasClass(specto_faker.config.selected_val_class); }).each(function(){ $(this).removeClass(specto_faker.config.selected_val_class); });
 				
 				specto_faker.updateValue(this); //update faker value
+				var self = this;
+				setTimeout(function(){ $(self).addClass(specto_faker.config.selected_val_class); }, (specto_faker.isFakerAnimated(fakr) ? specto_faker.config.animation_speed : 0)); //add selected class
 				//if there is select present, update it's value. And trigger change event
 				var selects = $(this).parent().nextAll("select");
 				if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(this)).change();

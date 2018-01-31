@@ -73,6 +73,7 @@ $(document).ready(function(){
 		init_class: "faker-init", //class for initiated faker
 		anim_class: "faker-animated", //class for animated faker
 		anim_progress_class: "faker-animating", //class while animation in progress
+		selected_val_class: "active", //class of selected option - default css has display:none
 		animated: false, //is faker animated
 		animation_speed: 400, //global value
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){},
@@ -164,6 +165,27 @@ But you can also use <i>(single element)</i>
 var faker_value = specto_faker.getFakerValue("#fakerId");
 
 ```
+
+### Multiple fakers, some custom
+
+Init multiple fakers and for specific fakers, set custom onchange function
+
+```
+//init all
+specto_faker.init({
+	animated: true
+});
+//custom faker special handling for postal number
+specto_faker.init({
+	animated: true,
+	object_selector: "#postal_nr.faker, #postal_nr2.faker",
+	on_change: function(newVal, e){
+		$(e.target).parentsUntil(".card-form-wrap").last().find("input[name='city']").val($(e.target).parent().next().find("option").filter(function(){ return $(this).text() === newVal; }).attr("name"));
+	},
+});
+
+```
+
 
 ## TODO
 

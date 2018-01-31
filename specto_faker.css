@@ -113,5 +113,6 @@
 	background-color: #959698;
 	color: #fff;
 }
+.faker .drop-selection div.active { display: none; }
 
 .faker select {display: none;}
