@@ -103,7 +103,7 @@ var specto_faker = {
 		
 			if(openme){
 				var selection = $(fakr).find(".drop-selection").css({visibility: "hidden", opacity: "1"});
-				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().height() * $(selection).find("div").length +"px"}, {
+				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().height() * $(selection).find("div:not(."+ specto_faker.config.selected_val_class +")").length +"px"}, {
 					duration: specto_faker.config.animation_speed,
 					always: function(){
 						$(selection).removeAttr("style");
