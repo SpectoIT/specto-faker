@@ -53,6 +53,8 @@ $(document).ready(function(){
 
 ## Installation
 
+###Manual
+
 ```
 <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 <link href="specto_faker.css" rel="stylesheet" type="text/css">
@@ -60,6 +62,17 @@ $(document).ready(function(){
 
 ```
 
+###Bower
+
+```
+
+"dependencies": {
+	"specto_sharer": "https://code.specto.si/akrasevec/specto_sharer.git"
+	//or with version
+	// "specto_sharer": "https://code.specto.si/akrasevec/specto_sharer.git#v2.03"
+}
+
+```
 
 ## Notes
 
