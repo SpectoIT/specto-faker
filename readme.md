@@ -65,7 +65,6 @@ $(document).ready(function(){
 ### Bower
 
 ```
-
 "dependencies": {
 	"specto_faker": "https://code.specto.si/akrasevec/specto-faker.git",
 	//or with version
@@ -102,6 +101,7 @@ $(document).ready(function(){
 * Closes every opened faker, if clicked outside of it.
 * Overrides click events, so you can reinit them without problems.
 * All classes are customizable only on the first init
+* Hide selected option from dropdown - customizable class with "selected_val_class"
 
 
 ## CUSTOM USE 
@@ -192,7 +192,7 @@ specto_faker.init({
 //custom faker special handling for postal number
 specto_faker.init({
 	animated: true,
-	object_selector: "#postal_nr.faker, #postal_nr2.faker",
+	object_selector: "#postal_nr, #postal_nr2",
 	on_change: function(newVal, e){
 		$(e.target).parentsUntil(".card-form-wrap").last().find("input[name='city']").val($(e.target).parent().next().find("option").filter(function(){ return $(this).text() === newVal; }).attr("name"));
 	},
@@ -208,5 +208,3 @@ specto_faker.init({
 * Function to change content based on array of objects and make clicks
 
 * Keyboard support
-
-* Hide selected option from dropdown (that it not looks like duplication) + make optionable
