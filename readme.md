@@ -67,9 +67,9 @@ $(document).ready(function(){
 ```
 
 "dependencies": {
-	"specto_sharer": "https://code.specto.si/akrasevec/specto_sharer.git"
+	"specto_faker": "https://code.specto.si/akrasevec/specto-faker.git",
 	//or with version
-	// "specto_sharer": "https://code.specto.si/akrasevec/specto_sharer.git#v2.03"
+	// "specto_faker": "https://code.specto.si/akrasevec/specto-faker.git#v1.05",
 }
 
 ```
