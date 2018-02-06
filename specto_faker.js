@@ -7,6 +7,7 @@ var specto_faker = {
 		anim_class: "faker-animated", //class for animated faker
 		anim_progress_class: "faker-animating", //class while animation in progress
 		selected_val_class: "active", //class of selected option - default css has display:none
+		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		animated: false, //is faker animated
 		animation_speed: 400,
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
@@ -24,6 +25,7 @@ var specto_faker = {
 			specto_faker.config.anim_class = fakr_settings.anim_class; 
 			specto_faker.config.anim_progress_class = fakr_settings.anim_progress_class; 
 			specto_faker.config.selected_val_class = fakr_settings.selected_val_class; 
+			specto_faker.config.disabled_val_class = fakr_settings.disabled_val_class; 
 		}
 		
 		//add clicks
@@ -67,6 +69,8 @@ var specto_faker = {
 	fakerSelection: function(fakr, after_change_fun, before_change_fun){ //dropdown clicks
 		$(fakr).find(".drop-selection div").each(function(){
 			$(this).unbind().click(function(e){
+				if(typeof $(this).attr("disabled") === "string") return; //prevent disabled options
+				
 				if(before_change_fun){ //run before change function
 					if(!before_change_fun(specto_faker.getSelectionValue(this), e)) { //prevent click
 						e.preventDefault();
@@ -84,6 +88,7 @@ var specto_faker = {
 				var selects = $(this).parent().nextAll("select");
 				if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(this)).change();
 				if(after_change_fun) after_change_fun(specto_faker.getSelectionValue(this), e); //change function
+				
 			});
 		});
 	},
@@ -132,7 +137,9 @@ var specto_faker = {
 	},
 	getTargetelement: function(that){ //if this is select tag, build proper html
 		if($(that).prop("tagName") === "SELECT"){
-			var fakr_html = $("<div class='faker'><div class='drop-value'>"+ ($(that).attr("placeholder") || "") +"</div><div class='drop-handle'>&nbsp;</div><div class='drop-selection'></div></div>");
+			var placeholder = $(that).attr("placeholder");
+			var fakr_html = $("<div class='faker'><div class='drop-value'>"+ (placeholder || "") +"</div><div class='drop-handle'>&nbsp;</div><div class='drop-selection'></div></div>");
+			if(placeholder) $(fakr_html).find(".drop-selection").append("<div rel='' disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'>"+ placeholder +"</div>"); //placeholder - add disabled value
 			//fill options
 			$(that).find("option").each(function(){
 				var display = $(this).text();

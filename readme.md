@@ -86,6 +86,7 @@ $(document).ready(function(){
 		anim_class: "faker-animated", //class for animated faker
 		anim_progress_class: "faker-animating", //class while animation in progress
 		selected_val_class: "active", //class of selected option - default css has display:none
+		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		animated: false, //is faker animated
 		animation_speed: 400, //global value
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){},
@@ -97,11 +98,12 @@ $(document).ready(function(){
 ```
 
 * Automaticaly builds html wrapper for ```<select>``` (original element is deleted, but copied)
-* If builded from select, it's "placeholder" is set as initial value (if not present, first option is selected)
 * Closes every opened faker, if clicked outside of it.
 * Overrides click events, so you can reinit them without problems.
 * All classes are customizable only on the first init
 * Hide selected option from dropdown - customizable class with "selected_val_class"
+* If builded from select, it's "placeholder" is set as initial value (if not present, first option is selected)
+* Prevents clicks for disabled options, example: ```<div rel='rel-disabled' class='' disabled='disabled'>placeholder</div>```
 
 
 ## CUSTOM USE 
