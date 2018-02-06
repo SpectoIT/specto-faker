@@ -60,6 +60,8 @@
 			<option value="b">Zabava</option>
 			<option value="c">Delo</option>
 		</select>
+		
+		<button class="btn" id="upd">Update zanimanje</button>
 	</div>
 	
 	<script>
@@ -85,6 +87,14 @@
 			$("#aaa").click(function(){
 				console.log($("#servis-selector-val").val());
 			});*/
+			
+			$("#upd").click(function(){
+				console.log("bla");
+				specto_faker.updateOptions($("#test").parent(), [{code: "1", xname: "Updejt"},{code: "2", xname: "Updejt 2"},{code: "3", xname: "Updejt 3"}], "code", "xname", {animated: true, object_selector: "#test", before_change: function(newVal, e){
+					if(newVal === "3") return false;
+					else return true;
+				}});
+			});
 		});
 	</script>
 </body>

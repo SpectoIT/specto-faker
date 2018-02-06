@@ -146,6 +146,21 @@ var specto_faker = {
 		}
 		else return that;
 	},
+	updateOptions: function(fakr, new_options, rel_name, name_name, settings){
+		
+		$(fakr).each(function(){
+			$(this).find(".drop-value").each(function(){ $(this).text(""); });
+			$(this).find(".drop-selection").each(function(){ 
+				$(this).empty(); 
+				var ins = "";
+				$.each(new_options, function(ind, item){
+					ins += "<div rel='"+ item[rel_name || "rel"] +"'>"+ item[name_name || "name"] +"</div>";
+				});
+				$(this).append(ins);
+			});
+			$(this).specto_faker(settings); //init 
+		});
+	},
 };
 
 //jquery wrapper

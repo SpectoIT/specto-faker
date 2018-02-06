@@ -200,11 +200,33 @@ specto_faker.init({
 
 ```
 
+### Update faker options and reinit faker
+
+
+```
+//init
+specto_faker.init({
+	animated: true,
+	object_selector: "#faker_elm"
+});
+
+//update -> function(fakr, new_options, rel_name, name_name, settings)
+specto_faker.updateOptions("#faker_elm", [{
+	code: "value1",
+	name: "Prikaz1"
+},{
+	code: "value2",
+	name: "Prikaz2"
+},{
+	code: "value3",
+	name: "Prikaz3"
+}], "code", "name", {animated: true});
+
+```
+
 
 ## TODO
 
 * index.html
-
-* Function to change content based on array of objects and make clicks
 
 * Keyboard support
