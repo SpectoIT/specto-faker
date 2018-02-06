@@ -143,7 +143,7 @@ var specto_faker = {
 			//fill options
 			$(that).find("option").each(function(){
 				var display = $(this).text();
-				$(fakr_html).find(".drop-selection").append("<div rel='"+ ($(this).attr("value") || display) +"'>"+display+"</div>");
+				$(fakr_html).find(".drop-selection").append("<div rel='"+ ($(this).attr("value") || display) +"'"+ (typeof $(this).attr("disabled") === "string" ? " disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'" : "") +">"+display+"</div>");
 			});
 			$(fakr_html).append($(that).clone(true)); //append original select
 			$(that).after(fakr_html);
