@@ -10,6 +10,8 @@ var specto_faker = {
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		animated: false, //is faker animated
 		animation_speed: 400,
+		count_selected: false, //valid only for animated faker, are selected_val_class counted for animation
+		count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
 		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
 		before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value or 0
@@ -26,6 +28,8 @@ var specto_faker = {
 			specto_faker.config.anim_progress_class = fakr_settings.anim_progress_class; 
 			specto_faker.config.selected_val_class = fakr_settings.selected_val_class; 
 			specto_faker.config.disabled_val_class = fakr_settings.disabled_val_class; 
+			specto_faker.config.count_selected = fakr_settings.count_selected; 
+			specto_faker.config.count_disables = fakr_settings.count_disables; 
 		}
 		
 		//add clicks
@@ -108,7 +112,12 @@ var specto_faker = {
 		
 			if(openme){
 				var selection = $(fakr).find(".drop-selection").css({visibility: "hidden", opacity: "1"});
-				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().height() * $(selection).find("div:not(."+ specto_faker.config.selected_val_class +")").length +"px"}, {
+				//final height 
+				var finder_css = "div";
+				if(specto_faker.config.count_selected) finder_css += ":not(."+ specto_faker.config.selected_val_class +")";
+				if(specto_faker.config.count_disables) finder_css += ":not(."+ specto_faker.config.disabled_val_class +")";
+				
+				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().height() * $(selection).find(finder_css).length +"px"}, {
 					duration: specto_faker.config.animation_speed,
 					always: function(){
 						$(selection).removeAttr("style");
@@ -137,6 +146,8 @@ var specto_faker = {
 	},
 	getTargetelement: function(that){ //if this is select tag, build proper html
 		if($(that).prop("tagName") === "SELECT"){
+			if($(that).parent().hasClass(specto_faker.config.init_class)) return $(that).parent(); //if select is already parsed, return faker elm
+			
 			var placeholder = $(that).attr("placeholder");
 			var fakr_html = $("<div class='faker'><div class='drop-value'>"+ (placeholder || "") +"</div><div class='drop-handle'>&nbsp;</div><div class='drop-selection'></div></div>");
 			if(placeholder) $(fakr_html).find(".drop-selection").append("<div rel='' disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'>"+ placeholder +"</div>"); //placeholder - add disabled value

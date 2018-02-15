@@ -89,6 +89,8 @@ $(document).ready(function(){
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		animated: false, //is faker animated
 		animation_speed: 400, //global value
+		count_selected: false, //valid only for animated faker, are selected_val_class counted for animation
+		count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){},
 		
 		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
@@ -100,7 +102,7 @@ $(document).ready(function(){
 * Automaticaly builds html wrapper for ```<select>``` (original element is deleted, but copied)
 * Closes every opened faker, if clicked outside of it.
 * Overrides click events, so you can reinit them without problems.
-* All classes are customizable only on the first init
+* All classes and counters are customizable only on the first init
 * Hide selected option from dropdown - customizable class with "selected_val_class"
 * If builded from select, it's "placeholder" is set as initial value (if not present, first option is selected)
 * Prevents clicks for disabled options, example: ```<div rel='rel-disabled' class='' disabled='disabled'>placeholder</div>```
