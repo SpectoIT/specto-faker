@@ -50,7 +50,11 @@ var specto_faker = {
 			//dropdown clicks
 			specto_faker.fakerSelection(fakr_elm, fakr_settings.on_change, fakr_settings.before_change);
 			//if empty, update first value
-			if(!$(fakr_elm).find(".drop-value").text()) specto_faker.updateValue($(fakr_elm).find(".drop-selection > div").first(), "noclick");
+			if(!$(fakr_elm).find(".drop-value").text()) {
+				//has faker selected value?
+				if($(fakr_elm).find(".drop-selection > div[selected]").length) specto_faker.updateValue($(fakr_elm).find(".drop-selection > div[selected]").first(), "noclick");
+				else specto_faker.updateValue($(fakr_elm).find(".drop-selection > div").first(), "noclick");
+			}
 			//faker settings
 			if(fakr_settings.animated) $(fakr_elm).addClass(specto_faker.config.anim_class);
 			$(fakr_elm).addClass(specto_faker.config.init_class);
@@ -154,7 +158,7 @@ var specto_faker = {
 			//fill options
 			$(that).find("option").each(function(){
 				var display = $(this).text();
-				$(fakr_html).find(".drop-selection").append("<div rel='"+ ($(this).attr("value") || display) +"'"+ (typeof $(this).attr("disabled") === "string" ? " disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'" : "") +">"+display+"</div>");
+				$(fakr_html).find(".drop-selection").append("<div rel='"+ ($(this).attr("value") || display) +"'"+ (typeof $(this).attr("disabled") === "string" ? " disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'" : "") + (typeof $(this).attr("selected") === "string" ? " selected='selected'" : "") +">"+display+"</div>");
 			});
 			$(fakr_html).append($(that).clone(true)); //append original select
 			$(that).after(fakr_html);
