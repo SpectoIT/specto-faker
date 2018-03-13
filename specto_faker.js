@@ -52,7 +52,7 @@ var specto_faker = {
 			//if empty, update first value
 			if(!$(fakr_elm).find(".drop-value").text()) {
 				//has faker selected value?
-				if($(fakr_elm).find(".drop-selection > div[selected]").length) specto_faker.updateValue($(fakr_elm).find(".drop-selection > div[selected]").first(), "noclick");
+				if($(fakr_elm).find(".drop-selection > div[selected]").length) specto_faker.updateValue($(fakr_elm).find(".drop-selection > div[selected]").first().addClass(fakr_settings.selected_val_class), "noclick");
 				else specto_faker.updateValue($(fakr_elm).find(".drop-selection > div").first(), "noclick");
 			}
 			//faker settings
