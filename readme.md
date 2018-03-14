@@ -84,6 +84,7 @@ $(document).ready(function(){
 		open_class: "open", //class for opened faker
 		init_class: "faker-init", //class for initiated faker
 		anim_class: "faker-animated", //class for animated faker
+		focused_class: "faker-focused", //class for focused faker
 		anim_progress_class: "faker-animating", //class while animation in progress
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
@@ -104,8 +105,9 @@ $(document).ready(function(){
 * Overrides click events, so you can reinit them without problems.
 * All classes and counters are customizable only on the first init
 * Hide selected option from dropdown - customizable class with "selected_val_class"
-* If builded from select, it's "placeholder" is set as initial value (if not present, first option is selected)
+* If builded from select, it's "placeholder" is set as initial value (if not present, first option is selected). But if any option is selected, placeholder is ignored and selected value is set
 * Prevents clicks for disabled options, example: ```<div rel='rel-disabled' class='' disabled='disabled'>placeholder</div>```
+* Adds focused class on select focus (for swithing with tab)
 
 
 ## CUSTOM USE 
