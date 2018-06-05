@@ -57,8 +57,10 @@
 		
 		<select id="test" name="test" placeholder="Področje zanimanja">
 			<option value="a">Šport</option>
-			<option value="b">Zabava</option>
+			<option value="b" selected="selected">Zabava</option>
 			<option value="c">Delo</option>
+			<option value="d">Delo2</option>
+			<option value="e">Delo3</option>
 		</select>
 		
 		<button class="btn" id="upd">Update zanimanje</button>
@@ -73,8 +75,8 @@
 		$(document).ready(function(){
 			
 			//$(".faker").specto_faker({animated: true, on_change: bla});
-			specto_faker.init({on_change: onchange_callback});
-			specto_faker.init({animated: true, object_selector: "#test", before_change: function(newVal, e){
+			specto_faker.init({on_change: onchange_callback, key_events: true});
+			specto_faker.init({animated: true, key_events: true, object_selector: "#test", before_change: function(newVal, e){
 				if(newVal === "b") return false;
 				else return true;
 			}});

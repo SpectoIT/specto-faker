@@ -84,19 +84,19 @@ $(document).ready(function(){
 		open_class: "open", //class for opened faker
 		init_class: "faker-init", //class for initiated faker
 		anim_class: "faker-animated", //class for animated faker
-		focused_class: "faker-focused", //class for focused faker
 		anim_progress_class: "faker-animating", //class while animation in progress
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
+		helper_val_class: "rel-helper", //class of helper option - to select with keyboard
 		animated: false, //is faker animated
-		animation_speed: 400, //global value
+		animation_speed: 400,
 		count_selected: false, //valid only for animated faker, are selected_val_class counted for animation
 		count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
-		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){},
-		
+		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
 		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
 		before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value or 0
-		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){}
+		key_events: false, //do you want keyEvents to work - Global setting which works only for the first specto_faker.init !
+		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
 	}
 ```
 
@@ -236,3 +236,5 @@ specto_faker.updateOptions("#faker_elm", [{
 * index.html
 
 * Keyboard support
+
+* function for update faker value - with select if present
