@@ -6,6 +6,7 @@ var specto_faker = {
 		init_class: "faker-init", //class for initiated faker
 		anim_class: "faker-animated", //class for animated faker
 		anim_progress_class: "faker-animating", //class while animation in progress
+		focused_class: "faker-focused", //class for focused faker
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		helper_val_class: "rel-helper", //class of helper option - to select with keyboard
@@ -28,6 +29,7 @@ var specto_faker = {
 			specto_faker.config.open_class = fakr_settings.open_class; 
 			specto_faker.config.anim_class = fakr_settings.anim_class; 
 			specto_faker.config.anim_progress_class = fakr_settings.anim_progress_class; 
+			specto_faker.config.focused_class = fakr_settings.focused_class; 
 			specto_faker.config.selected_val_class = fakr_settings.selected_val_class; 
 			specto_faker.config.disabled_val_class = fakr_settings.disabled_val_class; 
 			specto_faker.config.helper_val_class = fakr_settings.helper_val_class; 
@@ -57,6 +59,21 @@ var specto_faker = {
 				//has faker selected value?
 				if($(fakr_elm).find(".drop-selection > div[selected]").length) specto_faker.updateValue($(fakr_elm).find(".drop-selection > div[selected]").first().addClass(specto_faker.config.selected_val_class), "noclick");
 				else specto_faker.updateValue($(fakr_elm).find(".drop-selection > div").first(), "noclick");
+			}
+			
+			//on focus select, add focused class to faker
+			if($(fakr_elm).find("select").length > 0){
+				$(fakr_elm).find("select").each(function(){
+					$(this).focus(function(){
+						//close all opened fakers
+						$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
+							specto_faker.animateFaker(this);
+						});
+						specto_faker.animateFaker($(this).parent().addClass(specto_faker.config.focused_class), "openme"); //open and add focused class
+					}).blur(function(){
+						$(this).parent().removeClass(specto_faker.config.focused_class);
+					});
+				});
 			}
 			
 			//faker settings
