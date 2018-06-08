@@ -108,6 +108,7 @@ $(document).ready(function(){
 * If builded from select, it's "placeholder" is set as initial value (if not present, first option is selected). But if any option is selected, placeholder is ignored and selected value is set
 * Prevents clicks for disabled options, example: ```<div rel='rel-disabled' class='' disabled='disabled'>placeholder</div>```
 * Adds focused class on select focus (for swithing with tab)
+* Adds keyevents to simulate select
 
 
 ## CUSTOM USE 
