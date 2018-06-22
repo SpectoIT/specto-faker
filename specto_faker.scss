@@ -1,0 +1,153 @@
+.faker {
+	cursor: default;
+	height: 53px;
+	position: relative;
+	width: 100%;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	
+	
+	&.faker-focused .drop-value {
+		border-color: #66afe9;
+		outline: 0;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+		box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+	}
+	
+	&.open {
+		.drop-selection {
+			border-bottom: 1px solid #e7e7e7;
+			display: block;
+			height: auto;
+			max-height: 400px;
+			opacity: 1;
+			overflow: auto;
+			border-left: 1px solid #e7e7e7;
+			border-right: 1px solid #e7e7e7;
+			z-index: 11;
+		}
+	}
+	
+	/* DROP VALUE */
+	.drop-value {
+		cursor: pointer;
+		display: inline-block;
+		left: 0;
+		line-height: 52px;
+		overflow: hidden;
+		padding-right: 45px;
+		position: absolute;
+		text-overflow: ellipsis;
+		top: 0;
+		vertical-align: top;
+		white-space: nowrap;
+		width: 100%;
+		z-index: 2;
+		padding-left: 1em;
+		border: 1px solid #e6e7e8;
+		color: #949698;
+		font-weight: 300;
+		background-color: white;
+		
+		input[name='faker-search'] {
+			position: absolute;
+			left: 0;
+			top: 0;
+			height: 100%;
+			z-index: 150;
+			padding: 0 25px;
+		}
+	}
+	
+	/* DROP HANDLE */
+	.drop-handle {
+		cursor: pointer;
+		position: absolute;
+		right: 1px;
+		top: 1px;
+		width: 50px;
+		background-color: #fff;
+		height: 51px;
+		border-left: 1px solid #e6e7e8;
+		z-index: 10;
+		
+		&:after {
+			content: "V";
+			height: 5px;
+			position: absolute;
+			width: 8px;
+			display: block;
+			top: 50%;
+			left: 50%;
+			/*background: url('../img/form_faker_arrow.svg') transparent no-repeat scroll center / 8px 5px;*/
+			font-family: sans-serif;
+			font-stretch: extra-expanded;
+			font-size: 16px;
+		}
+	}
+	
+	/* DROP SELECTION */
+	.drop-selection {
+		background-color: #fff;
+		cursor: pointer;
+		height: 0;
+		opacity: 0;
+		overflow: hidden;
+		position: absolute;
+		top: 53px;
+		width: 100%;
+		z-index: 9;
+		
+		div {
+			font-weight: 300;
+			height: 40px;
+			letter-spacing: 0.1em;
+			line-height: 40px;
+			overflow: hidden;
+			padding-left: 15px;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			width: 100%;
+			cursor: pointer;
+			
+			&.active, &:hover {
+				background-color: #959698;
+				color: #fff;
+			}
+			
+			&.active { display: none; }
+			&.rel-search { display: none; }
+			
+			&.rel-disabled {
+				opacity: 0.5; 
+				cursor: not-allowed;
+			}
+		}
+	}
+	
+	select {
+		display: block;
+		opacity: 0;
+		overflow: hidden;
+		visibility: hidden;
+		
+		option { display: none; }
+	}
+}
+
+.faker .drop-value:hover, .faker.open .drop-value {color: #959698;}
+.faker .drop-value, .faker .drop-handle {height: 53px;}
+
+
+.faker .drop-value:hover ~ .drop-handle:after,
+.faker.open .drop-value ~ .drop-handle:after {
+	border-color: #d77c52 transparent transparent;
+}
+
+.faker-small .faker .faker .drop-selection {
+	max-height: 200px;
+}
