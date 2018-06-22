@@ -43,19 +43,29 @@
 	line-height: 76px;
 }
 
+.faker .drop-value input[name='faker-search'] {
+	position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    z-index: 150;
+    padding: 0 25px;
+}
+
 .faker .drop-value:hover, .faker.open .drop-value {color: #959698;}
 .faker .drop-value, .faker .drop-handle {height: 78px;}
 
 /* drop handle */
 .faker .drop-handle {
 	cursor: pointer;
-	position: absolute;
-	right: 1px;
-	top: 1px;
-	width: 45px;
-	background-color: #fff;
-	height: 78px;
-	border-left: 1px solid #e6e7e8;
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    width: 45px;
+    background-color: #fff;
+    height: 76px;
+    border-left: 1px solid #e6e7e8;
+    z-index: 10;
 }
 
 .faker .drop-handle:after {
@@ -96,6 +106,7 @@
 	max-height: 400px;
 	opacity: 1;
 	overflow: auto;
+	z-index: 100;
 }
 
 .faker .drop-selection div {
@@ -123,6 +134,7 @@
 	color: #fff;
 }
 .faker .drop-selection div.active { display: none; }
+.faker .drop-selection div.rel-search { display: none; }
 .faker .drop-selection div.rel-disabled { 
 	opacity: 0.5; 
 	cursor: not-allowed;

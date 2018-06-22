@@ -18,6 +18,22 @@
 <body>
 	<div class="container">   
 		
+		<div class="row">
+			<div class="col-sm-12">
+				<h3>Searchable faker - can be set only on first init</h3>
+				<select class="faker" id="srch" name="srch" placeholder="Make me search">
+					<option value="BE">Belize</option>
+					<option value="CA">Kanada</option>
+					<option value="JM">Jamajka</option>
+					<option value="IQ">Iraq</option>
+					<option value="LV">Latvija</option>
+					<option value="LT">Litva</option>
+				</select>
+				
+				<button class="btn" id="upd">Update zanimanje</button>
+			</div>
+		</div>	
+		
 		<div class="row">	
 			<div class="col-sm-12">
 				
@@ -55,27 +71,34 @@
 		
 		<button id="aaa">asddas</button>
 		
-		<select id="test" name="test" placeholder="Področje zanimanja">
-			<option value="a">Šport</option>
-			<option value="b" selected="selected">Zabava</option>
-			<option value="c">Delo</option>
-			<option value="d">Delo2</option>
-			<option value="e">Delo3</option>
-		</select>
+		<div class="row">
+			<div class="col-sm-12">
+				<select id="test" name="test" placeholder="Področje zanimanja">
+					<option value="a">Šport</option>
+					<option value="b" selected="selected">Zabava</option>
+					<option value="c">Delo</option>
+					<option value="d">Delo2</option>
+					<option value="e">Delo3</option>
+				</select>
+				
+				<button class="btn" id="upd">Update zanimanje</button>
+			</div>
+		</div>	
 		
-		<button class="btn" id="upd">Update zanimanje</button>
+		
+		
 	</div>
 	
 	<script>
 		function onchange_callback(newVal, e){
-			console.log("bla");
+			/* console.log("bla");
 			console.log(newVal);
-			console.log(e);
+			console.log(e); */
 		};
 		$(document).ready(function(){
 			
 			//$(".faker").specto_faker({animated: true, on_change: bla});
-			specto_faker.init({on_change: onchange_callback, key_events: true});
+			specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true});
 			specto_faker.init({animated: true, key_events: true, object_selector: "#test", before_change: function(newVal, e){
 				if(newVal === "b") return false;
 				else return true;
@@ -91,7 +114,7 @@
 			});*/
 			
 			$("#upd").click(function(){
-				console.log("bla");
+				//console.log("bla");
 				specto_faker.updateOptions($("#test").parent(), [{code: "1", xname: "Updejt"},{code: "2", xname: "Updejt 2"},{code: "3", xname: "Updejt 3"}], "code", "xname", {animated: true, object_selector: "#test", before_change: function(newVal, e){
 					if(newVal === "3") return false;
 					else return true;

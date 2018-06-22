@@ -80,22 +80,35 @@ $(document).ready(function(){
 
 ```
     {
-		object_selector: ".faker", //element(s) - works only if called through "specto_faker.init()"
+		object_selector: ".faker", //element(s) - works only if called through ```specto_faker.init()```, if called as ```$().specto_faker()``` elements are defined in $()"
+		
+		/* CLASSES */
 		open_class: "open", //class for opened faker
 		init_class: "faker-init", //class for initiated faker
 		anim_class: "faker-animated", //class for animated faker
 		anim_progress_class: "faker-animating", //class while animation in progress
+		focused_class: "faker-focused", //class for focused faker
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
-		helper_val_class: "rel-helper", //class of helper option - to select with keyboard
+		searchable_class: "faker-search", //class for searchable faker
+		search_hidden: "rel-search", //class for hidden options - hidden by search
+		
+		/* ANIMATION */
 		animated: false, //is faker animated
 		animation_speed: 400,
 		count_selected: false, //valid only for animated faker, are selected_val_class counted for animation
 		count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
-		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
+		
+		/* KEY EVENTS & SEARCHING & SORTING */
+		key_events: false, //do you want keyEvents to work - Global setting which works only for the first specto_faker.init !
+		searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
+		sortable: false, //do you want on init to be sorted
+		sort_ascending: true,
+		
+		/* METHODS - CALLBACKS */
 		/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
 		before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value or 0
-		key_events: false, //do you want keyEvents to work - Global setting which works only for the first specto_faker.init !
+		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
 		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
 	}
 ```
@@ -109,7 +122,8 @@ $(document).ready(function(){
 * Prevents clicks for disabled options, example: ```<div rel='rel-disabled' class='' disabled='disabled'>placeholder</div>```
 * Adds focused class on select focus (for swithing with tab)
 * Adds keyevents to simulate select
-
+* Allows searching for entered text
+* Can be ordered on init
 
 ## CUSTOM USE 
 
