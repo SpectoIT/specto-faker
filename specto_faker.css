@@ -133,7 +133,7 @@
 	background-color: #959698;
 	color: #fff;
 }
-.faker .drop-selection div.active { display: none; }
+.faker .drop-selection div.active { background-color: #959698; color: #fff; }
 .faker .drop-selection div.rel-search { display: none; }
 .faker .drop-selection div.rel-disabled { 
 	opacity: 0.5; 

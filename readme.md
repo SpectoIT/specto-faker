@@ -80,7 +80,7 @@ $(document).ready(function(){
 
 ```
     {
-		object_selector: ".faker", //element(s) - works only if called through ```specto_faker.init()```, if called as ```$().specto_faker()``` elements are defined in $()"
+		object_selector: ".faker", //element(s) - works only if called through ```specto_faker.init()```, if called as ```$().specto_faker()``` elements are defined in $()
 		
 		/* CLASSES */
 		open_class: "open", //class for opened faker
@@ -90,6 +90,7 @@ $(document).ready(function(){
 		focused_class: "faker-focused", //class for focused faker
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
+		key_events_class: "faker-keyevent", //class for faker with key events
 		searchable_class: "faker-search", //class for searchable faker
 		search_hidden: "rel-search", //class for hidden options - hidden by search
 		
@@ -100,7 +101,7 @@ $(document).ready(function(){
 		count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
 		
 		/* KEY EVENTS & SEARCHING & SORTING */
-		key_events: false, //do you want keyEvents to work - Global setting which works only for the first specto_faker.init !
+		key_events: false, //do you want keyEvents to work
 		searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
 		sortable: false, //do you want on init to be sorted
 		sort_ascending: true,

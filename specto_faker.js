@@ -1,7 +1,7 @@
 var specto_faker = {
 	initiated: false,
 	config: {
-		object_selector: ".faker", //element(s) - works only if called through "specto_faker.init()"
+		object_selector: ".faker", //element(s) - works only if called through ```specto_faker.init()```, if called as ```$().specto_faker()``` elements are defined in $()"
 		
 		/* CLASSES */
 		open_class: "open", //class for opened faker
@@ -11,6 +11,7 @@ var specto_faker = {
 		focused_class: "faker-focused", //class for focused faker
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
+		key_events_class: "faker-keyevent", //class for faker with key events
 		searchable_class: "faker-search", //class for searchable faker
 		search_hidden: "rel-search", //class for hidden options - hidden by search
 		
@@ -44,6 +45,7 @@ var specto_faker = {
 			specto_faker.config.focused_class = fakr_settings.focused_class; 
 			specto_faker.config.selected_val_class = fakr_settings.selected_val_class; 
 			specto_faker.config.disabled_val_class = fakr_settings.disabled_val_class; 
+			specto_faker.config.key_events_class = fakr_settings.key_events_class; 
 			specto_faker.config.searchable_class = fakr_settings.searchable_class; 
 			specto_faker.config.search_hidden = fakr_settings.search_hidden; 
 			specto_faker.config.count_selected = fakr_settings.count_selected; 
@@ -93,9 +95,13 @@ var specto_faker = {
 				});
 			}
 			
-			//faker settings
-			if(fakr_settings.animated) $(fakr_elm).addClass(specto_faker.config.anim_class);
-			if(fakr_settings.key_events && fakr_settings.searchable) $(fakr_elm).addClass(specto_faker.config.searchable_class);
+			//faker classes
+			if(fakr_settings.animated) $(fakr_elm).addClass(specto_faker.config.anim_class); //animated
+			else $(fakr_elm).removeClass(specto_faker.config.anim_class);
+			if(fakr_settings.key_events) $(fakr_elm).addClass(specto_faker.config.key_events_class); //key events
+			else $(fakr_elm).removeClass(specto_faker.config.key_events_class);
+			if(fakr_settings.searchable) $(fakr_elm).addClass(specto_faker.config.searchable_class); //searchable
+			else $(fakr_elm).removeClass(specto_faker.config.searchable_class);
 			$(fakr_elm).addClass(specto_faker.config.init_class);
 		});
 		
@@ -108,8 +114,8 @@ var specto_faker = {
 					}
 				});
 			});
-			if(fakr_settings.key_events) $(document).on("keyup", function (event){ //key events
-				$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
+			$(document).on("keyup", function (event){ //key events
+				$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.key_events_class +'.'+ specto_faker.config.open_class).each(function(){
 					specto_faker.keyEvents(this, event);
 				});
 			});
