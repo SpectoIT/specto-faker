@@ -52,6 +52,7 @@
 		color: #949698;
 		font-weight: 300;
 		background-color: white;
+		height: 53px;
 		
 		input[name='faker-search'] {
 			position: absolute;
@@ -139,8 +140,6 @@
 }
 
 .faker .drop-value:hover, .faker.open .drop-value {color: #959698;}
-.faker .drop-value, .faker .drop-handle {height: 53px;}
-
 
 .faker .drop-value:hover ~ .drop-handle:after,
 .faker.open .drop-value ~ .drop-handle:after {
