@@ -111,6 +111,7 @@ $(document).ready(function(){
 		before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value or 0
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
 		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
+		
 	}
 ```
 
@@ -128,6 +129,30 @@ $(document).ready(function(){
 
 ## CUSTOM USE 
 
+###	SCSS VARIABLES (colors, handle icon, height)
+		
+```
+$faker_handle_icon: "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTQiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE0IDgiPjxkZWZzPjxwYXRoIGlkPSJmd2Y4YSIgZD0iTTYyMDcuNTIgMzU2MS40NGMwLS4xLS4wNS0uMjMtLjEzLS4zbC0uNjctLjY4YS40Ni40NiAwIDAgMC0uMy0uMTNjLS4xMSAwLS4yNC4wNS0uMzIuMTNsLTUuMjYgNS4yNy01LjI3LTUuMjdhLjQ2LjQ2IDAgMCAwLS4zLS4xMy40NC40NCAwIDAgMC0uMzEuMTNsLS42Ny42N2EuNDYuNDYgMCAwIDAtLjE0LjMxYzAgLjEuMDYuMjMuMTQuMzFsNi4yNCA2LjI0Yy4wOC4wOC4yLjE0LjMuMTQuMTIgMCAuMjQtLjA2LjMyLS4xNGw2LjI0LTYuMjRjLjA4LS4wOC4xMy0uMi4xMy0uM3oiLz48L2RlZnM+PGc+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYxOTQgLTM1NjApIj48dXNlIHhsaW5rOmhyZWY9IiNmd2Y4YSIvPjwvZz48L2c+PC9zdmc+";
+
+
+$drop_value_color: #949698;
+$drop_value_bg_color: #FFFFFF;
+$drop_value_border: #e6e7e8;
+
+$faker_opened_value_color: #959698;
+
+$drop_selection_bg_color: #FFFFFF;
+$drop_selection_border: #e7e7e7;
+
+$drop_selection_div_active_color: #FFFFFF;
+$drop_selection_div_active_bg_color: #959698;
+
+$faker_focused_value_border_shadow: #66afe9;
+$faker_focused_value_shadow_startcolor: #000000;
+
+
+$faker_height: 53px;
+```
 
 ### Custom element with animation
 

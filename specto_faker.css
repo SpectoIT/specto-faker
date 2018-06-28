@@ -1,3 +1,4 @@
+/*		VARIABLES		*/
 .faker {
   cursor: default;
   height: 53px;
@@ -13,11 +14,14 @@
   /* DROP HANDLE */
   /* DROP SELECTION */
 }
+.faker.faker-search.open .drop-value {
+  z-index: 11;
+}
 .faker.faker-focused .drop-value {
   border-color: #66afe9;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 .faker.open .drop-selection {
   border-bottom: 1px solid #e7e7e7;
@@ -48,10 +52,10 @@
   border: 1px solid #e6e7e8;
   color: #949698;
   font-weight: 300;
-  background-color: white;
+  background-color: #FFFFFF;
   height: 53px;
 }
-.faker .drop-value input[name='faker-search'] {
+.faker .drop-value input[name=faker-search] {
   position: absolute;
   left: 0;
   top: 0;
@@ -62,29 +66,33 @@
 .faker .drop-handle {
   cursor: pointer;
   position: absolute;
-  right: 1px;
-  top: 1px;
-  width: 50px;
-  background-color: #fff;
-  height: 51px;
-  border-left: 1px solid #e6e7e8;
+  right: 0;
+  top: 0;
+  width: 53px;
+  background-color: #FFFFFF;
+  height: 53px;
+  border: 1px solid #e6e7e8;
   z-index: 10;
 }
 .faker .drop-handle:after {
-  content: "V";
-  height: 5px;
+  content: "";
+  height: 9px;
   position: absolute;
-  width: 8px;
+  width: 14px;
   display: block;
   top: 50%;
   left: 50%;
-  /*background: url('../img/form_faker_arrow.svg') transparent no-repeat scroll center / 8px 5px;*/
+  transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -webkit-transform: translate(-50%, -50%);
+  background: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTQiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE0IDgiPjxkZWZzPjxwYXRoIGlkPSJmd2Y4YSIgZD0iTTYyMDcuNTIgMzU2MS40NGMwLS4xLS4wNS0uMjMtLjEzLS4zbC0uNjctLjY4YS40Ni40NiAwIDAgMC0uMy0uMTNjLS4xMSAwLS4yNC4wNS0uMzIuMTNsLTUuMjYgNS4yNy01LjI3LTUuMjdhLjQ2LjQ2IDAgMCAwLS4zLS4xMy40NC40NCAwIDAgMC0uMzEuMTNsLS42Ny42N2EuNDYuNDYgMCAwIDAtLjE0LjMxYzAgLjEuMDYuMjMuMTQuMzFsNi4yNCA2LjI0Yy4wOC4wOC4yLjE0LjMuMTQuMTIgMCAuMjQtLjA2LjMyLS4xNGw2LjI0LTYuMjRjLjA4LS4wOC4xMy0uMi4xMy0uM3oiLz48L2RlZnM+PGc+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYxOTQgLTM1NjApIj48dXNlIHhsaW5rOmhyZWY9IiNmd2Y4YSIvPjwvZz48L2c+PC9zdmc+) transparent no-repeat scroll center/14px 9px;
+  background-repeat: no-repeat;
   font-family: sans-serif;
   font-stretch: extra-expanded;
   font-size: 16px;
 }
 .faker .drop-selection {
-  background-color: #fff;
+  background-color: #FFFFFF;
   cursor: pointer;
   height: 0;
   opacity: 0;
@@ -108,7 +116,7 @@
 }
 .faker .drop-selection div.active, .faker .drop-selection div:hover {
   background-color: #959698;
-  color: #fff;
+  color: #FFFFFF;
 }
 .faker .drop-selection div.rel-search {
   display: none;
@@ -126,12 +134,11 @@
 .faker select option {
   display: none;
 }
+
 .faker .drop-value:hover, .faker.open .drop-value {
   color: #959698;
 }
-.faker .drop-value:hover ~ .drop-handle:after, .faker.open .drop-value ~ .drop-handle:after {
-  border-color: #d77c52 transparent transparent;
-}
+
 .faker-small .faker .faker .drop-selection {
   max-height: 200px;
 }
