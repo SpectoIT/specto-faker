@@ -282,22 +282,28 @@ var specto_faker = {
 	selection: {
 		filter_fn: function(){ return !$(this).hasClass(specto_faker.config.disabled_val_class) && !$(this).hasClass(specto_faker.config.search_hidden); },
 		next: function(fakr){ //move to next option
+			var is_found = false;
 			$(fakr).find(".drop-selection div."+ specto_faker.config.selected_val_class).first().each(function(){
+				is_found = true;
 				if($(this).nextAll().filter(specto_faker.selection.filter_fn).length > 0) specto_faker.updateValue($(this).nextAll().filter(specto_faker.selection.filter_fn).first(), "noclick");
 				else {
 					var prevs = $(this).prevAll().filter(specto_faker.selection.filter_fn);
 					if(prevs.length > 0) specto_faker.updateValue(prevs.last(), "noclick");
 				}
 			});
+			if(!is_found) specto_faker.updateValue($(fakr).find(".drop-selection div").filter(specto_faker.selection.filter_fn).first(), "noclick");
 		},
 		previous: function(fakr){ //move to prevoius option
+			var is_found = false;
 			$(fakr).find(".drop-selection div."+ specto_faker.config.selected_val_class).first().each(function(){
+				is_found = true;
 				if($(this).prevAll().filter(specto_faker.selection.filter_fn).length > 0) specto_faker.updateValue($(this).prevAll().filter(specto_faker.selection.filter_fn).first(), "noclick");
 				else {
 					var nexts = $(this).nextAll().filter(specto_faker.selection.filter_fn);
 					if(nexts.length > 0) specto_faker.updateValue(nexts.last(), "noclick");
 				}
 			});
+			if(!is_found) specto_faker.updateValue($(fakr).find(".drop-selection div").filter(specto_faker.selection.filter_fn).last(), "noclick");
 		},
 		tochar: function(fakr, ch){ //move to char
 			var is_already = false;
