@@ -1,7 +1,7 @@
 var specto_faker = {
 	initiated: false,
 	config: {
-		object_selector: ".faker", //element(s) - works only if called through ```specto_faker.init()```, if called as ```$().specto_faker()``` elements are defined in $()"
+		object_selector: ".faker", //element(s) - works only if called through `specto_faker.init()`, if called as `$([object_selector]).specto_faker()` elements are defined in `$([object_selector])`
 		
 		/* CLASSES */
 		open_class: "open", //class for opened faker
@@ -9,10 +9,11 @@ var specto_faker = {
 		anim_class: "faker-animated", //class for animated faker
 		anim_progress_class: "faker-animating", //class while animation in progress
 		focused_class: "faker-focused", //class for focused faker
-		selected_val_class: "active", //class of selected option - default css has display:none
-		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		key_events_class: "faker-keyevent", //class for faker with key events
 		searchable_class: "faker-search", //class for searchable faker
+		/* options classes */
+		selected_val_class: "active", //class of selected option - default css has display:none
+		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		search_hidden: "rel-search", //class for hidden options - hidden by search
 		
 		/* ANIMATION */
@@ -81,19 +82,18 @@ var specto_faker = {
 			}
 			
 			//on focus select, add focused class to faker
-			if($(fakr_elm).find("select").length > 0){
-				$(fakr_elm).find("select").each(function(){
-					$(this).focus(function(){
-						//close all opened fakers
-						$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
-							specto_faker.animateFaker(this);
-						});
-						specto_faker.animateFaker($(this).parent().addClass(specto_faker.config.focused_class), "openme"); //open and add focused class
-					}).blur(function(){
-						$(this).parent().removeClass(specto_faker.config.focused_class);
+			$(fakr_elm).find("select").each(function(){
+				$(this).removeClass("faker").focus(function(){ //remove faker class from select
+					//close all opened fakers
+					$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
+						specto_faker.animateFaker(this);
 					});
+					specto_faker.animateFaker($(this).parent().addClass(specto_faker.config.focused_class), "openme"); //open and add focused class
+				}).blur(function(){
+					$(this).parent().removeClass(specto_faker.config.focused_class);
 				});
-			}
+			});
+			
 			
 			//faker classes
 			if(fakr_settings.animated) $(fakr_elm).addClass(specto_faker.config.anim_class); //animated

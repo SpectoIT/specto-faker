@@ -23,15 +23,15 @@ OR plain version
 	<div class="drop-value"></div>
 	<div class="drop-handle">&nbsp;</div>
 	<div class="drop-selection">
-		<div rel="0">0</div>
-		<div rel="1">1</div>
-		<div rel="2">2</div>
+		<div rel="a">Šport</div>
+		<div rel="b">Zabava</div>
+		<div rel="c">Delo</div>
 	</div>
 	<!-- with or without -->
 	<select name="servis">
-		<option value="0">0</option>
-		<option value="1">1</option>
-		<option value="2">2</option>
+		<option value="a">Šport</option>
+		<option value="b">Zabava</option>
+		<option value="c">Delo</option>
 	</select>
 	<!-- with or without end -->
 </div>
@@ -66,21 +66,21 @@ $(document).ready(function(){
 
 ```
 "dependencies": {
-	"specto_faker": "https://code.specto.si/akrasevec/specto-faker.git",
+	"specto_faker": "https://code.specto.si/bower/specto-faker.git",
 	//or with version
-	// "specto_faker": "https://code.specto.si/akrasevec/specto-faker.git#v1.05",
+	// "specto_faker": "https://code.specto.si/bower/specto-faker.git#v1.05",
 }
 
 ```
 
 ## Notes
 
-* Requires jQuery (Tested on 2.2.4).
+* Requires jQuery <i>(Tested on 2.2.4)</i>.
 * Customizable with options:
 
 ```
     {
-		object_selector: ".faker", //element(s) - works only if called through ```specto_faker.init()```, if called as ```$().specto_faker()``` elements are defined in $()
+		object_selector: ".faker", //element(s) - works only if called through `specto_faker.init()`, if called as `$([object_selector]).specto_faker()` elements are defined in `$([object_selector])`
 		
 		/* CLASSES */
 		open_class: "open", //class for opened faker
@@ -88,10 +88,11 @@ $(document).ready(function(){
 		anim_class: "faker-animated", //class for animated faker
 		anim_progress_class: "faker-animating", //class while animation in progress
 		focused_class: "faker-focused", //class for focused faker
-		selected_val_class: "active", //class of selected option - default css has display:none
-		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		key_events_class: "faker-keyevent", //class for faker with key events
 		searchable_class: "faker-search", //class for searchable faker
+		/* options classes */
+		selected_val_class: "active", //class of selected option - default css has display:none
+		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		search_hidden: "rel-search", //class for hidden options - hidden by search
 		
 		/* ANIMATION */
@@ -115,22 +116,23 @@ $(document).ready(function(){
 	}
 ```
 
-* Automaticaly builds html wrapper for ```<select>``` (original element is deleted, but copied)
+* Automaticaly builds html wrapper for ```<select>``` <i>(original element is deleted, but copied)</i>
 * Closes every opened faker, if clicked outside of it.
 * Overrides click events, so you can reinit them without problems.
 * All classes and counters are customizable only on the first init
 * Hide selected option from dropdown - customizable class with "selected_val_class"
-* If builded from select, it's "placeholder" is set as initial value (if not present, first option is selected). But if any option is selected, placeholder is ignored and selected value is set
+* If builded from select, it's "placeholder" is set as initial value <i>(if not present, first option is selected)</i>. But if any option is selected, placeholder is ignored and selected value is set
 * Prevents clicks for disabled options, example: ```<div rel='rel-disabled' class='' disabled='disabled'>placeholder</div>```
-* Adds focused class on select focus (for swithing with tab)
-* Adds keyevents to simulate select
-* Allows searching for entered text
+* Adds focused class on select focus <i>(for swithing with tab)</i>
+* Can add keyevents to simulate select
+* Can allow searching for entered text
 * Can be ordered on init
+* If builded from select, be aware that every further reference to faker <i>(fakr, faker_elm, object_selector, ...)</i> doesn't mean original select, but it's faker <i>(more in examples - Build from select and update options)</i>
 
 ## CUSTOM USE 
 
 ###	SCSS VARIABLES (colors, handle icon, height)
-		
+
 ```
 $faker_handle_icon: "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTQiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE0IDgiPjxkZWZzPjxwYXRoIGlkPSJmd2Y4YSIgZD0iTTYyMDcuNTIgMzU2MS40NGMwLS4xLS4wNS0uMjMtLjEzLS4zbC0uNjctLjY4YS40Ni40NiAwIDAgMC0uMy0uMTNjLS4xMSAwLS4yNC4wNS0uMzIuMTNsLTUuMjYgNS4yNy01LjI3LTUuMjdhLjQ2LjQ2IDAgMCAwLS4zLS4xMy40NC40NCAwIDAgMC0uMzEuMTNsLS42Ny42N2EuNDYuNDYgMCAwIDAtLjE0LjMxYzAgLjEuMDYuMjMuMTQuMzFsNi4yNCA2LjI0Yy4wOC4wOC4yLjE0LjMuMTQuMTIgMCAuMjQtLjA2LjMyLS4xNGw2LjI0LTYuMjRjLjA4LS4wOC4xMy0uMi4xMy0uM3oiLz48L2RlZnM+PGc+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYxOTQgLTM1NjApIj48dXNlIHhsaW5rOmhyZWY9IiNmd2Y4YSIvPjwvZz48L2c+PC9zdmc+";
 
@@ -188,7 +190,7 @@ $(".faker").specto_faker({
 
 ```
 
-### Select
+### Build from select (with onchange function already attached)
 
 ```
 $("select").change(function(newVal, jsEvent){ console.log("changed into"+ newVal); }); 
@@ -257,7 +259,7 @@ specto_faker.init({
 	object_selector: "#faker_elm"
 });
 
-//update -> function(fakr, new_options, rel_name, name_name, settings)
+//update -> function(fakr, new_options, [rel_name = "rel", name_name = "name", settings = null])
 specto_faker.updateOptions("#faker_elm", [{
 	code: "value1",
 	name: "Prikaz1"
@@ -271,11 +273,34 @@ specto_faker.updateOptions("#faker_elm", [{
 
 ```
 
+### Build from select and update options
 
-## TODO
 
-* index.html
+```
+//init and save reference to faker
+var initiated_fakers = specto_faker.init({
+	object_selector: "select#test"
+});
 
-* Keyboard support
+var first_faker = initiated_fakers[0];
+//or first parent of original select
+// var first_faker = $("select#test").parent();
 
-* function for update faker value - with select if present
+//update -> function(fakr, new_options, [rel_name = "rel", name_name = "name", settings = null])
+specto_faker.updateOptions(first_faker, [{
+	rel: "value1",
+	name: "Prikaz1"
+},{
+	code: "value2",
+	name: "Prikaz2"
+},{
+	code: "value3",
+	name: "Prikaz3"
+}]);
+
+```
+
+
+## TO DO
+
+* index.html - more examples
