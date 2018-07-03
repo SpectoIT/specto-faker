@@ -50,8 +50,7 @@ var specto_faker = {
 			specto_faker.config.searchable_class = fakr_settings.searchable_class; 
 			specto_faker.config.search_hidden = fakr_settings.search_hidden; 
 			specto_faker.config.count_selected = fakr_settings.count_selected; 
-			specto_faker.config.count_disables = fakr_settings.count_disables; 
-			specto_faker.config.key_events = fakr_settings.key_events; //save if faker has keyevents
+			specto_faker.config.count_disables = fakr_settings.count_disables;
 		}
 		
 		//add clicks
