@@ -99,7 +99,7 @@ var specto_faker = {
 			else $(fakr_elm).removeClass(specto_faker.config.anim_class);
 			if(fakr_settings.key_events) $(fakr_elm).addClass(specto_faker.config.key_events_class); //key events
 			else $(fakr_elm).removeClass(specto_faker.config.key_events_class);
-			if(fakr_settings.searchable) $(fakr_elm).addClass(specto_faker.config.searchable_class); //searchable
+			if(fakr_settings.searchable && fakr_settings.key_events) $(fakr_elm).addClass(specto_faker.config.searchable_class); //searchable - only with both keyevents and searchable
 			else $(fakr_elm).removeClass(specto_faker.config.searchable_class);
 			$(fakr_elm).addClass(specto_faker.config.init_class);
 		});
