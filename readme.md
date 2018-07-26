@@ -1,7 +1,7 @@
 # Faker jQuery Plugin
 
 ## IMPORTANT CHANGES
-* v2.0 .drop-value gets <span> inside (needed for searchable faker)
+* v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
 
 ## Demo & Examples
 index.html
