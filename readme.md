@@ -1,5 +1,8 @@
 # Faker jQuery Plugin
 
+## IMPORTANT CHANGES
+* v2.0 .drop-value gets <span> inside (needed for searchable faker)
+
 ## Demo & Examples
 index.html
 
@@ -20,7 +23,9 @@ OR plain version
 
 ```
 <div id="servis" class="faker">
-	<div class="drop-value"></div>
+	<div class="drop-value">
+		<span></span>
+	</div>
 	<div class="drop-handle">&nbsp;</div>
 	<div class="drop-selection">
 		<div rel="a">Šport</div>
@@ -90,6 +95,7 @@ $(document).ready(function(){
 		focused_class: "faker-focused", //class for focused faker
 		key_events_class: "faker-keyevent", //class for faker with key events
 		searchable_class: "faker-search", //class for searchable faker
+		select_single: "faker-sel-single", //class for searchable faker to auto select single filtered option
 		/* options classes */
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
@@ -104,6 +110,7 @@ $(document).ready(function(){
 		/* KEY EVENTS & SEARCHING & SORTING */
 		key_events: false, //do you want keyEvents to work
 		searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
+		search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
 		sortable: false, //do you want on init to be sorted
 		sort_ascending: true,
 		

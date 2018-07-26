@@ -170,7 +170,7 @@ $faker_height: 53px;
 		display: block;
 		opacity: 0;
 		overflow: hidden;
-		visibility: hidden;
+		position: absolute;
 		
 		option { display: none; }
 	}

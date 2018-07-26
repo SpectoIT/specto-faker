@@ -11,6 +11,7 @@ var specto_faker = {
 		focused_class: "faker-focused", //class for focused faker
 		key_events_class: "faker-keyevent", //class for faker with key events
 		searchable_class: "faker-search", //class for searchable faker
+		select_single: "faker-sel-single", //class for searchable faker to auto select single filtered option
 		/* options classes */
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
@@ -25,6 +26,7 @@ var specto_faker = {
 		/* KEY EVENTS & SEARCHING & SORTING */
 		key_events: false, //do you want keyEvents to work - Global setting which works only for the first specto_faker.init !
 		searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
+		search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
 		sortable: false, //do you want on init to be sorted
 		sort_ascending: true,
 		
@@ -48,6 +50,7 @@ var specto_faker = {
 			specto_faker.config.disabled_val_class = fakr_settings.disabled_val_class; 
 			specto_faker.config.key_events_class = fakr_settings.key_events_class; 
 			specto_faker.config.searchable_class = fakr_settings.searchable_class; 
+			specto_faker.config.select_single = fakr_settings.select_single; 
 			specto_faker.config.search_hidden = fakr_settings.search_hidden; 
 			specto_faker.config.count_selected = fakr_settings.count_selected; 
 			specto_faker.config.count_disables = fakr_settings.count_disables;
@@ -74,7 +77,7 @@ var specto_faker = {
 			//dropdown clicks
 			specto_faker.fakerSelection(fakr_elm, fakr_settings.on_change, fakr_settings.before_change);
 			//if empty, update first value
-			if(!$(fakr_elm).find(".drop-value").text()) {
+			if(!$(fakr_elm).find(".drop-value span").text()) {
 				//has faker selected value?
 				if($(fakr_elm).find(".drop-selection > div[selected]").length) specto_faker.updateValue($(fakr_elm).find(".drop-selection > div[selected]").first().addClass(specto_faker.config.selected_val_class), "noclick");
 				else specto_faker.updateValue($(fakr_elm).find(".drop-selection > div").first(), "noclick");
@@ -89,7 +92,7 @@ var specto_faker = {
 					});
 					specto_faker.animateFaker($(this).parent().addClass(specto_faker.config.focused_class), "openme"); //open and add focused class
 				}).blur(function(){
-					$(this).parent().removeClass(specto_faker.config.focused_class);
+					specto_faker.animateFaker($(this).parent().removeClass(specto_faker.config.focused_class));
 				});
 			});
 			
@@ -99,7 +102,10 @@ var specto_faker = {
 			else $(fakr_elm).removeClass(specto_faker.config.anim_class);
 			if(fakr_settings.key_events) $(fakr_elm).addClass(specto_faker.config.key_events_class); //key events
 			else $(fakr_elm).removeClass(specto_faker.config.key_events_class);
-			if(fakr_settings.searchable && fakr_settings.key_events) $(fakr_elm).addClass(specto_faker.config.searchable_class); //searchable - only with both keyevents and searchable
+			if(fakr_settings.searchable && fakr_settings.key_events) {
+				$(fakr_elm).addClass(specto_faker.config.searchable_class); //searchable - only with both keyevents and searchable
+				if(fakr_settings.search_single) $(fakr_elm).addClass(specto_faker.config.select_single); //searchable - only with both keyevents and searchable 
+			}
 			else $(fakr_elm).removeClass(specto_faker.config.searchable_class);
 			$(fakr_elm).addClass(specto_faker.config.init_class);
 		});
@@ -145,7 +151,7 @@ var specto_faker = {
 				var self = this;
 				setTimeout(function(){ $(self).addClass(specto_faker.config.selected_val_class); }, (specto_faker.isFakerAnimated(fakr) ? specto_faker.config.animation_speed : 0)); //add selected class
 				//if there is select present, update it's value. And trigger change event
-				var selects = $(this).parent().nextAll("select");
+				var selects = $(this).parent().prevAll("select");
 				if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(this)).change();
 				if(after_change_fun) after_change_fun(specto_faker.getSelectionValue(this), e); //change function
 				
@@ -156,7 +162,7 @@ var specto_faker = {
 		if($(rel).length < 1) return; //prevent error
 		$(rel).siblings().filter(function(){ return $(this).hasClass(specto_faker.config.selected_val_class); }).each(function(){ $(this).removeClass(specto_faker.config.selected_val_class); });
 		$(rel).addClass(specto_faker.config.selected_val_class);
-		var v = $(rel).parent().prevAll(".drop-value").text($(rel).text()).attr("rel", $(rel).attr("rel")); 
+		var v = $(rel).parent().prevAll(".drop-value").attr("rel", $(rel).attr("rel")).find("span").text($(rel).text()); 
 		if(!dimm_click) v.trigger("click");
 	},
 	getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); },
@@ -218,7 +224,7 @@ var specto_faker = {
 			if($(that).parent().hasClass(specto_faker.config.init_class)) return $(that).parent(); //if select is already parsed, return faker elm
 			
 			var placeholder = $(that).attr("placeholder");
-			var fakr_html = $("<div class='faker'><div class='drop-value'></div><div class='drop-handle'>&nbsp;</div><div class='drop-selection'></div></div>");
+			var fakr_html = $("<div class='faker'><div class='drop-value'><span></span></div><div class='drop-handle'>&nbsp;</div><div class='drop-selection'></div></div>");
 			//fill options
 			$(that).find("option").each(function(){
 				var display = $(this).text();
@@ -226,9 +232,9 @@ var specto_faker = {
 				if(is_sel) placeholder = ""; //prevent placeholder if any option is selected
 				$(fakr_html).find(".drop-selection").append("<div rel='"+ ($(this).attr("value") || display) +"'"+ (typeof $(this).attr("disabled") === "string" ? " disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'" : "") + (is_sel ? " selected='selected'" : "") +">"+display+"</div>");
 			});
-			$(fakr_html).append($(that).clone(true)); //append original select
+			$(fakr_html).prepend($(that).clone(true)); //append original select
 			if(placeholder) {
-				$(fakr_html).find(".drop-value").text(placeholder);
+				$(fakr_html).find(".drop-value span").text(placeholder);
 				$(fakr_html).find(".drop-selection").prepend("<div rel='' disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'>"+ placeholder +"</div>"); //placeholder - add disabled value
 			}
 			$(that).after(fakr_html);
@@ -241,7 +247,7 @@ var specto_faker = {
 	updateOptions: function(fakr, new_options, rel_name, name_name, settings){
 		
 		$(fakr).each(function(){
-			$(this).find(".drop-value").each(function(){ $(this).text(""); });
+			$(this).find(".drop-value span").each(function(){ $(this).text(""); });
 			$(this).find(".drop-selection").each(function(){ 
 				$(this).empty(); 
 				var ins = "";
@@ -344,11 +350,24 @@ var specto_faker = {
 		}
 	},
 	filterBySearchInput: function(fakr){
-		var srch_val = $(fakr).find("input[name='faker-search']").val().toLowerCase();
+		var srch_val = $(fakr).find("input[name='faker-search']").val();
+		if(srch_val) srch_val = srch_val.toLowerCase();
+		//else if(typeof srch_val !== "string") return; //prevent error
+		
+		var cnt = 0;
 		$(fakr).find(".drop-selection div").each(function(){
-			if($(this).text().toLowerCase().search(srch_val) > -1) $(this).removeClass(specto_faker.config.search_hidden);
+			if($(this).text().toLowerCase().search(srch_val) > -1) {
+				$(this).removeClass(specto_faker.config.search_hidden);
+				cnt++;
+			}
 			else $(this).addClass(specto_faker.config.search_hidden);
 		});
+		
+		if(cnt === 1 && $(fakr).hasClass(specto_faker.config.select_single)){ //select single option that was left from filtering
+			$(fakr).find(".drop-selection div:not(."+ specto_faker.config.search_hidden +")").first().each(function(){ //prevent error - first()
+				if(!$(this).hasClass(specto_faker.config.selected_val_class)) specto_faker.updateValue(this, "noclick");
+			});
+		}
 	},
 	sortValues: function(fakr, ascending){
 		

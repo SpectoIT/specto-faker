@@ -17,7 +17,7 @@
 
 <body>
 	<div class="container">   
-		
+
 		<div class="row">
 			<div class="col-sm-12">
 				<h3>Searchable faker - can be set only on first init</h3>
@@ -39,7 +39,7 @@
 				
 				<!-- FAKER EXAMPLE -->
 				<div id="servis-selector" class="faker">
-					<div class="drop-value">Izberite</div>
+					<div class="drop-value"><span>Izberite</span></div>
 					<div class="drop-handle">&nbsp;</div>
 					<div class="drop-selection" style="">
 						<div rel="">Izberite</div>
@@ -52,7 +52,7 @@
 				
 				<!-- FAKER EXAMPLE 2 -->
 				<div id="servis-selector2" class="faker">
-					<div class="drop-value"></div>
+					<div class="drop-value"><span></span></div>
 					<div class="drop-handle">&nbsp;</div>
 					<div class="drop-selection" style="">
 						<div rel="10">Porsche Verovškova</div>
@@ -84,21 +84,22 @@
 				<button class="btn" id="upd">Update zanimanje</button>
 			</div>
 		</div>	
-		
+		<input name="aaa" value="prazen" />
+
 		
 		
 	</div>
 	
 	<script>
 		function onchange_callback(newVal, e){
-			/* console.log("bla");
-			console.log(newVal);
+			console.log("bla");
+			/* console.log(newVal);
 			console.log(e); */
 		};
 		$(document).ready(function(){
 			
 			//$(".faker").specto_faker({animated: true, on_change: bla});
-			specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true});
+			specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true, searchable: true});
 			specto_faker.init({animated: true, key_events: true, object_selector: "#test", before_change: function(newVal, e){
 				if(newVal === "b") return false;
 				else return true;
