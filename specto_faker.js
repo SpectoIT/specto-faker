@@ -91,7 +91,8 @@ var specto_faker = {
 						specto_faker.animateFaker(this);
 					});
 					specto_faker.animateFaker($(this).parent().addClass(specto_faker.config.focused_class), "openme"); //open and add focused class
-				}).blur(function(){
+				})
+				if(!specto_faker.isFakerSearchable(fakr_elm)) $(this).blur(function(){
 					specto_faker.animateFaker($(this).parent().removeClass(specto_faker.config.focused_class));
 				});
 			});
@@ -256,6 +257,16 @@ var specto_faker = {
 				});
 				$(this).append(ins);
 			});
+			
+			$(fakr).find("select").each(function(){ //fill also select, if present
+				$(this).empty();
+				var ins = "";
+				$.each(new_options, function(ind, item){
+					ins += "<option value='"+ item[rel_name || "rel"] +"'>"+ item[name_name || "name"] +"</option>";
+				});
+				$(this).append(ins);
+			});
+			
 			$(this).specto_faker(settings); //init 
 		});
 	},
@@ -333,13 +344,16 @@ var specto_faker = {
 	},
 	makeFakerSearchable: function(fakr, focus_me){
 		if(specto_faker.isFakerSearchable(fakr)){
-			$(fakr).find(".drop-value").append("<input type='text' name='faker-search' class='form-control' />");
+			$(fakr).find(".drop-value").append("<input autocomplete='nope' type='text' name='faker-search' class='form-control' />"); //prevent autocomplete on input
 			$(fakr).find("input[name='faker-search']").each(function(){ 
 				$(this).click(function(event){
 					event.preventDefault();
 					event.stopPropagation();
 				});
-				$(this).focus(); 
+				$(this).focus();
+				$(this).blur(function(){ //on focus out, close faker
+					specto_faker.animateFaker($(this).removeClass(specto_faker.config.focused_class));
+				});
 			});
 		}
 	},
