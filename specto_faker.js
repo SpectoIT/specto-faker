@@ -350,8 +350,11 @@ var specto_faker = {
 					event.preventDefault();
 					event.stopPropagation();
 				});
-				$(this).blur(function(){ //on focus out, close faker
-					specto_faker.animateFaker($(this).parent().parent().removeClass(specto_faker.config.focused_class));
+				$(this).on("keydown", function (event){ //key events
+				
+					var key = event.keyCode || event.which;
+					//on tab click, close faker
+					if(key === 9) specto_faker.animateFaker($(this).parent().parent().removeClass(specto_faker.config.focused_class));
 				});
 				$(this).focus();
 			});
