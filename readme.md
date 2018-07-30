@@ -269,7 +269,8 @@ specto_faker.init({
 //update -> function(fakr, new_options, [rel_name = "rel", name_name = "name", settings = null])
 specto_faker.updateOptions("#faker_elm", [{
 	code: "value1",
-	name: "Prikaz1"
+	name: "Prikaz1",
+	is_default: true,
 },{
 	code: "value2",
 	name: "Prikaz2"

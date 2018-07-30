@@ -253,7 +253,7 @@ var specto_faker = {
 				$(this).empty(); 
 				var ins = "";
 				$.each(new_options, function(ind, item){
-					ins += "<div rel='"+ item[rel_name || "rel"] +"'>"+ item[name_name || "name"] +"</div>";
+					ins += "<div rel='"+ item[rel_name || "rel"] +"' "+ (item.is_default ? "selected" : "") +">"+ item[name_name || "name"] +"</div>";
 				});
 				$(this).append(ins);
 			});
@@ -350,10 +350,10 @@ var specto_faker = {
 					event.preventDefault();
 					event.stopPropagation();
 				});
-				$(this).focus();
 				$(this).blur(function(){ //on focus out, close faker
-					specto_faker.animateFaker($(this).removeClass(specto_faker.config.focused_class));
+					specto_faker.animateFaker($(this).parent().parent().removeClass(specto_faker.config.focused_class));
 				});
+				$(this).focus();
 			});
 		}
 	},
