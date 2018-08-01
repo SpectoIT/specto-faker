@@ -60,6 +60,7 @@ var specto_faker = {
 		$(fakr_settings.object_selector).each(function(){
 			//if this is select tag, build proper html
 			var fakr_elm = specto_faker.getTargetelement(this);
+			var has_select = false;
 			faker_elms.push(fakr_elm);
 			
 			//sorting of values
@@ -85,6 +86,7 @@ var specto_faker = {
 			
 			//on focus select, add focused class to faker
 			$(fakr_elm).find("select").each(function(){
+				has_select = true;
 				$(this).removeClass("faker").focus(function(){ //remove faker class from select
 					//close all opened fakers
 					$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
@@ -109,6 +111,19 @@ var specto_faker = {
 			}
 			else $(fakr_elm).removeClass(specto_faker.config.searchable_class);
 			$(fakr_elm).addClass(specto_faker.config.init_class);
+			
+			//firefox workaround - reset form for proper detection of required fields
+			if(has_select && $(fakr_elm).parents("form").length > 0){
+				switch(document.readyState){
+					case "complete":
+						$(fakr_elm).parentsUntil("form").last().parent()[0].reset();
+						break;
+					default:
+						$(window).load(function(){
+							$(fakr_elm).parentsUntil("form").last().parent()[0].reset();
+						});
+				}
+			}
 		});
 		
 		//document clicks - outside of opened fakers, close those fakers
@@ -237,6 +252,7 @@ var specto_faker = {
 			if(placeholder) {
 				$(fakr_html).find(".drop-value span").text(placeholder);
 				$(fakr_html).find(".drop-selection").prepend("<div rel='' disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'>"+ placeholder +"</div>"); //placeholder - add disabled value
+				if($(fakr_html).find("option[value='']").length < 1) $(fakr_html).find("select").prepend("<option value='' selected='selected' disabled='disabled'>placeholder</option>"); //also append option with empty value to select (FF requirement)
 			}
 			$(that).after(fakr_html);
 			var final_target = $(that).next();
