@@ -166,22 +166,25 @@ var specto_faker = {
 				specto_faker.updateValue(this); //update faker value
 				var self = this;
 				setTimeout(function(){ $(self).addClass(specto_faker.config.selected_val_class); }, (specto_faker.isFakerAnimated(fakr) ? specto_faker.config.animation_speed : 0)); //add selected class
-				//if there is select present, update it's value. And trigger change event
-				var selects = $(this).parent().prevAll("select");
-				if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(this)).change();
 				if(after_change_fun) after_change_fun(specto_faker.getSelectionValue(this), e); //change function
 				
 			});
 		});
 	},
-	updateValue: function(rel, dimm_click){ 
+	updateValue: function(rel, dimm_click){ //notice - this function doesn't call after change event
 		if($(rel).length < 1) return; //prevent error
 		$(rel).siblings().filter(function(){ return $(this).hasClass(specto_faker.config.selected_val_class); }).each(function(){ $(this).removeClass(specto_faker.config.selected_val_class); });
 		$(rel).addClass(specto_faker.config.selected_val_class);
 		var v = $(rel).parent().prevAll(".drop-value").attr("rel", $(rel).attr("rel")).find("span").text($(rel).text()); 
-		if(!dimm_click) v.trigger("click");
+		
+		//if there is select present, update it's value. And trigger change event
+		var selects = $(rel).parent().prevAll("select");
+		if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(rel)).change();
+		
+		if(!dimm_click) v[0].click();
 	},
 	getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); },
+	setFakerValue: function(fakr, val, prevent_opening){ specto_faker.updateValue($(fakr).find(".drop-selection div[rel='"+ val +"']"), prevent_opening); },
 	getSelectionValue: function(sel_item){ return $(sel_item).attr("rel"); },
 	isFakerOpen: function(fakr){ return $(fakr).hasClass(specto_faker.config.open_class); },
 	isFakerAnimated: function(fakr){ return $(fakr).hasClass(specto_faker.config.anim_class); },
@@ -401,6 +404,9 @@ var specto_faker = {
 				if(!$(this).hasClass(specto_faker.config.selected_val_class)) specto_faker.updateValue(this, "noclick");
 			});
 		}
+	},
+	selectLastSelected: function(){
+		
 	},
 	sortValues: function(fakr, ascending){
 		
