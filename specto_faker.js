@@ -1,3 +1,4 @@
+"use strict";
 var specto_faker = {
 	initiated: false,
 	config: {
