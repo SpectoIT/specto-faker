@@ -182,7 +182,7 @@ var specto_faker = {
 		var selects = $(rel).parent().prevAll("select");
 		if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(rel)).change();
 		
-		if(!dimm_click) v[0].click();
+		if(!dimm_click) $(v).trigger("click");
 	},
 	getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); },
 	setFakerValue: function(fakr, val, prevent_opening){ specto_faker.updateValue($(fakr).find(".drop-selection div[rel='"+ val +"']"), prevent_opening); },
