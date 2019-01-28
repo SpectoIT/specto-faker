@@ -8,10 +8,10 @@ index.html
 
 ## Notes
 
-* Requires jQuery <i>(Tested on 2.2.4)</i>.
+* Requires jQuery <i>(Tested on 2.2.4)</i>, works also on 3.3 (tested)!
 * Customizable with options:
 
-```
+```javascript
     {
 		object_selector: ".faker", //element(s) - works only if called through `specto_faker.init()`, if called as `$([object_selector]).specto_faker()` elements are defined in `$([object_selector])`
 		
@@ -69,7 +69,7 @@ index.html
 
 ### HTML
 
-```
+```html
 	<select id="test" name="test" class="faker">
 		<option value="a">Šport</option>
 		<option value="b">Zabava</option>
@@ -80,7 +80,7 @@ index.html
 
 OR plain version
 
-```
+```html
 <div id="servis" class="faker">
 	<div class="drop-value">
 		<span></span>
@@ -106,7 +106,7 @@ OR plain version
 
 Use the plugin as follows:
 
-```
+```javascript
 $(document).ready(function(){
 	specto_faker.init(); 
 	//or 
@@ -119,16 +119,18 @@ $(document).ready(function(){
 
 ### Manual
 
-```
+```html
 <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 <link href="specto_faker.css" rel="stylesheet" type="text/css">
 <script src="specto_faker.js" type="text/javascript"></script>
 
 ```
+### NPM
+Run command `npm install git+ssh://git@code.specto.si:22015/bower/specto-faker.git#master`
 
 ### Bower
 
-```
+```javascript
 "dependencies": {
 	"specto_faker": "https://code.specto.si/bower/specto-faker.git",
 	//or with version
@@ -142,7 +144,7 @@ $(document).ready(function(){
 
 ###	SCSS VARIABLES (colors, handle icon, height)
 
-```
+```scss
 $faker_handle_icon: "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTQiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE0IDgiPjxkZWZzPjxwYXRoIGlkPSJmd2Y4YSIgZD0iTTYyMDcuNTIgMzU2MS40NGMwLS4xLS4wNS0uMjMtLjEzLS4zbC0uNjctLjY4YS40Ni40NiAwIDAgMC0uMy0uMTNjLS4xMSAwLS4yNC4wNS0uMzIuMTNsLTUuMjYgNS4yNy01LjI3LTUuMjdhLjQ2LjQ2IDAgMCAwLS4zLS4xMy40NC40NCAwIDAgMC0uMzEuMTNsLS42Ny42N2EuNDYuNDYgMCAwIDAtLjE0LjMxYzAgLjEuMDYuMjMuMTQuMzFsNi4yNCA2LjI0Yy4wOC4wOC4yLjE0LjMuMTQuMTIgMCAuMjQtLjA2LjMyLS4xNGw2LjI0LTYuMjRjLjA4LS4wOC4xMy0uMi4xMy0uM3oiLz48L2RlZnM+PGc+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYxOTQgLTM1NjApIj48dXNlIHhsaW5rOmhyZWY9IiNmd2Y4YSIvPjwvZz48L2c+PC9zdmc+";
 
 
@@ -167,7 +169,7 @@ $faker_height: 53px;
 
 ### Custom element with animation
 
-```
+```javascript
 specto_faker.init({animated: true, object_selector: "#testId"});
 //$("#testId").specto_faker({animated: true});
 
@@ -175,7 +177,7 @@ specto_faker.init({animated: true, object_selector: "#testId"});
 
 ### Custom callbacks
 
-```
+```javascript
 specto_faker.init({
 	on_change: function(newVal, jsEvent){
 		console.log("new value: "+ newVal);
@@ -201,7 +203,7 @@ $(".faker").specto_faker({
 
 ### Build from select (with onchange function already attached)
 
-```
+```javascript
 $("select").change(function(newVal, jsEvent){ console.log("changed into"+ newVal); }); 
 
 specto_faker.init({ object_selector: "select"});
@@ -211,7 +213,7 @@ specto_faker.init({ object_selector: "select"});
 
 ### After changed content, rebuild selection clicks
 
-```
+```javascript
 specto_faker.fakerSelection("#dropdown");
 
 //specto_faker.fakerSelection("#dropdown", after_change_function, before_change_function);
@@ -220,7 +222,7 @@ specto_faker.fakerSelection("#dropdown");
 
 or just reinit
 
-```
+```javascript
 specto_faker.init({object_selector: "#dropdown"});
 //$("#dropdown").specto_faker();
 
@@ -233,7 +235,7 @@ If there is ```<select>```, you can use js or jQuery to get current value.
 
 But you can also use <i>(single element)</i>
 
-```
+```javascript
 var faker_value = specto_faker.getFakerValue("#fakerId");
 
 ```
@@ -242,7 +244,7 @@ var faker_value = specto_faker.getFakerValue("#fakerId");
 
 Init multiple fakers and for specific fakers, set custom onchange function
 
-```
+```javascript
 //init all
 specto_faker.init({
 	animated: true
@@ -261,7 +263,7 @@ specto_faker.init({
 ### Update faker options and reinit faker
 
 
-```
+```javascript
 //init
 specto_faker.init({
 	animated: true,
@@ -286,7 +288,7 @@ specto_faker.updateOptions("#faker_elm", [{
 ### Build from select and update options
 
 
-```
+```javascript
 //init and save reference to faker
 var initiated_fakers = specto_faker.init({
 	object_selector: "select#test"
