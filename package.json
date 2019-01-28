@@ -16,7 +16,7 @@
   },
   "main": "specto_faker.js",
   "dependencies": {
-    "jquery": "~2.2"
+    "jquery": "^3"
   },
   "devDependencies": {},
   "moduleType": [
