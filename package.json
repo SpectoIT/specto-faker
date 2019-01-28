@@ -1,0 +1,33 @@
+{
+  "name": "specto_faker",
+  "version": "1.0.0",
+  "description": "Specto jQuery plugin for customizable / styleable select substitution.",
+  "author": "Aljaž Kraševec <aljaz@specto.si>",
+  "contributors": [
+    "Aljaž Kraševec <aljaz@specto.si>"
+  ],
+  "bugs": "https://code.specto.si/bower/specto-faker/issues",
+  "copyright": "Specto informacijske tehnologije d.o.o.",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@code.specto.si:22015/bower/specto-faker.git"
+  },
+  "main": "specto_faker.js",
+  "dependencies": {
+    "jquery": "~2.2"
+  },
+  "devDependencies": {
+  },
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "specto",
+    "faker",
+    "specto_faker",
+    "select"
+  ],
+  "ignore": []
+}
