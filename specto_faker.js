@@ -69,7 +69,7 @@ var specto_faker = {
 			
 			//drop value & handle clicks
 			$(fakr_elm).find(".drop-value, .drop-handle").each(function(){ 
-				$(this).unbind().click(function(){
+				$(this).off().click(function(){
 					
 					var faker = $(this).parent();
 					if(specto_faker.isFakerOpen(faker)) specto_faker.animateFaker(faker);
@@ -151,7 +151,7 @@ var specto_faker = {
 	},
 	fakerSelection: function(fakr, after_change_fun, before_change_fun){ //dropdown clicks
 		$(fakr).find(".drop-selection div").each(function(){
-			$(this).unbind().click(function(e){
+			$(this).off().click(function(e){
 				if(typeof $(this).attr("disabled") === "string") return; //prevent disabled options
 				
 				if(before_change_fun){ //run before change function
