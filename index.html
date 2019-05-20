@@ -18,17 +18,22 @@
 <body>
 	<div class="container">   
 		
+		<!-- PLAIN -->
 		<div class="row">
 			<form>
-				<div class="col-sm-12">
+				<div class="col-sm-6">
 					<h4>Plain select faker</h4>
 					<select class="faker" default-values id="plain" name="plain"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Plain select faker</h4>
+					<div class="faker" noselect-faker id="plain2" name="plain2"></div>
 				</div>
 			</form>
 		</div>
 		<hr />
 		
-		
+		<!-- ANIMATED -->
 		<div class="row">
 			<form>
 				<div class="col-sm-12">
@@ -39,6 +44,7 @@
 		</div>
 		<hr />
 		
+		<!-- CUSTOM CALLBACKS -->
 		<div class="row">
 			<form>
 				<div class="col-sm-12">
@@ -156,6 +162,12 @@
 		};
 		$(document).ready(function(){
 			
+			//prevent all forms to be sent
+			$("form").each(function(){
+				$(this).submit(function(event){
+					event.preventDefault();
+				});
+			});
 			//fill default selects
 			$("select[default-values]").each(function(){
 				var self = this;
@@ -163,7 +175,22 @@
 					$(self).append("<option value='"+ ind +"'>"+ item +"</option>");
 				});
 			});
+			//fill default fakers with no select
+			$("div[noselect-faker]").each(function(){
+				
+				var self = this;
+				$(this).append("<div class='drop-value' rel=''><span></span></div>");
+				$(this).append("<div class='drop-handle'>&nbsp;</div>");
+				$(this).append("<div class='drop-selection'></div>");
+				$.each({BE:"Belize",CA:"Kanada",JM:"Jamajka",IQ:"Iraq",LV:"Latvija",LT:"Litva"}, function(ind, item){
+					$(self).find(".drop-selection").append("<div rel='"+ ind +"'>"+ item +"</div>");
+				});
+			});
 			
+			
+			/* *** */
+			/* START OF SPECTO_FAKER INIT */
+			/* *** */
 			
 			//$(".faker").specto_faker({animated: true, on_change: bla});
 			specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true, searchable: true}); //key events on init
@@ -176,7 +203,7 @@
 			
 			
 			//PLAIN
-			specto_faker.init({object_selector: "#plain"});
+			specto_faker.init({object_selector: "#plain, #plain2", braille_support: true, searchable: false});
 			//ANIMATED
 			specto_faker.init({object_selector: "#plain_anim", animated: true, animation_speed: 1500, count_selected: true, count_disables: false});
 			//CUSTOM CALLBACKS
