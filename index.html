@@ -17,6 +17,57 @@
 
 <body>
 	<div class="container">   
+		
+		<!-- PLAIN -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>Plain select faker</h4>
+					<select class="faker" default-values id="plain" name="plain"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Plain select faker</h4>
+					<div class="faker" noselect-faker id="plain2" name="plain2"></div>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
+		<!-- ANIMATED -->
+		<div class="row">
+			<form>
+				<div class="col-sm-12">
+					<h4>Animated faker - with custom animation effects</h4>
+					<select class="faker" default-values id="plain_anim" name="plain_anim"></select>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
+		<!-- CUSTOM CALLBACKS -->
+		<div class="row">
+			<form>
+				<div class="col-sm-12">
+					<h4>Faker with custom callbacks (Iraq prevented, alert onchange, custom border on init)</h4>
+					<select class="faker" default-values id="callback" name="callback"></select>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
+		
+		<!-- key events -->
+		<!-- key events & animated -->
+		<!-- searchable -->
+		<!-- searchable & animated -->
+		<!-- braille support -->
+		
+		
+		<!-- made from html instead of select -> all options? -->
+		
+		
+		
+	
 		<form>
 			<div class="row">
 				<div class="col-sm-12">
@@ -90,32 +141,81 @@
 
 		</form>
 		
+		<form>
+			<p>regular select</p>
+			<select class="faker3" id="srch_me" name="srch_me" placeholder="Make me search regular" required>
+				<option value="BE">Belize</option>
+				<option value="CA">Kanada</option>
+				<option value="JM">Jamajka</option>
+				<option value="IQ">Iraq</option>
+				<option value="LV">Latvija</option>
+				<option value="LT">Litva</option>
+			</select>
+		</form>
+		
 	</div>
 	
 	<script>
 		function onchange_callback(newVal, e){
-			console.log("bla");
-			/* console.log(newVal);
-			console.log(e); */
+			console.log("Nova vrednost fakerja: " + newVal);
+			console.log(e);
 		};
 		$(document).ready(function(){
 			
+			//prevent all forms to be sent
+			$("form").each(function(){
+				$(this).submit(function(event){
+					event.preventDefault();
+				});
+			});
+			//fill default selects
+			$("select[default-values]").each(function(){
+				var self = this;
+				$.each({BE:"Belize",CA:"Kanada",JM:"Jamajka",IQ:"Iraq",LV:"Latvija",LT:"Litva"}, function(ind, item){
+					$(self).append("<option value='"+ ind +"'>"+ item +"</option>");
+				});
+			});
+			//fill default fakers with no select
+			$("div[noselect-faker]").each(function(){
+				
+				var self = this;
+				$(this).append("<div class='drop-value' rel=''><span></span></div>");
+				$(this).append("<div class='drop-handle'>&nbsp;</div>");
+				$(this).append("<div class='drop-selection'></div>");
+				$.each({BE:"Belize",CA:"Kanada",JM:"Jamajka",IQ:"Iraq",LV:"Latvija",LT:"Litva"}, function(ind, item){
+					$(self).find(".drop-selection").append("<div rel='"+ ind +"'>"+ item +"</div>");
+				});
+			});
+			
+			
+			/* *** */
+			/* START OF SPECTO_FAKER INIT */
+			/* *** */
+			
 			//$(".faker").specto_faker({animated: true, on_change: bla});
-			specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true, searchable: true});
+			specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true, searchable: true}); //key events on init
 			specto_faker.init({animated: true, key_events: true, object_selector: "#test", before_change: function(newVal, e){
 				if(newVal === "b") return false;
 				else return true;
 			}});
 			
-			/*$("#test").change(function(){
-				console.log("onchange_select");
-			});
 			
 			
-			$("#aaa").click(function(){
-				console.log($("#servis-selector-val").val());
-			});*/
 			
+			//PLAIN
+			specto_faker.init({object_selector: "#plain, #plain2", braille_support: true, searchable: false});
+			//ANIMATED
+			specto_faker.init({object_selector: "#plain_anim", animated: true, animation_speed: 1500, count_selected: true, count_disables: false});
+			//CUSTOM CALLBACKS
+			specto_faker.init({object_selector: "#callback", before_change: function(newVal, jsEvent){ 
+				return newVal == "IQ" ? false : true;
+			}, on_change: function(newVal, jsEvent){
+				alert("new value: "+ newVal);
+			}, on_init: function(fakers){
+				$.each(fakers, function(ind, itm){ $(itm).css("border", "2px solid blue"); });
+			}});
+			
+	
 			$("#upd").click(function(){
 				//console.log("bla");
 				specto_faker.updateOptions($("#test").parent(), [{code: "1", xname: "Updejt"},{code: "2", xname: "Updejt 2"},{code: "3", xname: "Updejt 3"}], "code", "xname", {animated: true, object_selector: "#test", before_change: function(newVal, e){
