@@ -29,6 +29,7 @@ index.html
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		search_hidden: "rel-search", //class for hidden options - hidden by search
+		nv_helper_class: "non-visual-helper", //class of non-visual input helper
 		
 		/* ANIMATION */
 		animated: false, //is faker animated
@@ -50,7 +51,7 @@ index.html
 		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
 		
 		/* BRAILLE SUPPORT */
-		braille_support: false, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on
+		braille_support: false, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on -->> example: https://a11y.nicolas-hoffmann.net/autocomplete-list/
 	}
 ```
 
@@ -67,7 +68,7 @@ index.html
 * Can be ordered on init
 * If builded from select, be aware that every further reference to faker <i>(fakr, faker_elm, object_selector, ...)</i> doesn't mean original select, but it's faker <i>(more in examples - Build from select and update options)</i>
 
-* start of non-visual support
+* start of non-visual support (tested with no select present)
 
 
 ## Example Usage

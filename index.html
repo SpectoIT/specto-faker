@@ -18,6 +18,11 @@
 <body>
 	<div class="container">   
 		
+		<div class="row">
+			<div class="col-sm-6"><h3>WITH SELECT</h3></div>
+			<div class="col-sm-6"><h3>WITHOUT SELECT</h3></div>
+		</div>
+		
 		<!-- PLAIN -->
 		<div class="row">
 			<form>
@@ -36,9 +41,13 @@
 		<!-- ANIMATED -->
 		<div class="row">
 			<form>
-				<div class="col-sm-12">
+				<div class="col-sm-6">
 					<h4>Animated faker - with custom animation effects</h4>
 					<select class="faker" default-values id="plain_anim" name="plain_anim"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Animated faker - with custom animation effects</h4>
+					<div class="faker" noselect-faker id="plain_anim2" name="plain_anim2"></div>
 				</div>
 			</form>
 		</div>
@@ -47,19 +56,66 @@
 		<!-- CUSTOM CALLBACKS -->
 		<div class="row">
 			<form>
-				<div class="col-sm-12">
+				<div class="col-sm-6">
 					<h4>Faker with custom callbacks (Iraq prevented, alert onchange, custom border on init)</h4>
 					<select class="faker" default-values id="callback" name="callback"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Faker with custom callbacks (Iraq prevented, alert onchange, custom border on init)</h4>
+					<div class="faker" noselect-faker id="callback2" name="callback2"></div>
 				</div>
 			</form>
 		</div>
 		<hr />
 		
+		<!-- KEY EVENTS -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>Faker with key events</h4>
+					<select class="faker" default-values id="keyevents" name="keyevents"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Faker with key events</h4>
+					<div class="faker" noselect-faker id="keyevents2" name="keyevents2"></div>
+				</div>
+			</form>
+		</div>
+		<hr />
 		
-		<!-- key events -->
-		<!-- key events & animated -->
-		<!-- searchable -->
-		<!-- searchable & animated -->
+		<!-- KEY EVENTS + ANIMATED -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>Animated faker with key events</h4>
+					<select class="faker" default-values id="keyevents_anim" name="keyevents_anim"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Animated faker with key events</h4>
+					<div class="faker" noselect-faker id="keyevents_anim2" name="keyevents_anim2"></div>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
+		<!-- SEARCHABLE -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>Searchable faker</h4>
+					<select class="faker" default-values id="searchable" name="searchable"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Searchable faker</h4>
+					<div class="faker" noselect-faker id="searchable2" name="searchable2"></div>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
+		<label for="next_faker">next input for proper tab switching</label>
+		<input id="next_faker" type="text" />
+		
 		<!-- braille support -->
 		
 		
@@ -68,6 +124,10 @@
 		
 		
 	
+		<hr />
+		<hr />
+		<hr />
+		<h3>OLD EXAMPLES</h3>
 		<form>
 			<div class="row">
 				<div class="col-sm-12">
@@ -205,17 +265,24 @@
 			//PLAIN
 			specto_faker.init({object_selector: "#plain, #plain2", braille_support: true, searchable: false});
 			//ANIMATED
-			specto_faker.init({object_selector: "#plain_anim", animated: true, animation_speed: 1500, count_selected: true, count_disables: false});
+			specto_faker.init({object_selector: "#plain_anim, #plain_anim2", animated: true, animation_speed: 1500, count_selected: true, count_disables: false});
 			//CUSTOM CALLBACKS
-			specto_faker.init({object_selector: "#callback", before_change: function(newVal, jsEvent){ 
+			specto_faker.init({object_selector: "#callback, #callback2", before_change: function(newVal, jsEvent){ 
 				return newVal == "IQ" ? false : true;
 			}, on_change: function(newVal, jsEvent){
 				alert("new value: "+ newVal);
 			}, on_init: function(fakers){
 				$.each(fakers, function(ind, itm){ $(itm).css("border", "2px solid blue"); });
 			}});
+			//KEY EVENTS
+			specto_faker.init({object_selector: "#keyevents, #keyevents2", key_events:true, searchable: false, braille_support: true,});
+			//KEY EVENTS + ANIMATED
+			specto_faker.init({object_selector: "#keyevents_anim, #keyevents_anim2", key_events:true, searchable: false, animated: true, braille_support: true,});
+			//SEARCHABLE
+			specto_faker.init({object_selector: "#searchable, #searchable2", key_events:true, braille_support: true, });
 			
-	
+			
+			<!-- !!! -->
 			$("#upd").click(function(){
 				//console.log("bla");
 				specto_faker.updateOptions($("#test").parent(), [{code: "1", xname: "Updejt"},{code: "2", xname: "Updejt 2"},{code: "3", xname: "Updejt 3"}], "code", "xname", {animated: true, object_selector: "#test", before_change: function(newVal, e){
