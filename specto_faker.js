@@ -75,6 +75,23 @@ var specto_faker = {
 			//sorting of values
 			if(fakr_settings.sortable) specto_faker.sortValues(fakr_elm, fakr_settings.sort_ascending);
 			
+			//faker classes
+			if(fakr_settings.animated) $(fakr_elm).addClass(specto_faker.config.anim_class); //animated
+			else $(fakr_elm).removeClass(specto_faker.config.anim_class);
+			if(fakr_settings.braille_support){ 
+				$(fakr_elm).addClass(specto_faker.config.braille_class); //braille support
+				fakr_settings.key_events = true;
+			}
+			else $(fakr_elm).removeClass(specto_faker.config.braille_class);
+			if(fakr_settings.key_events) $(fakr_elm).addClass(specto_faker.config.key_events_class); //key events
+			else $(fakr_elm).removeClass(specto_faker.config.key_events_class);
+			if(fakr_settings.searchable && fakr_settings.key_events) {
+				$(fakr_elm).addClass(specto_faker.config.searchable_class); //searchable - only with both keyevents and searchable
+				if(fakr_settings.search_single) $(fakr_elm).addClass(specto_faker.config.select_single); //searchable - only with both keyevents and searchable 
+			}
+			else $(fakr_elm).removeClass(specto_faker.config.searchable_class);
+			$(fakr_elm).addClass(specto_faker.config.init_class);
+			
 			//drop value & handle clicks
 			$(fakr_elm).find(".drop-value, .drop-handle").each(function(){ 
 				$(this).off("click").click(function(){
@@ -143,23 +160,6 @@ var specto_faker = {
 			}
 			else $(fakr_elm).find("."+ specto_faker.config.nv_helper_class).each(function(){ $(this).remove(); });
 			
-			
-			//faker classes
-			if(fakr_settings.animated) $(fakr_elm).addClass(specto_faker.config.anim_class); //animated
-			else $(fakr_elm).removeClass(specto_faker.config.anim_class);
-			if(fakr_settings.braille_support){ 
-				$(fakr_elm).addClass(specto_faker.config.braille_class); //braille support
-				fakr_settings.key_events = true;
-			}
-			else $(fakr_elm).removeClass(specto_faker.config.braille_class);
-			if(fakr_settings.key_events) $(fakr_elm).addClass(specto_faker.config.key_events_class); //key events
-			else $(fakr_elm).removeClass(specto_faker.config.key_events_class);
-			if(fakr_settings.searchable && fakr_settings.key_events) {
-				$(fakr_elm).addClass(specto_faker.config.searchable_class); //searchable - only with both keyevents and searchable
-				if(fakr_settings.search_single) $(fakr_elm).addClass(specto_faker.config.select_single); //searchable - only with both keyevents and searchable 
-			}
-			else $(fakr_elm).removeClass(specto_faker.config.searchable_class);
-			$(fakr_elm).addClass(specto_faker.config.init_class);
 			
 			//firefox workaround - reset form for proper detection of required fields
 			if(has_select && $(fakr_elm).parents("form").length > 0){
