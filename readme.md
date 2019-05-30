@@ -2,6 +2,7 @@
 
 ## IMPORTANT CHANGES
 * v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
+* v3.13 changed search in searchable faker. From now on, it works only from start
 
 ## Demo & Examples
 index.html
@@ -23,6 +24,7 @@ index.html
 		focused_class: "faker-focused", //class for focused faker
 		key_events_class: "faker-keyevent", //class for faker with key events
 		searchable_class: "faker-search", //class for searchable faker
+		searchable_from_start_class: "faker-search-start", //class for searchable faker to search from beginning
 		select_single: "faker-sel-single", //class for searchable faker to auto select single filtered option
 		braille_class: "faker-braille", //class for faker that supports braille speach
 		/* options classes */
@@ -38,9 +40,10 @@ index.html
 		count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
 		
 		/* KEY EVENTS & SEARCHING & SORTING */
-		key_events: false, //do you want keyEvents to work - Global setting which works only for the first specto_faker.init !
+		key_events: false, //do you want keyEvents to work
 		searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
 		search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
+		search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this options and consideres it set to true
 		sortable: false, //do you want on init to be sorted
 		sort_ascending: true,
 		
@@ -69,6 +72,7 @@ index.html
 * If builded from select, be aware that every further reference to faker <i>(fakr, faker_elm, object_selector, ...)</i> doesn't mean original select, but it's faker <i>(more in examples - Build from select and update options)</i>
 
 * start of non-visual support (tested with no select present)
+* added search hints (+auto selected first value)
 
 
 ## Example Usage
