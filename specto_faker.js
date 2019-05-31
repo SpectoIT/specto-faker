@@ -238,8 +238,10 @@ var specto_faker = {
 		var selects = $(rel).parent().prevAll("select");
 		if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(rel)).change();
 		
-		if(!dimm_click) $(v).trigger("click");
 		var fakr_el = $(rel).parent().parent();
+		if(!dimm_click) $(v).trigger("click");
+		else if(extra_settings.manual_close) specto_faker.animateFaker(fakr_el, false, {dont_remove_focus: true});
+		
 		if(specto_faker.isFakerBrailleSupport(fakr_el)) {
 			if(specto_faker.isFakerSearchable(fakr_el)){
 				//$(fakr_el).find("."+ specto_faker.config.nv_helper_class).each(function(){ //focus helper - if moved from searchable with arrow keys
@@ -248,7 +250,7 @@ var specto_faker = {
 					else  */
 						$(fakr_el).find("input[name='faker-search']").each(function(){ //update search value
 
-							$(this).val(specto_faker.getFakerUserValue(fakr_el)).attr("title", specto_faker.braille_list_text(fakr_el));
+							$(this).val(specto_faker.getFakerUserValue(fakr_el)).attr("title", specto_faker.brailleListText(fakr_el));
 							this.setSelectionRange(0, 200);
 							$(this).focus();
 						});
@@ -394,13 +396,9 @@ var specto_faker = {
 		var key = e.keyCode || e.which;
 		switch(key){
 			case 13: //enter - close faker
+				$(fakr).find("."+ specto_faker.config.nv_helper_class).each(function(){ $(this).focus(); });
 				specto_faker.animateFaker(fakr, false, {dont_remove_focus: specto_faker.hasFakerNvHelperInput(fakr)});
-				$(fakr).find("."+ specto_faker.config.nv_helper_class).each(function(){
-					$(this).blur(function(){
-						$(this).off("blur");
-						$(fakr).removeClass(specto_faker.config.focused_class);
-					});
-				});
+				specto_faker.brailleClosedFakerButFocusedNvHelper(fakr);
 				break;
 			case 40: //down
 				specto_faker.selection.next(fakr);
@@ -471,8 +469,8 @@ var specto_faker = {
 	makeFakerSearchable: function(fakr){
 		if(specto_faker.isFakerSearchable(fakr)){
 			
-			var title = specto_faker.isFakerBrailleSupport(fakr) ? "combobox "+ specto_faker.getFakerUserValue(fakr) +" expanded. This combobox can be searchable by input and by using arrow keys" : "";
-			$(fakr).find(".drop-value").append("<input autocomplete='nope' type='text' name='faker-search' class='form-control' tabindex='-1' title='"+ title +"' />"); //prevent autocomplete on input
+			var title = specto_faker.isFakerBrailleSupport(fakr) ? "combobox "+ specto_faker.getFakerUserValue(fakr) +" expanded has autocomplete. This combobox can be searchable by input and by using arrow keys" : "";
+			$(fakr).find(".drop-value").append("<input autocomplete='both' type='text' name='faker-search' class='form-control' tabindex='-1' title='"+ title +"' />"); //prevent autocomplete on input
 			$(fakr).find("input[name='faker-search']").each(function(){ 
 				$(this).click(function(event){
 					event.preventDefault();
@@ -510,7 +508,7 @@ var specto_faker = {
 		var from_start = specto_faker.isFakerBrailleSupport(fakr) || specto_faker.isFakerSearchableFromStart(fakr);
 		$(fakr).find(".drop-selection div").each(function(){
 			var search_pos = $(this).text().toLowerCase().search(srch_val);
-			if((from_start && search_pos === 0) || (!from_start && search_pos > -1)) { //values that start with the same letters
+			if((from_start && search_pos === 0) || (!from_start && search_pos > -1)) { //diff search from start or contains
 				$(this).removeClass(specto_faker.config.search_hidden);
 				cnt++;
 				if(!first_found){
@@ -528,7 +526,8 @@ var specto_faker = {
 		if(cnt === 1 && $(fakr).hasClass(specto_faker.config.select_single)){ //select single option that was left from filtering
 			$(fakr).find("."+ specto_faker.config.nv_helper_class).each(function(){ $(this).focus(); }); //for nvda helper first focus it (so that it will double open -> therefore close)
 			$(fakr).find(".drop-selection div:not(."+ specto_faker.config.search_hidden +")").each(function(){ //prevent error - first()
-				specto_faker.updateValue(this);
+				specto_faker.updateValue(this, "noclick", {manual_close: true});
+				specto_faker.brailleClosedFakerButFocusedNvHelper(fakr);
 			});
 		}
 	},
@@ -559,7 +558,7 @@ var specto_faker = {
 		
 		switch(type){
 			case "selection":
-				var nv_title = specto_faker.braille_list_text(fakr);
+				var nv_title = specto_faker.brailleListText(fakr);
 				
 				if(specto_faker.hasFakerNvHelperInput(fakr)) $(fakr).find("."+ specto_faker.config.nv_helper_class).val(nv_title); //faker without select
 				else $(document.activeElement).attr("title", nv_title);
@@ -571,12 +570,20 @@ var specto_faker = {
 		}
 		
 	},
-	braille_list_text: function(fakr){
+	brailleListText: function(fakr){
 		return specto_faker.getFakerUserValue(fakr) +" "+
 			($(fakr).find(".drop-selection div."+ specto_faker.config.selected_val_class).prevAll().filter(specto_faker.selection.filter_fn).length + 1) +
 			" of " +
 			$(fakr).find(".drop-selection div").filter(specto_faker.selection.filter_fn).length;
-	}
+	},
+	brailleClosedFakerButFocusedNvHelper: function(fakr){ //hach to allow tab switching, but resets on blur
+		$(fakr).find("."+ specto_faker.config.nv_helper_class).each(function(){
+			$(this).attr("tabindex", "-1").blur(function(){
+				$(this).off("blur").removeAttr("tabindex");
+				$(this).parent().removeClass(specto_faker.config.focused_class);
+			});
+		});
+	},
 };
 
 //jquery wrapper
