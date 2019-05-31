@@ -469,7 +469,8 @@ var specto_faker = {
 	makeFakerSearchable: function(fakr){
 		if(specto_faker.isFakerSearchable(fakr)){
 			
-			var title = specto_faker.isFakerBrailleSupport(fakr) ? "combobox "+ specto_faker.getFakerUserValue(fakr) +" expanded has autocomplete. This combobox can be searchable by input and by using arrow keys" : "";
+			var label = $(fakr).parents("label").length > 0 ? $(fakr).parents("label").first().attr("title") : "";
+			var title = specto_faker.isFakerBrailleSupport(fakr) ? label +" combobox "+ specto_faker.getFakerUserValue(fakr) +" expanded has autocomplete. This combobox can be searchable by input and by using arrow keys" : "";
 			$(fakr).find(".drop-value").append("<input autocomplete='both' type='text' name='faker-search' class='form-control' tabindex='-1' title='"+ title +"' />"); //prevent autocomplete on input
 			$(fakr).find("input[name='faker-search']").each(function(){ 
 				$(this).click(function(event){
@@ -583,6 +584,20 @@ var specto_faker = {
 				$(this).parent().removeClass(specto_faker.config.focused_class);
 			});
 		});
+	},
+	brailleLanguages: {
+		en: {
+			combobox: "combobox",
+			expanded: "expanded",
+			autocomplete: "has autocomplete",
+			searchable: "This combobox can be searchable by input and by using arrow keys"
+		},
+		sl: {
+			combobox: "combobox",
+			expanded: "expanded",
+			autocomplete: "has autocomplete",
+			searchable: "This combobox can be searchable by input and by using arrow keys"
+		},
 	},
 };
 
