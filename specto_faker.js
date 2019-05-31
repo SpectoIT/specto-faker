@@ -585,7 +585,7 @@ var specto_faker = {
 			});
 		});
 	},
-	brailleLanguages: {
+	/* brailleLanguages: {
 		en: {
 			combobox: "combobox",
 			expanded: "expanded",
@@ -598,7 +598,7 @@ var specto_faker = {
 			autocomplete: "has autocomplete",
 			searchable: "This combobox can be searchable by input and by using arrow keys"
 		},
-	},
+	}, */
 };
 
 //jquery wrapper
