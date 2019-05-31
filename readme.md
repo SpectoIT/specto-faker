@@ -74,6 +74,8 @@ index.html
 * start of non-visual support (tested with no select present)
 * added search hints (+auto selected first value)
 
+* recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option
+
 
 ## Example Usage
 
