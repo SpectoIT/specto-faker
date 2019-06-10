@@ -168,7 +168,7 @@ var specto_faker = {
 						$(fakr_elm).parentsUntil("form").last().parent()[0].reset();
 						break;
 					default:
-						$(window).load(function(){
+						$(window).on("load", function(){
 							$(fakr_elm).parentsUntil("form").last().parent()[0].reset();
 						});
 				}
