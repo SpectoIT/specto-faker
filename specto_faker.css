@@ -134,6 +134,9 @@
 .faker select option {
   display: none;
 }
+.faker .non-visual-helper {
+  opacity: 0;
+}
 .faker .drop-value:hover, .faker.open .drop-value {
   color: #959698;
 }

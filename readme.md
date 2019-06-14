@@ -2,6 +2,7 @@
 
 ## IMPORTANT CHANGES
 * v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
+* v3.13 changed search in searchable faker. From now on, it works only from start
 
 ## Demo & Examples
 index.html
@@ -23,12 +24,14 @@ index.html
 		focused_class: "faker-focused", //class for focused faker
 		key_events_class: "faker-keyevent", //class for faker with key events
 		searchable_class: "faker-search", //class for searchable faker
+		searchable_from_start_class: "faker-search-start", //class for searchable faker to search from beginning
 		select_single: "faker-sel-single", //class for searchable faker to auto select single filtered option
 		braille_class: "faker-braille", //class for faker that supports braille speach
 		/* options classes */
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
 		search_hidden: "rel-search", //class for hidden options - hidden by search
+		nv_helper_class: "non-visual-helper", //class of non-visual input helper
 		
 		/* ANIMATION */
 		animated: false, //is faker animated
@@ -37,9 +40,10 @@ index.html
 		count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
 		
 		/* KEY EVENTS & SEARCHING & SORTING */
-		key_events: false, //do you want keyEvents to work - Global setting which works only for the first specto_faker.init !
+		key_events: false, //do you want keyEvents to work
 		searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
 		search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
+		search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this options and consideres it set to true
 		sortable: false, //do you want on init to be sorted
 		sort_ascending: true,
 		
@@ -50,7 +54,7 @@ index.html
 		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
 		
 		/* BRAILLE SUPPORT */
-		braille_support: false, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on
+		braille_support: false, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on -->> example: https://a11y.nicolas-hoffmann.net/autocomplete-list/
 	}
 ```
 
@@ -67,7 +71,10 @@ index.html
 * Can be ordered on init
 * If builded from select, be aware that every further reference to faker <i>(fakr, faker_elm, object_selector, ...)</i> doesn't mean original select, but it's faker <i>(more in examples - Build from select and update options)</i>
 
-* start of non-visual support
+* start of non-visual support (tested with no select present)
+* added search hints (+auto selected first value)
+
+* recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option
 
 
 ## Example Usage
