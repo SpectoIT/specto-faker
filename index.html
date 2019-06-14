@@ -13,6 +13,7 @@
 
     <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
 	<script type="text/javascript" src="specto_faker.js"></script>
+	
 </head>
 
 <body>
@@ -113,10 +114,39 @@
 		</div>
 		<hr />
 		
+		<!-- NON_VISUAL SUPPORT -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>NV faker</h4>
+					<select class="faker" default-values id="nvda" name="nvda"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>NV faker</h4>
+					<div class="faker" noselect-faker id="nvda2" name="nvda2"></div>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
+		<!-- NON_VISUAL SUPPORT WITH SEARCH -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>NV searchable faker</h4>
+					<select class="faker" default-values id="nvdaSrch" name="nvdaSrch"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>NV searchable faker</h4>
+					<div class="faker" noselect-faker id="nvdaSrch2" name="nvdaSrch2"></div>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
 		<label for="next_faker">next input for proper tab switching</label>
 		<input id="next_faker" type="text" />
 		
-		<!-- braille support -->
 		
 		
 		<!-- made from html instead of select -> all options? -->
@@ -128,7 +158,7 @@
 		<hr />
 		<hr />
 		<h3>OLD EXAMPLES</h3>
-		<form>
+		<form class="hide">
 			<div class="row">
 				<div class="col-sm-12">
 					<h3>Searchable faker - can be set only on first init</h3>
@@ -201,7 +231,7 @@
 
 		</form>
 		
-		<form>
+		<form class="hide">
 			<p>regular select</p>
 			<select class="faker3" id="srch_me" name="srch_me" placeholder="Make me search regular" required>
 				<option value="BE">Belize</option>
@@ -253,17 +283,17 @@
 			/* *** */
 			
 			//$(".faker").specto_faker({animated: true, on_change: bla});
-			specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true, searchable: true}); //key events on init
+			/*specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true, searchable: true}); //key events on init
 			specto_faker.init({animated: true, key_events: true, object_selector: "#test", before_change: function(newVal, e){
 				if(newVal === "b") return false;
 				else return true;
-			}});
+			}}); */
 			
 			
 			
 			
 			//PLAIN
-			specto_faker.init({object_selector: "#plain, #plain2", braille_support: true, searchable: false});
+			specto_faker.init({object_selector: "#plain, #plain2", searchable: false});
 			//ANIMATED
 			specto_faker.init({object_selector: "#plain_anim, #plain_anim2", animated: true, animation_speed: 1500, count_selected: true, count_disables: false});
 			//CUSTOM CALLBACKS
@@ -275,11 +305,15 @@
 				$.each(fakers, function(ind, itm){ $(itm).css("border", "2px solid blue"); });
 			}});
 			//KEY EVENTS
-			specto_faker.init({object_selector: "#keyevents, #keyevents2", key_events:true, searchable: false, braille_support: true,});
+			specto_faker.init({object_selector: "#keyevents, #keyevents2", key_events:true, searchable: false, });
 			//KEY EVENTS + ANIMATED
-			specto_faker.init({object_selector: "#keyevents_anim, #keyevents_anim2", key_events:true, searchable: false, animated: true, braille_support: true,});
+			specto_faker.init({object_selector: "#keyevents_anim, #keyevents_anim2", key_events:true, searchable: false, animated: true, });
 			//SEARCHABLE
-			specto_faker.init({object_selector: "#searchable, #searchable2", key_events:true, braille_support: true, });
+			specto_faker.init({object_selector: "#searchable, #searchable2", key_events:true, searchable: true, });
+			//NON_VISUAL SUPPORT
+			specto_faker.init({object_selector: "#nvda, #nvda2", braille_support: true, }); //key events will be set automatically
+			//NON_VISUAL SUPPORT WITH SEARCH
+			specto_faker.init({object_selector: "#nvdaSrch, #nvdaSrch2", braille_support: true, searchable: true, }); //key events will be set automatically
 			
 			
 			<!-- !!! -->
