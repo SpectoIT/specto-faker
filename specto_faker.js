@@ -24,9 +24,10 @@ var specto_faker = {
 		
 		/* ANIMATION */
 		animated: false, //is faker animated
-		animation_speed: 400,
+		animation_speed: 400, //updated on each init. (e.g. first init with speed 400, second with 600 -> result both will be animated with 600)
 		count_selected: false, //valid only for animated faker, are selected_val_class counted for animation
 		count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
+		count_manual_val: 0, //valid only for animated faker, animate to specific number of elements
 		
 		/* KEY EVENTS & SEARCHING & SORTING */
 		key_events: false, //do you want keyEvents to work
@@ -67,6 +68,7 @@ var specto_faker = {
 			specto_faker.config.nv_helper_class = fakr_settings.nv_helper_class; 
 			specto_faker.config.count_selected = fakr_settings.count_selected; 
 			specto_faker.config.count_disables = fakr_settings.count_disables;
+			specto_faker.config.count_manual_val = fakr_settings.count_manual_val;
 		}
 		
 		//add clicks
@@ -288,10 +290,11 @@ var specto_faker = {
 				var finder_css = "div";
 				if(specto_faker.config.count_selected) finder_css += ":not(."+ specto_faker.config.selected_val_class +")";
 				if(specto_faker.config.count_disables) finder_css += ":not(."+ specto_faker.config.disabled_val_class +")";
+				var nr_elements = parseInt(specto_faker.config.count_manual_val) > 0 ? parseInt(specto_faker.config.count_manual_val) : $(selection).find(finder_css).length;
 				
 				
 				$(fakr).addClass(specto_faker.config.focused_class);
-				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().height() * $(selection).find(finder_css).length +"px"}, {
+				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().height() * nr_elements +"px"}, {
 					duration: specto_faker.config.animation_speed,
 					always: function(){
 						$(selection).removeAttr("style");
@@ -585,20 +588,6 @@ var specto_faker = {
 			});
 		});
 	},
-	/* brailleLanguages: {
-		en: {
-			combobox: "combobox",
-			expanded: "expanded",
-			autocomplete: "has autocomplete",
-			searchable: "This combobox can be searchable by input and by using arrow keys"
-		},
-		sl: {
-			combobox: "combobox",
-			expanded: "expanded",
-			autocomplete: "has autocomplete",
-			searchable: "This combobox can be searchable by input and by using arrow keys"
-		},
-	}, */
 };
 
 //jquery wrapper
