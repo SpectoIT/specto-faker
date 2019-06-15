@@ -325,4 +325,7 @@ specto_faker.updateOptions(first_faker, [{
 
 ## TO DO
 
-* index.html - more examples
+* add function to open/close faker
+* nvda support with select (and test all non-searchable variants)
+* check select on focus if still working
+* form value workaround?
