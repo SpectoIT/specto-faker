@@ -144,104 +144,27 @@
 		</div>
 		<hr />
 		
-		<label for="next_faker">next input for proper tab switching</label>
-		<input id="next_faker" type="text" />
 		
-		
-		
-		<!-- made from html instead of select -> all options? -->
-		
-		
-		
-	
-		<hr />
-		<hr />
-		<hr />
-		<h3>OLD EXAMPLES</h3>
-		<form class="hide">
-			<div class="row">
-				<div class="col-sm-12">
-					<h3>Searchable faker - can be set only on first init</h3>
-					<select class="faker" id="srch" name="srch" placeholder="Make me search" required>
-						<option value="BE">Belize</option>
-						<option value="CA">Kanada</option>
-						<option value="JM">Jamajka</option>
-						<option value="IQ">Iraq</option>
-						<option value="LV">Latvija</option>
-						<option value="LT">Litva</option>
-					</select>
-					
-					<input required />
-					<button class="btn" id="upd">Update zanimanje</button>
-					<button class="btn" typoe="submit">Send</button>
+		<!-- UPDATE VALUES AND GET VALUE BUTTONS -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>Buttons for updating and getting value</h4>
+					<select class="faker" default-values id="btns" name="btns"></select>
 				</div>
-			</div>	
-			
-			<div class="row">	
-				<div class="col-sm-12">
-					
-					<!-- FAKER EXAMPLE -->
-					<div id="servis-selector" class="faker">
-						<div class="drop-value"><span>Izberite</span></div>
-						<div class="drop-handle">&nbsp;</div>
-						<div class="drop-selection" style="">
-							<div rel="">Izberite</div>
-							<div rel="10">Porsche Verovškova</div>
-							<div rel="1">Porsche Kozjansko</div>
-							<div rel="2">Porsche neki</div>
-						</div>
-					</div>
-					
-					
-					<!-- FAKER EXAMPLE 2 -->
-					<div id="servis-selector2" class="faker">
-						<div class="drop-value"><span></span></div>
-						<div class="drop-handle">&nbsp;</div>
-						<div class="drop-selection" style="">
-							<div rel="10">Porsche Verovškova</div>
-							<div rel="1">Porsche Kozjansko</div>
-							<div rel="2">Porsche neki</div>
-						</div>
-						<select id="servis-selector2-val" name="servis-selector2">
-							<option value="10">Porsche Verovškova</option>
-							<option value="1">Porsche Kozjansko</option>
-							<option value="2">Porsche neki</option>
-						</select>
-					</div>
-					
-				</div>	
-			</div>
-			
-			<button id="aaa">asddas</button>
-			
-			<div class="row">
-				<div class="col-sm-12">
-					<select id="test" name="test" placeholder="Področje zanimanja">
-						<option value="a">Šport</option>
-						<option value="b" selected="selected">Zabava</option>
-						<option value="c">Delo</option>
-						<option value="d">Delo2</option>
-						<option value="e">Delo3</option>
-					</select>
-					
-					<button class="btn" id="upd">Update zanimanje</button>
+				<div class="col-sm-6">
+					<h4>Buttons for updating and getting value</h4>
+					<div class="faker" noselect-faker id="btns2" name="btns2"></div>
 				</div>
-			</div>	
-			<input name="aaa" value="prazen" />
-
-		</form>
+			</form>
+			
+			<button class="btn" id="upd">Update values</button>
+			<button class="btn" id="getVal">Get value</button>
+			<button class="btn" id="getHumanVal">Get shown value</button>
+		</div>
+		<hr />
 		
-		<form class="hide">
-			<p>regular select</p>
-			<select class="faker3" id="srch_me" name="srch_me" placeholder="Make me search regular" required>
-				<option value="BE">Belize</option>
-				<option value="CA">Kanada</option>
-				<option value="JM">Jamajka</option>
-				<option value="IQ">Iraq</option>
-				<option value="LV">Latvija</option>
-				<option value="LT">Litva</option>
-			</select>
-		</form>
+		
 		
 	</div>
 	
@@ -303,24 +226,25 @@
 			//NON_VISUAL SUPPORT WITH SEARCH
 			specto_faker.init({object_selector: "#nvdaSrch, #nvdaSrch2", braille_support: true, searchable: true, }); //key events will be set automatically
 			
-			
-			
-			
-			/* !!! */
-			/* !!! */
-			//$(".faker").specto_faker({animated: true, on_change: bla});
-			/*specto_faker.init({on_change: onchange_callback, key_events: true, sortable: true, searchable: true}); //key events on init
-			specto_faker.init({animated: true, key_events: true, object_selector: "#test", before_change: function(newVal, e){
-				if(newVal === "b") return false;
-				else return true;
-			}}); */
+			//UPDATE VALUES AND GET VALUE BUTTONS
+			var upd_fakers = specto_faker.init({object_selector: "#btns, #btns2"}); //all faker elements are returned in array
 			$("#upd").click(function(){
-				//console.log("bla");
-				specto_faker.updateOptions($("#test").parent(), [{code: "1", xname: "Updejt"},{code: "2", xname: "Updejt 2"},{code: "3", xname: "Updejt 3"}], "code", "xname", {animated: true, object_selector: "#test", before_change: function(newVal, e){
-					if(newVal === "3") return false;
-					else return true;
-				}});
+				$.each(upd_fakers, function(i, upd_faker){
+					specto_faker.updateOptions(upd_faker, [{code: "1", xname: "Update"},{code: "2", xname: "Update 2"},{code: "3", xname: "Update 3"}], "code", "xname");
+				});
 			});
+			$("#getVal").click(function(){
+				$.each(upd_fakers, function(i, upd_faker){
+					console.log(specto_faker.getFakerValue(upd_faker));
+				});
+			});
+			$("#getHumanVal").click(function(){
+				$.each(upd_fakers, function(i, upd_faker){
+					console.log(specto_faker.getFakerUserValue(upd_faker));
+				});
+			});
+			
+			
 		});
 	</script>
 </body>
