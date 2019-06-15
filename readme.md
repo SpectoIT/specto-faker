@@ -70,10 +70,8 @@
 * Can allow searching for entered text
 * Can be ordered on init
 * If builded from select, be aware that every further reference to faker <i>(fakr, faker_elm, object_selector, ...)</i> doesn't mean original select, but it's faker <i>(more in examples - Build from select and update options)</i>
-
 * start of non-visual support (tested with no select present)
 * added search hints (+auto selected first value)
-
 * recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option
 
 
