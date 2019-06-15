@@ -230,6 +230,7 @@
 			var upd_fakers = specto_faker.init({object_selector: "#btns, #btns2"}); //all faker elements are returned in array
 			$("#upd").click(function(){
 				$.each(upd_fakers, function(i, upd_faker){
+					//function(fakr, new_options, [rel_name = "rel", name_name = "name", settings = null])
 					specto_faker.updateOptions(upd_faker, [{code: "1", xname: "Update"},{code: "2", xname: "Update 2"},{code: "3", xname: "Update 3"}], "code", "xname");
 				});
 			});
