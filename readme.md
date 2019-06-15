@@ -4,12 +4,11 @@
 * v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
 * v3.13 changed search in searchable faker. From now on, it works only from start
 
-## Demo & Examples
-index.html
+## DEPENDENCIES
+* jQuery <i>(Tested on 2.2.4 and 3.3)</i>
 
-## Notes
+## NOTES
 
-* Requires jQuery <i>(Tested on 2.2.4)</i>, works also on 3.3 (tested)!
 * Customizable with options:
 
 ```javascript
@@ -78,9 +77,9 @@ index.html
 * recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option
 
 
-## Example Usage
+## EXAMPLE USAGE
 
-### HTML
+### Html
 
 ```html
 	<select id="test" name="test" class="faker">
@@ -128,7 +127,7 @@ $(document).ready(function(){
 
 ```
 
-## Installation
+## INSTALLATION
 
 ### Manual
 
@@ -155,7 +154,7 @@ Run command `npm install git+ssh://git@code.specto.si:22015/bower/specto-faker.g
 
 ## CUSTOM USE 
 
-###	SCSS VARIABLES (colors, handle icon, height)
+###	Scss variables (colors, handle icon, height)
 
 ```scss
 $faker_handle_icon: "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTQiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE0IDgiPjxkZWZzPjxwYXRoIGlkPSJmd2Y4YSIgZD0iTTYyMDcuNTIgMzU2MS40NGMwLS4xLS4wNS0uMjMtLjEzLS4zbC0uNjctLjY4YS40Ni40NiAwIDAgMC0uMy0uMTNjLS4xMSAwLS4yNC4wNS0uMzIuMTNsLTUuMjYgNS4yNy01LjI3LTUuMjdhLjQ2LjQ2IDAgMCAwLS4zLS4xMy40NC40NCAwIDAgMC0uMzEuMTNsLS42Ny42N2EuNDYuNDYgMCAwIDAtLjE0LjMxYzAgLjEuMDYuMjMuMTQuMzFsNi4yNCA2LjI0Yy4wOC4wOC4yLjE0LjMuMTQuMTIgMCAuMjQtLjA2LjMyLS4xNGw2LjI0LTYuMjRjLjA4LS4wOC4xMy0uMi4xMy0uM3oiLz48L2RlZnM+PGc+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYxOTQgLTM1NjApIj48dXNlIHhsaW5rOmhyZWY9IiNmd2Y4YSIvPjwvZz48L2c+PC9zdmc+";
