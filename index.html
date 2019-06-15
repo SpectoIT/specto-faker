@@ -180,10 +180,11 @@
 					event.preventDefault();
 				});
 			});
+			var countries = {BE:"Belize",CA:"Kanada",KZ:"Kazahstan",JM:"Jamajka",JP:"Japonska",IQ:"Iraq",LV:"Latvija",LT:"Litva"};
 			//fill default selects
 			$("select[default-values]").each(function(){
 				var self = this;
-				$.each({BE:"Belize",CA:"Kanada",JM:"Jamajka",IQ:"Iraq",LV:"Latvija",LT:"Litva"}, function(ind, item){
+				$.each(countries, function(ind, item){
 					$(self).append("<option value='"+ ind +"'>"+ item +"</option>");
 				});
 			});
@@ -194,7 +195,7 @@
 				$(this).append("<div class='drop-value' rel=''><span></span></div>");
 				$(this).append("<div class='drop-handle'>&nbsp;</div>");
 				$(this).append("<div class='drop-selection'></div>");
-				$.each({BE:"Belize",CA:"Kanada",JM:"Jamajka",IQ:"Iraq",LV:"Latvija",LT:"Litva"}, function(ind, item){
+				$.each(countries, function(ind, item){
 					$(self).find(".drop-selection").append("<div rel='"+ ind +"'>"+ item +"</div>");
 				});
 			});
