@@ -1,0 +1,15 @@
+{
+  "name": "konchita",
+  "description": "Koncita",
+  "main": "bower",
+  "license": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "min"
+  ],
+  "dependencies": {
+	"jquery": "~2.2"
+  },
+  "overrides": {}
+}
