@@ -64,6 +64,7 @@
 * All classes and counters are customizable only on the first init
 * Hide selected option from dropdown - customizable class with "selected_val_class"
 * If builded from select, it's "placeholder" is set as initial value <i>(if not present, first option is selected)</i>. But if any option is selected, placeholder is ignored and selected value is set
+* If builded from select, all events binded to select will be preserved (<i>(This feature depends on browser support for changing and triggering change() on ```<select>``` )</i>)
 * Prevents clicks for disabled options, example: ```<div rel='rel-disabled' class='' disabled='disabled'>placeholder</div>```
 * Adds focused class on select focus <i>(for swithing with tab)</i>
 * Can add keyevents to simulate select
@@ -241,7 +242,7 @@ specto_faker.init({object_selector: "#dropdown"});
 ### Get value
 
 If there is ```<select>```, you can use js or jQuery to get current value. 
-<i>(This feature depends on browser support for changing and triggering change() on ```<select>``` )</i>
+<i>(As mentioned above, this feature depends on browser support for changing and triggering change() on ```<select>``` )</i>
 
 But you can also use <i>(single element)</i>
 
