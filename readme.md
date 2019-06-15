@@ -81,11 +81,11 @@
 ### Html
 
 ```html
-	<select id="test" name="test" class="faker">
-		<option value="a">Šport</option>
-		<option value="b">Zabava</option>
-		<option value="c">Delo</option>
-	</select>
+<select id="test" name="test" class="faker">
+	<option value="a">Šport</option>
+	<option value="b">Zabava</option>
+	<option value="c">Delo</option>
+</select>
 	
 ```
 
