@@ -230,11 +230,12 @@
 			specto_faker.init({object_selector: "#nvdaSrch, #nvdaSrch2", braille_support: true, searchable: true, }); //key events will be set automatically
 			
 			//UPDATE VALUES AND GET VALUE BUTTONS
-			var upd_fakers = specto_faker.init({object_selector: "#btns, #btns2"}); //all faker elements are returned in array
+			var fakr_setting = {key_events:true, searchable: true,};
+			var upd_fakers = $("#btns, #btns2").specto_faker(fakr_setting); //all faker elements are returned in array
 			$("#upd").click(function(){
 				$.each(upd_fakers, function(i, upd_faker){
 					//function(fakr, new_options, [rel_name = "rel", name_name = "name", settings = null])
-					specto_faker.updateOptions(upd_faker, [{code: "1", xname: "Update"},{code: "2", xname: "Update 2"},{code: "3", xname: "Update 3"}], "code", "xname");
+					specto_faker.updateOptions(upd_faker, [{code: "1", xname: "Update"},{code: "2", xname: "Update 2"},{code: "3", xname: "Update 3"}], "code", "xname", fakr_setting);
 				});
 			});
 			$("#getVal").click(function(){
