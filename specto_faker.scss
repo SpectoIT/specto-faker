@@ -51,7 +51,7 @@ $faker_height: 53px;
 		box-shadow: inset 0 1px 1px rgba($faker_focused_value_shadow_startcolor,.075), 0 0 8px rgba($faker_focused_value_border_shadow ,.6);
 	}
 	
-	&.open {
+	&.open, &.faker-animating {
 		.drop-selection {
 			border-bottom: 1px solid $drop_selection_border;
 			display: block;
@@ -140,7 +140,7 @@ $faker_height: 53px;
 		width: 100%;
 		z-index: 9;
 		
-		div {
+		div[rel] {
 			font-weight: 300;
 			height: 40px;
 			letter-spacing: 0.1em;

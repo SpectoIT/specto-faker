@@ -4,12 +4,11 @@
 * v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
 * v3.13 changed search in searchable faker. From now on, it works only from start
 
-## Demo & Examples
-index.html
+## DEPENDENCIES
+* jQuery <i>(Tested on 2.2.4 and 3.3)</i>
 
-## Notes
+## NOTES
 
-* Requires jQuery <i>(Tested on 2.2.4)</i>, works also on 3.3 (tested)!
 * Customizable with options:
 
 ```javascript
@@ -26,7 +25,7 @@ index.html
 	searchable_class: "faker-search", //class for searchable faker
 	searchable_from_start_class: "faker-search-start", //class for searchable faker to search from beginning
 	select_single: "faker-sel-single", //class for searchable faker to auto select single filtered option
-	braille_class: "faker-braille", //class for faker that supports braille speach
+	braille_class: "faker-braille", //class for faker that supports non-visual (braille) speach
 	/* options classes */
 	selected_val_class: "active", //class of selected option - default css has display:none
 	disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
@@ -54,7 +53,7 @@ index.html
 	on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
 	on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
 	
-	/* BRAILLE SUPPORT */
+	/* NON-VISUAL (BRAILLE) SUPPORT */
 	braille_support: false, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on -->> example: https://a11y.nicolas-hoffmann.net/autocomplete-list/
 }
 ```
@@ -65,29 +64,28 @@ index.html
 * All classes and counters are customizable only on the first init
 * Hide selected option from dropdown - customizable class with "selected_val_class"
 * If builded from select, it's "placeholder" is set as initial value <i>(if not present, first option is selected)</i>. But if any option is selected, placeholder is ignored and selected value is set
+* If builded from select, all events binded to select will be preserved (<i>(This feature depends on browser support for changing and triggering change() on ```<select>``` )</i>)
 * Prevents clicks for disabled options, example: ```<div rel='rel-disabled' class='' disabled='disabled'>placeholder</div>```
 * Adds focused class on select focus <i>(for swithing with tab)</i>
 * Can add keyevents to simulate select
 * Can allow searching for entered text
 * Can be ordered on init
 * If builded from select, be aware that every further reference to faker <i>(fakr, faker_elm, object_selector, ...)</i> doesn't mean original select, but it's faker <i>(more in examples - Build from select and update options)</i>
-
 * start of non-visual support (tested with no select present)
 * added search hints (+auto selected first value)
+* recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option (more in index.html)
 
-* recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option
 
+## EXAMPLE USAGE
 
-## Example Usage
-
-### HTML
+### Html
 
 ```html
-	<select id="test" name="test" class="faker">
-		<option value="a">Šport</option>
-		<option value="b">Zabava</option>
-		<option value="c">Delo</option>
-	</select>
+<select id="test" name="test" class="faker">
+	<option value="a">Šport</option>
+	<option value="b">Zabava</option>
+	<option value="c">Delo</option>
+</select>
 	
 ```
 
@@ -128,7 +126,7 @@ $(document).ready(function(){
 
 ```
 
-## Installation
+## INSTALLATION
 
 ### Manual
 
@@ -155,7 +153,7 @@ Run command `npm install git+ssh://git@code.specto.si:22015/bower/specto-faker.g
 
 ## CUSTOM USE 
 
-###	SCSS VARIABLES (colors, handle icon, height)
+###	Scss variables (colors, handle icon, height)
 
 ```scss
 $faker_handle_icon: "PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTQiIGhlaWdodD0iOCIgdmlld0JveD0iMCAwIDE0IDgiPjxkZWZzPjxwYXRoIGlkPSJmd2Y4YSIgZD0iTTYyMDcuNTIgMzU2MS40NGMwLS4xLS4wNS0uMjMtLjEzLS4zbC0uNjctLjY4YS40Ni40NiAwIDAgMC0uMy0uMTNjLS4xMSAwLS4yNC4wNS0uMzIuMTNsLTUuMjYgNS4yNy01LjI3LTUuMjdhLjQ2LjQ2IDAgMCAwLS4zLS4xMy40NC40NCAwIDAgMC0uMzEuMTNsLS42Ny42N2EuNDYuNDYgMCAwIDAtLjE0LjMxYzAgLjEuMDYuMjMuMTQuMzFsNi4yNCA2LjI0Yy4wOC4wOC4yLjE0LjMuMTQuMTIgMCAuMjQtLjA2LjMyLS4xNGw2LjI0LTYuMjRjLjA4LS4wOC4xMy0uMi4xMy0uM3oiLz48L2RlZnM+PGc+PGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTYxOTQgLTM1NjApIj48dXNlIHhsaW5rOmhyZWY9IiNmd2Y4YSIvPjwvZz48L2c+PC9zdmc+";
@@ -244,7 +242,7 @@ specto_faker.init({object_selector: "#dropdown"});
 ### Get value
 
 If there is ```<select>```, you can use js or jQuery to get current value. 
-<i>(This feature depends on browser support for changing and triggering change() on ```<select>``` )</i>
+<i>(As mentioned above, this feature depends on browser support for changing and triggering change() on ```<select>``` )</i>
 
 But you can also use <i>(single element)</i>
 
@@ -328,4 +326,7 @@ specto_faker.updateOptions(first_faker, [{
 
 ## TO DO
 
-* index.html - more examples
+* add function to open/close faker
+* nvda support with select (and test all non-searchable variants)
+* check select on focus if still working
+* form value workaround?

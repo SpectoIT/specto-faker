@@ -15,7 +15,7 @@ var specto_faker = {
 		searchable_class: "faker-search", //class for searchable faker
 		searchable_from_start_class: "faker-search-start", //class for searchable faker to search from beginning
 		select_single: "faker-sel-single", //class for searchable faker to auto select single filtered option
-		braille_class: "faker-braille", //class for faker that supports braille speach
+		braille_class: "faker-braille", //class for faker that supports non-visual (braille) speach
 		/* options classes */
 		selected_val_class: "active", //class of selected option - default css has display:none
 		disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
@@ -43,7 +43,7 @@ var specto_faker = {
 		on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
 		on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
 		
-		/* BRAILLE SUPPORT */
+		/* NON-VISUAL (BRAILLE) SUPPORT */
 		braille_support: false, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on -->> example: https://a11y.nicolas-hoffmann.net/autocomplete-list/
 	},
 	lastClosedFaker: null,
@@ -308,12 +308,13 @@ var specto_faker = {
 			else {
 				specto_faker.removeFakerSearchable(fakr); //searchable faker
 				var selection = $(fakr).find(".drop-selection");
+				$(fakr).removeClass(specto_faker.config.open_class);
 				
 				$(selection).css({"height": $(selection).height() +"px"}).animate({"height": "0px"}, {
 					duration: specto_faker.config.animation_speed,
 					always: function(){
 						$(selection).removeAttr("style");
-						$(fakr).removeClass(specto_faker.config.open_class).removeClass(specto_faker.config.anim_progress_class);
+						$(fakr).removeClass(specto_faker.config.anim_progress_class);
 						if(!extra_settings.dont_remove_focus) $(fakr).removeClass(specto_faker.config.focused_class);
 						if(!extra_settings.dont_save_closed) specto_faker.lastClosedFaker = fakr;
 					}
