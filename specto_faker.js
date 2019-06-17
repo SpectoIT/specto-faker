@@ -234,13 +234,13 @@ var specto_faker = {
 		if($(rel).length < 1) return; //prevent error
 		$(rel).siblings().filter(function(){ return $(this).hasClass(specto_faker.config.selected_val_class); }).each(function(){ $(this).removeClass(specto_faker.config.selected_val_class); });
 		$(rel).addClass(specto_faker.config.selected_val_class);
-		var v = $(rel).parent().prevAll(".drop-value").attr("rel", $(rel).attr("rel")).find("span").text($(rel).text()).parent(); 
+		var v = $(rel).parents(".drop-selection").first().prevAll(".drop-value").attr("rel", $(rel).attr("rel")).find("span").text($(rel).text()).parent(); 
 		
 		//if there is select present, update it's value. And trigger change event
-		var selects = $(rel).parent().prevAll("select");
+		var selects = $(rel).parents(".drop-selection").first().prevAll("select");
 		if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(rel)).change();
 		
-		var fakr_el = $(rel).parent().parent();
+		var fakr_el = $(rel).parents("."+ specto_faker.config.init_class).first();
 		if(!dimm_click) $(v).trigger("click");
 		else if(extra_settings.manual_close) specto_faker.animateFaker(fakr_el, false, {dont_remove_focus: true});
 		
