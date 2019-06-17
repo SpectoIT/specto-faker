@@ -308,12 +308,13 @@ var specto_faker = {
 			else {
 				specto_faker.removeFakerSearchable(fakr); //searchable faker
 				var selection = $(fakr).find(".drop-selection");
+				$(fakr).removeClass(specto_faker.config.open_class);
 				
 				$(selection).css({"height": $(selection).height() +"px"}).animate({"height": "0px"}, {
 					duration: specto_faker.config.animation_speed,
 					always: function(){
 						$(selection).removeAttr("style");
-						$(fakr).removeClass(specto_faker.config.open_class).removeClass(specto_faker.config.anim_progress_class);
+						$(fakr).removeClass(specto_faker.config.anim_progress_class);
 						if(!extra_settings.dont_remove_focus) $(fakr).removeClass(specto_faker.config.focused_class);
 						if(!extra_settings.dont_save_closed) specto_faker.lastClosedFaker = fakr;
 					}
