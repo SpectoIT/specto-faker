@@ -103,7 +103,7 @@ var specto_faker = {
 			$(fakr_elm).find(".drop-value, .drop-handle").each(function(){ 
 				$(this).off("click").click(function(){
 					
-					var faker = $(this).parent();
+					var faker = specto_faker.returnFakerElementFromChild(this);
 					if(specto_faker.isFakerOpen(faker)) specto_faker.animateFaker(faker);
 					else specto_faker.animateFaker(faker, "openme");
 				});
@@ -127,11 +127,11 @@ var specto_faker = {
 					$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
 						specto_faker.animateFaker(this, false, {dont_save_closed: true});
 					});
-					specto_faker.animateFaker($(this).parent(), "openme"); //open and add focused class
+					specto_faker.animateFaker(specto_faker.returnFakerElementFromChild(this), "openme"); //open and add focused class
 				});
 				if(!(fakr_settings.searchable && fakr_settings.key_events)){ //searchable looses focus automatically
 					$(this).off("blur").blur(function(){
-						specto_faker.animateFaker($(this).parent());
+						specto_faker.animateFaker(specto_faker.returnFakerElementFromChild(this));
 					});
 				}
 			});
@@ -142,12 +142,12 @@ var specto_faker = {
 					$(fakr_elm).find("."+ specto_faker.config.nv_helper_class).each(function(){ //add focusing by tab
 						$(this).focus(function(event){
 							
-							if(!specto_faker.isFakerOpen($(this).parent())){ //if focus not redirected within opened faker
+							if(!specto_faker.isFakerOpen(specto_faker.returnFakerElementFromChild(this))){ //if focus not redirected within opened faker
 								//close all opened fakers
 								$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
 									specto_faker.animateFaker(this, false, {dont_save_closed: true});
 								});
-								specto_faker.animateFaker($(this).parent(), "openme"); //open and add focused class
+								specto_faker.animateFaker(specto_faker.returnFakerElementFromChild(this), "openme"); //open and add focused class
 							}
 							specto_faker.brailleSpeach(fakr_elm, "selection");
 						});
@@ -161,14 +161,14 @@ var specto_faker = {
 			
 			
 			//firefox workaround - reset form for proper detection of required fields
-			if(has_select && $(fakr_elm).parents("form").length > 0){
+			if(has_select && $(fakr_elm).closest("form").length > 0){
 				switch(document.readyState){
 					case "complete":
-						$(fakr_elm).parentsUntil("form").last().parent()[0].reset();
+						$(fakr_elm).closest("form")[0].reset();
 						break;
 					default:
 						$(window).on("load", function(){
-							$(fakr_elm).parentsUntil("form").last().parent()[0].reset();
+							$(fakr_elm).closest("form")[0].reset();
 						});
 				}
 			}
@@ -234,13 +234,13 @@ var specto_faker = {
 		if($(rel).length < 1) return; //prevent error
 		$(rel).siblings().filter(function(){ return $(this).hasClass(specto_faker.config.selected_val_class); }).each(function(){ $(this).removeClass(specto_faker.config.selected_val_class); });
 		$(rel).addClass(specto_faker.config.selected_val_class);
-		var v = $(rel).parents(".drop-selection").first().prevAll(".drop-value").attr("rel", $(rel).attr("rel")).find("span").text($(rel).text()).parent(); 
+		var v = $(rel).closest(".drop-selection").prevAll(".drop-value").attr("rel", $(rel).attr("rel")).find("span").text($(rel).text()).parent(); 
 		
 		//if there is select present, update it's value. And trigger change event
-		var selects = $(rel).parents(".drop-selection").first().prevAll("select");
+		var selects = $(rel).closest(".drop-selection").prevAll("select");
 		if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(rel)).change();
 		
-		var fakr_el = $(rel).parents("."+ specto_faker.config.init_class).first();
+		var fakr_el = specto_faker.returnFakerElementFromChild(rel);
 		if(!dimm_click) $(v).trigger("click");
 		else if(extra_settings.manual_close) specto_faker.animateFaker(fakr_el, false, {dont_remove_focus: true});
 		
@@ -258,7 +258,7 @@ var specto_faker = {
 						});
 				//});
 			}
-			else specto_faker.brailleSpeach($(rel).parent().parent(), "selection"); //update braille speach
+			else specto_faker.brailleSpeach(specto_faker.returnFakerElementFromChild(rel), "selection"); //update braille speach
 		}
 	},
 	getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); },
@@ -271,6 +271,7 @@ var specto_faker = {
 	isFakerSearchableFromStart: function(fakr){ return $(fakr).hasClass(specto_faker.config.searchable_from_start_class); },
 	isFakerBrailleSupport: function(fakr){ return $(fakr).hasClass(specto_faker.config.braille_class); },
 	hasFakerNvHelperInput: function(fakr){ return $(fakr).find("."+ specto_faker.config.nv_helper_class).length > 0; },
+    returnFakerElementFromChild: function(child){ return $(child).closest("."+ specto_faker.config.init_class); },
 	animateFaker: function(fakr, openme, extra_settings){
 		extra_settings = extra_settings || {};
 		
@@ -463,7 +464,8 @@ var specto_faker = {
 					else specto_faker.updateValue(start_proper.first(), "noclick", {focus_nv: true});
 				});
 			}
-			else { //first time
+            
+			if(!is_already) { //first time - or no more matching elements, so start again from beginning
 				$(fakr).find(".drop-selection .drop-selection-item").filter(function(){ return $(this).text().slice(0,1).toLowerCase() == ch && !$(this).hasClass(specto_faker.config.search_hidden); }).first().each(function(){
 					specto_faker.updateValue(this, "noclick", {focus_nv: true});
 				});
@@ -486,7 +488,7 @@ var specto_faker = {
 					var key = event.keyCode || event.which;
 					switch(key){
 						case 9: //on tab click, close faker
-							specto_faker.animateFaker($(this).parent().parent(), false, {dont_save_closed: true});
+							specto_faker.animateFaker(specto_faker.returnFakerElementFromChild(this), false, {dont_save_closed: true});
 							break;
 						default: break;
 					}
@@ -585,7 +587,7 @@ var specto_faker = {
 		$(fakr).find("."+ specto_faker.config.nv_helper_class).each(function(){
 			$(this).attr("tabindex", "-1").blur(function(){
 				$(this).off("blur").removeAttr("tabindex");
-				$(this).parent().removeClass(specto_faker.config.focused_class);
+				$(specto_faker.returnFakerElementFromChild(this)).removeClass(specto_faker.config.focused_class);
 			});
 		});
 	},
