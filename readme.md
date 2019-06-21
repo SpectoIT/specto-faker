@@ -2,7 +2,8 @@
 
 ## IMPORTANT CHANGES
 * v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
-* v3.13 changed search in searchable faker. From now on, it works only from start
+* v3.13 changed search in searchable faker. From now on, by default, it works only from start
+* v3.32 added class .drop-selection-item
 
 ## DEPENDENCIES
 * jQuery <i>(Tested on 2.2.4 and 3.3)</i>
@@ -98,9 +99,9 @@ OR plain version
 	</div>
 	<div class="drop-handle">&nbsp;</div>
 	<div class="drop-selection">
-		<div rel="a">Šport</div>
-		<div rel="b">Zabava</div>
-		<div rel="c">Delo</div>
+		<div class='drop-selection-item' rel="a">Šport</div>
+		<div class='drop-selection-item' rel="b">Zabava</div>
+		<div class='drop-selection-item' rel="c">Delo</div>
 	</div>
 	<!-- with or without -->
 	<select name="servis">

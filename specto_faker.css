@@ -102,7 +102,7 @@
   width: 100%;
   z-index: 9;
 }
-.faker .drop-selection div[rel] {
+.faker .drop-selection .drop-selection-item {
   font-weight: 300;
   height: 40px;
   letter-spacing: 0.1em;
@@ -114,14 +114,14 @@
   width: 100%;
   cursor: pointer;
 }
-.faker .drop-selection div[rel].active, .faker .drop-selection div[rel]:hover {
+.faker .drop-selection .drop-selection-item.active, .faker .drop-selection .drop-selection-item:hover {
   background-color: #959698;
   color: #fff;
 }
-.faker .drop-selection div[rel].rel-search {
+.faker .drop-selection .drop-selection-item.rel-search {
   display: none;
 }
-.faker .drop-selection div[rel].rel-disabled {
+.faker .drop-selection .drop-selection-item.rel-disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
