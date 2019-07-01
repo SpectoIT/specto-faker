@@ -136,6 +136,7 @@
 }
 .faker .non-visual-helper {
   opacity: 0;
+  width: 0px;
 }
 .faker .drop-value:hover, .faker.open .drop-value {
   color: #959698;
