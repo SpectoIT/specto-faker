@@ -295,7 +295,7 @@ var specto_faker = {
 				
 				
 				$(fakr).addClass(specto_faker.config.focused_class);
-				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().height() * nr_elements +"px"}, {
+				$(selection).css({"height": "0px", visibility: "visible"}).animate({"height": $(selection).find("div").first().outerHeight() * nr_elements +"px"}, {
 					duration: specto_faker.config.animation_speed,
 					always: function(){
 						$(selection).removeAttr("style");
