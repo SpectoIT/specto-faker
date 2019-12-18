@@ -360,7 +360,7 @@ var specto_faker = {
 			$(fakr_html).prepend($(that).clone(true)); //append original select
 			if(placeholder) {
 				$(fakr_html).find(".drop-value span").text(placeholder);
-				$(fakr_html).find(".drop-selection").prepend("<div rel='' disabled='disabled' class='drop-selection-item "+ specto_faker.config.disabled_val_class +"'>"+ placeholder +"</div>"); //placeholder - add disabled value
+				$(fakr_html).find(".drop-selection").prepend(specto_faker.placeholderDivHtml(placeholder)); //placeholder - add disabled value
 				if($(fakr_html).find("option[value='']").length < 1) $(fakr_html).find("select").prepend("<option value='' selected='selected' disabled='disabled'>placeholder</option>"); //also append option with empty value to select (FF requirement)
 			}
 			$(that).after(fakr_html);
@@ -370,26 +370,40 @@ var specto_faker = {
 		}
 		else return that;
 	},
+    placeholderDivHtml: function(val){ return "<div rel='' disabled='disabled' class='drop-selection-item "+ specto_faker.config.disabled_val_class +"'>"+ val +"</div>"; },
 	updateOptions: function(fakr, new_options, rel_name, name_name, settings){
 		
 		$(fakr).each(function(){
 			$(this).find(".drop-value span").each(function(){ $(this).text(""); });
-			$(this).find(".drop-selection").each(function(){ 
-				$(this).empty(); 
-				var ins = "";
-				$.each(new_options, function(ind, item){
-					ins += "<div class='drop-selection-item' rel='"+ item[rel_name || "rel"] +"' "+ (item.is_default ? "selected" : "") +">"+ item[name_name || "name"] +"</div>";
-				});
-				$(this).append(ins);
-			});
-			
-			$(fakr).find("select").each(function(){ //fill also select, if present
-				$(this).empty();
+            var select_placeholder = "";
+            
+			$(fakr).find("select").each(function(){ //fill select, if present (and retreive placeholder)
+				select_placeholder = $(this).attr("placeholder") || "";
+                $(this).empty();
 				var ins = "";
 				$.each(new_options, function(ind, item){
 					ins += "<option value='"+ item[rel_name || "rel"] +"'>"+ item[name_name || "name"] +"</option>";
 				});
-				$(this).append(ins);
+				$(this).html(ins);
+			});
+            
+			$(this).find(".drop-selection").each(function(){ 
+				$(this).empty();
+				var ins = $("<div></div>");
+                var placeholder_in_data = {};
+				$.each(new_options, function(ind, item){
+                    if(item.is_placeholder) placeholder_in_data = item;
+					else ins.append("<div class='drop-selection-item' rel='"+ item[rel_name || "rel"] +"' "+ (item.is_default ? "selected" : "") +">"+ item[name_name || "name"] +"</div>");
+				});
+                
+                if(placeholder_in_data[name_name] || select_placeholder){ //placeholder
+                    ins.find(".drop-selection-item[selected]").each(function(){ $(this).removeAttr("selected"); }); //remove any selected to prevent error
+                    //add placeholder
+                    if(placeholder_in_data[name_name]) ins.prepend(specto_faker.placeholderDivHtml(placeholder_in_data[name_name]));
+                    else if(select_placeholder) ins.prepend(specto_faker.placeholderDivHtml(select_placeholder));
+                }
+                
+				$(this).html(ins.html());
 			});
 			
 			$(this).specto_faker(settings); //init 

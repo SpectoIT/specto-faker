@@ -272,7 +272,7 @@ specto_faker.init({
 
 ```
 
-### Update faker options and reinit faker
+### Update faker options and reinit faker (placeholder is fetched in data, or copied from original select)
 
 
 ```javascript
@@ -284,6 +284,10 @@ specto_faker.init({
 
 //update -> function(fakr, new_options, [rel_name = "rel", name_name = "name", settings = null])
 specto_faker.updateOptions("#faker_elm", [{
+	code: "", //ignored
+	name: "Izberite",
+	is_placeholder: true,
+},{
 	code: "value1",
 	name: "Prikaz1",
 	is_default: true,
@@ -297,7 +301,7 @@ specto_faker.updateOptions("#faker_elm", [{
 
 ```
 
-### Build from select and update options
+### Build from select and update options (placeholder is copied from original select)
 
 
 ```javascript
