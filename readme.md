@@ -328,11 +328,11 @@ specto_faker.updateOptions(first_faker, [{
 
 ```
 
-### Update value on existing faker
+### Update value programatically on existing faker
 
 ```javascript
-//update value and don't trigger click on faker (normaly this function is triggered on open faker, that's why there is additional variable to control opening/closing)
-specto_faker.updateValue(".faker .drop-selection-item[rel='"+ to_change_value +"']", "dont_open");
+//update value programatically
+specto_faker.updateFakerValue(to_change_value);
 
 ```
 

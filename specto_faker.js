@@ -1,7 +1,6 @@
 "use strict";
 var specto_faker = {
 	initiated: false,
-	keys_initiated: false,
 	config: {
 		object_selector: ".faker", //element(s) - works only if called through `specto_faker.init()`, if called as `$([object_selector]).specto_faker()` elements are defined in `$([object_selector])`
 		
@@ -123,10 +122,7 @@ var specto_faker = {
 				$(this).removeClass("faker").off("focus").focus(function(){ //remove faker class from select
 					if(specto_faker.isFakerOpen(fakr_elm)) return;
 					
-					//close all opened fakers
-					$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
-						specto_faker.animateFaker(this, false, {dont_save_closed: true});
-					});
+					specto_faker.closeAllOpenedFakers(); //close all opened fakers
 					specto_faker.animateFaker(specto_faker.returnFakerElementFromChild(this), "openme"); //open and add focused class
 				});
 				if(!(fakr_settings.searchable && fakr_settings.key_events)){ //searchable looses focus automatically
@@ -138,15 +134,12 @@ var specto_faker = {
 			if(!has_select && fakr_settings.braille_support){ //NON-VISUAL SUPPORT FOR FAKERS WITHOUT TAB FOCUS ELEMENTS
 				if(!specto_faker.hasFakerNvHelperInput(fakr_elm)){ //only first time
 					
-					$(fakr_elm).prepend("<input class='"+ specto_faker.config.nv_helper_class +"' name='non-visual-helper' />")
+					$(fakr_elm).prepend("<input class='"+ specto_faker.config.nv_helper_class +"' name='non-visual-helper' />");
 					$(fakr_elm).find("."+ specto_faker.config.nv_helper_class).each(function(){ //add focusing by tab
 						$(this).focus(function(event){
 							
 							if(!specto_faker.isFakerOpen(specto_faker.returnFakerElementFromChild(this))){ //if focus not redirected within opened faker
-								//close all opened fakers
-								$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
-									specto_faker.animateFaker(this, false, {dont_save_closed: true});
-								});
+								specto_faker.closeAllOpenedFakers(); //close all opened fakers
 								specto_faker.animateFaker(specto_faker.returnFakerElementFromChild(this), "openme"); //open and add focused class
 							}
 							specto_faker.brailleSpeach(fakr_elm, "selection");
@@ -158,6 +151,22 @@ var specto_faker = {
 				}
 			}
 			else $(fakr_elm).find("."+ specto_faker.config.nv_helper_class).each(function(){ $(this).remove(); });
+			if(!has_select) $(fakr_elm).attr("tabindex", "0");
+			
+			
+			$(fakr_elm).on("keyup", function (event){ //key events
+				specto_faker.keyEvents(this, event);
+				/* var opened_was_found = false;
+				$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.key_events_class +'.'+ specto_faker.config.open_class).each(function(){
+					specto_faker.keyEvents(this, event);
+					opened_was_found = true;
+				});
+				if(!opened_was_found){
+					var key = event.keyCode || event.which;
+					// TODO REFACTOR lastClosed
+					if(key === 13 && specto_faker.lastClosedFaker) specto_faker.animateFaker(specto_faker.lastClosedFaker, "openme");
+				} */
+			});
 			
 			
 			//firefox workaround - reset form for proper detection of required fields
@@ -184,21 +193,7 @@ var specto_faker = {
 				});
 			});
 		}
-		if(!specto_faker.keys_initiated) {
-			specto_faker.keys_initiated = true;
-			$(document).on("keyup", function (event){ //key events
-				var opened_was_found = false;
-				$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.key_events_class +'.'+ specto_faker.config.open_class).each(function(){
-					specto_faker.keyEvents(this, event);
-					opened_was_found = true;
-				});
-				if(!opened_was_found){
-					var key = event.keyCode || event.which;
-					if(key === 13 && specto_faker.lastClosedFaker) specto_faker.animateFaker(specto_faker.lastClosedFaker, "openme");
-				}
-			});
-			
-		}
+		
 		
 		specto_faker.config.animation_speed = fakr_settings.animation_speed; //update animation speed
 		specto_faker.initiated = true;
@@ -263,7 +258,12 @@ var specto_faker = {
 	},
 	getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); },
 	getFakerUserValue: function(fakr){ return $(fakr).find(".drop-value span").text().trim(); },
-	//setFakerValue: function(fakr, val, prevent_opening){ specto_faker.updateValue($(fakr).find(".drop-selection .drop-selection-item[rel='"+ val +"']"), prevent_opening); },
+	updateFakerValue: function(fakr, val){
+		var rel = $(fakr).find(".drop-selection .drop-selection-item[rel='"+ val +"']");
+		if(rel.length < 1) return false; //not found 
+		specto_faker.updateValue(rel, "dont open");
+		return true;
+	},
 	getSelectionValue: function(sel_item){ return $(sel_item).attr("rel"); },
 	isFakerOpen: function(fakr){ return $(fakr).hasClass(specto_faker.config.open_class); },
 	isFakerAnimated: function(fakr){ return $(fakr).hasClass(specto_faker.config.anim_class); },
@@ -323,6 +323,7 @@ var specto_faker = {
 				//if searchable and with non-visual helper, return to default shift-tab
 				if(specto_faker.isFakerSearchable(fakr) && specto_faker.hasFakerNvHelperInput(fakr)) 
 					setTimeout(function(){ $(fakr).find("."+ specto_faker.config.nv_helper_class).each(function(){ $(this).removeAttr("tabindex"); }); }, 20);
+				else $(fakr).focus();
 			}
 		
 		}
@@ -341,8 +342,14 @@ var specto_faker = {
 				//if searchable and with non-visual helper, return to default shift-tab
 				if(specto_faker.isFakerSearchable(fakr) && specto_faker.hasFakerNvHelperInput(fakr)) 
 					setTimeout(function(){ $(fakr).find("."+ specto_faker.config.nv_helper_class).each(function(){ $(this).removeAttr("tabindex"); }); }, 20);
+				else $(fakr).focus();
 			}
 		}
+	},
+	closeAllOpenedFakers: function(){
+		$('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
+			specto_faker.animateFaker(this, false, {dont_save_closed: true});
+		});
 	},
 	getTargetelement: function(that){ //if this is select tag, build proper html
 		if($(that).prop("tagName") === "SELECT"){
@@ -410,11 +417,16 @@ var specto_faker = {
 		});
 	},
 	keyEvents: function(fakr, e){
-		if(!specto_faker.isFakerOpen(fakr)) return; //prevent if faker is closed -dbl check
+		var wasClosed = false;
+		if(!specto_faker.isFakerOpen(fakr)) {
+			specto_faker.animateFaker(fakr, true);
+			wasClosed = true;
+		}
 		
 		var key = e.keyCode || e.which;
 		switch(key){
 			case 13: //enter - close faker
+				if(wasClosed) return;
 				$(fakr).find("."+ specto_faker.config.nv_helper_class).each(function(){ $(this).focus(); });
 				specto_faker.animateFaker(fakr, false, {dont_remove_focus: specto_faker.hasFakerNvHelperInput(fakr)});
 				specto_faker.brailleClosedFakerButFocusedNvHelper(fakr);
