@@ -206,6 +206,7 @@ var specto_faker = {
             if(has_aria) this.setAttribute("aria-selected", "false");
         });
         selectedItem.addClass(specto_faker.config.selected_val_class);
+        specto_faker.scrollIntoViewIfNeeded(selectedItem[0]); //scroll into view
         if(has_aria) {
             selectedItem.attr("aria-selected", "true");
             $(fakr_el).attr("aria-activedescendant", selectedItem.attr("id"));
@@ -227,6 +228,11 @@ var specto_faker = {
         
         if(!dimm_click) v.trigger("click");
         else if(extra_settings.manual_close) specto_faker.animateFaker(fakr_el, false, {dont_remove_focus: true});
+    },
+    scrollIntoViewIfNeeded: function(target){
+        var rect = target.getBoundingClientRect();
+        if (rect.bottom > window.innerHeight) target.scrollIntoView(false);
+        if (rect.top < window.innerHeight) target.scrollIntoView();
     },
     getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); },
     getFakerUserValue: function(fakr){ return $(fakr).find(".drop-value span").text().trim(); },
@@ -351,22 +357,22 @@ var specto_faker = {
         });
     },
     keyEvents: function(fakr, e){
-        var wasClosed = false;
-        if(!specto_faker.isFakerOpen(fakr)) {
-            specto_faker.animateFaker(fakr, true);
-            wasClosed = true;
-        }
-        
+
         var key = e.keyCode || e.which;
         switch(key){
             case 13: //enter - close faker
-                if(wasClosed) return;
+                if(!specto_faker.isFakerOpen(fakr)) specto_faker.animateFaker(fakr, true);
+                else specto_faker.animateFaker(fakr, false, {dont_remove_focus: true});
+                break;
+            case 27: //escape - close faker
                 specto_faker.animateFaker(fakr, false, {dont_remove_focus: true});
                 break;
             case 40: //down
+                e.preventDefault(); //prevent moving of scrollbar
                 specto_faker.selection.next(fakr);
                 break;
             case 38: //up
+                e.preventDefault(); //prevent moving of scrollbar
                 specto_faker.selection.previous(fakr);
                 break;
             case 9: //tab
@@ -374,6 +380,7 @@ var specto_faker = {
                 break;
             case 8: //backspace
             case 46: //delete
+                //todo refresh filtered inputs if needed (prevent auto selection?)
             case 16: //shift
                 break;
             default:
