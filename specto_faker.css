@@ -147,7 +147,7 @@
 .faker select option {
   display: none;
 }
-.faker .non-visual-helper {
+.faker .filtered-listbox {
   opacity: 0;
   width: 0px;
 }
