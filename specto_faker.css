@@ -10,9 +10,6 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  /* DROP VALUE */
-  /* DROP HANDLE */
-  /* DROP SELECTION */
 }
 .faker.faker-search.open .drop-value {
   z-index: 11;
@@ -20,8 +17,8 @@
 .faker.faker-focused .drop-value {
   border-color: #66afe9;
   outline: 0;
-  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(102, 175, 233, 0.6);
 }
 .faker.open .drop-selection, .faker.faker-animating .drop-selection {
   border-bottom: 1px solid #e7e7e7;
@@ -33,6 +30,7 @@
   border-left: 1px solid #e7e7e7;
   border-right: 1px solid #e7e7e7;
   z-index: 11;
+  /* DROP VALUE */
 }
 .faker .drop-value {
   cursor: pointer;
@@ -52,7 +50,7 @@
   border: 1px solid #e6e7e8;
   color: #949698;
   font-weight: 300;
-  background-color: #fff;
+  background-color: #FFFFFF;
   height: 53px;
 }
 .faker .drop-value input[name='faker-search'] {
@@ -62,6 +60,7 @@
   height: 100%;
   z-index: 150;
   padding: 0 25px;
+  /* DROP HANDLE */
 }
 .faker .drop-handle {
   cursor: pointer;
@@ -69,7 +68,7 @@
   right: 0;
   top: 0;
   width: 53px;
-  background-color: #fff;
+  background-color: #FFFFFF;
   height: 53px;
   border: 1px solid #e6e7e8;
   z-index: 10;
@@ -90,9 +89,10 @@
   font-family: sans-serif;
   font-stretch: extra-expanded;
   font-size: 16px;
+  /* DROP SELECTION */
 }
 .faker .drop-selection {
-  background-color: #fff;
+  background-color: #FFFFFF;
   cursor: pointer;
   height: 0;
   opacity: 0;
@@ -116,7 +116,7 @@
 }
 .faker .drop-selection .drop-selection-item.active, .faker .drop-selection .drop-selection-item:hover {
   background-color: #959698;
-  color: #fff;
+  color: #FFFFFF;
 }
 .faker .drop-selection .drop-selection-item.rel-search {
   display: none;
@@ -124,6 +124,13 @@
 .faker .drop-selection .drop-selection-item.rel-disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+.faker.faker-animated .drop-selection {
+  -webkit-transition: height 0.4s ease-in;
+  -moz-transition: height 0.4s ease-in;
+  -o-transition: height 0.4s ease-in;
+  -ms-transition: height 0.4s ease-in;
+  transition: height 0.4s ease-in;
 }
 .faker select {
   display: block;
@@ -141,6 +148,6 @@
 .faker .drop-value:hover, .faker.open .drop-value {
   color: #959698;
 }
-.faker-small .faker .faker .drop-selection {
+.faker-small .faker .drop-selection {
   max-height: 200px;
 }
