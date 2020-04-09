@@ -4,9 +4,10 @@
 * v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
 * v3.13 changed search in searchable faker. From now on, by default, it works only from start
 * v3.32 added class .drop-selection-item
-* v4.00 animation of dropdown moved to css, only calculation left (removed properties anim_progress_class & animation_speed)
+* v4.00 animation of dropdown moved to css, only calculation left (removed properties anim_progress_class & animation_speed & nv_helper_class)
 *       braille_support default value changed to true
-*       allow_form_reload option added, and changed default to false
+*       allow_form_reload option added. And changed it's default value to false
+*       added multiple aria options (label_id, listbox_label, is_required)
 
 ## DEPENDENCIES
 * jQuery <i>(Tested on 2.2.4 and 3.3)</i>

@@ -211,11 +211,11 @@
 			
 			
 			//PLAIN
-			specto_faker.init({object_selector: "#plain, #plain2"});
+			specto_faker.init({object_selector: "#plain, #plain2", braille_support: false});
 			//ANIMATED
-			specto_faker.init({object_selector: "#plain_anim, #plain_anim2", animated: true, animation_speed: 1500, count_selected: true, count_disables: false});
+			specto_faker.init({object_selector: "#plain_anim, #plain_anim2", animated: true, animation_speed: 1500, count_selected: true, count_disables: false, braille_support: false});
 			//CUSTOM CALLBACKS
-			specto_faker.init({object_selector: "#callback, #callback2", before_change: function(newVal, jsEvent){ 
+			specto_faker.init({object_selector: "#callback, #callback2", braille_support: false, before_change: function(newVal, jsEvent){ 
 				return newVal == "IQ" ? false : true;
 			}, on_change: function(newVal, jsEvent){
 				alert("new value: "+ newVal);
@@ -223,11 +223,11 @@
 				$.each(fakers, function(ind, itm){ $(itm).css("border", "2px solid blue"); });
 			}});
 			//KEY EVENTS
-			specto_faker.init({object_selector: "#keyevents, #keyevents2", key_events:true, searchable: false, });
+			specto_faker.init({object_selector: "#keyevents, #keyevents2", key_events:true, searchable: false, braille_support: false, });
 			//KEY EVENTS + ANIMATED
-			specto_faker.init({object_selector: "#keyevents_anim, #keyevents_anim2", key_events:true, searchable: false, animated: true, });
+			specto_faker.init({object_selector: "#keyevents_anim, #keyevents_anim2", key_events:true, searchable: false, animated: true, braille_support: false, });
 			//SEARCHABLE
-			specto_faker.init({object_selector: "#searchable, #searchable2", key_events:true, searchable: true, });
+			specto_faker.init({object_selector: "#searchable, #searchable2", key_events:true, searchable: true, braille_support: false, });
 			//NON_VISUAL SUPPORT
 			specto_faker.init({object_selector: "#nvda, #nvda2", braille_support: true, }); //key events will be set automatically
 			//NON_VISUAL SUPPORT WITH SEARCH

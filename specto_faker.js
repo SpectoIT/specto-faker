@@ -63,8 +63,7 @@ var specto_faker = {
             specto_faker.config.searchable_from_start_class = fakr_settings.searchable_from_start_class; 
             specto_faker.config.select_single = fakr_settings.select_single; 
             specto_faker.config.braille_class = fakr_settings.braille_class;
-            specto_faker.config.search_hidden = fakr_settings.search_hidden; 
-            //specto_faker.config.nv_helper_class = fakr_settings.nv_helper_class; 
+            specto_faker.config.search_hidden = fakr_settings.search_hidden;
             specto_faker.config.count_selected = fakr_settings.count_selected; 
             specto_faker.config.count_disables = fakr_settings.count_disables;
             specto_faker.config.count_manual_val = fakr_settings.count_manual_val;
@@ -214,9 +213,7 @@ var specto_faker = {
         var is_searchable = specto_faker.isFakerSearchable(fakr_el);
         if(!extra_settings.leave_search_alone && is_searchable) {
             var val = specto_faker.getFakerUserValue(fakr_el);
-            var srch_input = specto_faker.getSearchInput(fakr_el);
-            srch_input.val(val || "");
-            srch_input[0].setSelectionRange(0, val ? val.length +1 : 10);
+            specto_faker.searchInputSelectText(fakr_el, val); //update value and select
         }
         
         //if there is select present, update it's value. And trigger change event
@@ -241,7 +238,6 @@ var specto_faker = {
     isFakerSearchable: function(fakr){ return $(fakr).hasClass(specto_faker.config.searchable_class); },
     isFakerSearchableFromStart: function(fakr){ return $(fakr).hasClass(specto_faker.config.searchable_from_start_class); },
     isFakerBrailleSupport: function(fakr){ return $(fakr).hasClass(specto_faker.config.braille_class); },
-    //hasFakerNvHelperInput: function(fakr){ return $(fakr).find("."+ specto_faker.config.nv_helper_class).length > 0; },
     returnFakerElementFromChild: function(child){ return $(child).closest("."+ specto_faker.config.init_class); },
     makeTabIndex: function(elm, index){ $(elm).attr("tabindex", index || "0"); },
     removeTabIndex: function(elm){ $(elm).removeAttr("tabindex"); }, //check if used anywhere
@@ -449,27 +445,6 @@ var specto_faker = {
         }
     },
     removeSearchInput: function(fakr){ $(fakr).find(".drop-value input[name='faker-search']").each(function(){ $(this).remove(); }); },
-    /* makeFakerSearchable: function(fakr){
-        if(specto_faker.isFakerSearchable(fakr)){
-            
-            var label = $(fakr).parents("label").length > 0 ? $(fakr).parents("label").first().attr("title") : "";
-            var title = specto_faker.isFakerBrailleSupport(fakr) ? label +" combobox "+ specto_faker.getFakerUserValue(fakr) +" expanded has autocomplete. This combobox can be searchable by input and by using arrow keys" : "";
-            $(fakr).find(".drop-value").append("<input autocomplete='off' type='text' name='faker-search' class='form-control' tabindex='-1' title='"+ title +"' />"); //prevent autocomplete on input
-            $(fakr).find("input[name='faker-search']").each(function(){ 
-                $(this).click(function(event){
-                    event.preventDefault();
-                    event.stopPropagation();
-                });
-                $(this).focus();
-                if($(fakr).find("select").length > 0) { //allow shift+tab switching
-                    $(fakr).find("select").first().attr("tabindex", "-1");
-                    $(this).blur(function(){ $(specto_faker.returnFakerElementFromChild(this)).find("select").first().removeAttr("tabindex"); });
-                }
-                $(this).val(specto_faker.getFakerUserValue(fakr) || "")[0].setSelectionRange(0, 200);
-            });
-            if(!specto_faker.isFakerBrailleSupport(fakr)) $(fakr).removeAttr("tabindex"); //make shift+tab possible for non-nv faker
-        }
-    }, */
     removeFakerSearchable: function(fakr){
         if(specto_faker.isFakerSearchable(fakr)){
             //remove searchable classes
@@ -480,13 +455,17 @@ var specto_faker = {
     },
     searchInputSelectText: function(fakr, newVal, skip){
         var srch_input = specto_faker.getSearchInput(fakr);
-        if(!newVal) newVal = srch_input.val();
-        else srch_input.val(newVal);
+        if(typeof newVal !== "string") newVal = srch_input.val();
+        else {
+            srch_input.val(newVal);
+            srch_input.attr("data-val", newVal);
+        }
         srch_input[0].setSelectionRange(skip || 0, newVal.length + 1);
     },
     filterBySearchInput: function(fakr){
         var srch_input = specto_faker.getSearchInput(fakr);
         var srch_val = srch_input.val();
+        if(srch_val === srch_input.attr("data-val")) return; //prevent editing if no change
         if(srch_val) srch_val = srch_val.toLowerCase();
         else if(typeof srch_val !== "string") return; //prevent error
         
