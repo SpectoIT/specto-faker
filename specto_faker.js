@@ -107,13 +107,12 @@ var specto_faker = {
                 $(this).off("click").click(function(){
                     
                     console.log("basic click");
-                    if(!$(document.activeElement).is(specto_faker.returnFakerElementFromChild(this))) {
-                        specto_faker.toggleOpenState(this);
+                    var fakr = specto_faker.returnFakerElementFromChild(this);
+                    if(!specto_faker.isFakerOpen(fakr)) specto_faker.animateFaker(fakr, "openme");
+                    else if(!$(document.activeElement).is(specto_faker.returnFakerElementFromChild(this))) {
+                        specto_faker.animateFaker(fakr);
+                        //TODO opened plain doesn't close
                     }
-                    
-                    /* var faker = specto_faker.returnFakerElementFromChild(this);
-                    if(!specto_faker.isFakerOpen(faker)) specto_faker.animateFaker(faker, "openme");
-                    else specto_faker.animateFaker(faker); */
                 });
             });
             //dropdown clicks
