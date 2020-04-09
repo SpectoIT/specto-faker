@@ -43,7 +43,6 @@ $faker_height: 53px;
 		}
 	}
 	
-	
 	&.faker-focused .drop-value {
 		border-color: $faker_focused_value_border_shadow;
 		outline: 0;
@@ -165,6 +164,14 @@ $faker_height: 53px;
 			}
 		}
 	}
+    
+    &.faker-animated .drop-selection {
+        -webkit-transition: height 0.4s ease-in;
+        -moz-transition: height 0.4s ease-in;
+        -o-transition: height 0.4s ease-in;
+        -ms-transition: height 0.4s ease-in;
+        transition: height 0.4s ease-in;
+    }
 	
 	select {
 		display: block;
@@ -184,6 +191,6 @@ $faker_height: 53px;
 .faker .drop-value:hover, .faker.open .drop-value {color: $faker_opened_value_color;}
 
 
-.faker-small .faker .faker .drop-selection {
+.faker-small .faker .drop-selection {
 	max-height: 200px;
 }

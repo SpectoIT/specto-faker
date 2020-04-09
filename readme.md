@@ -4,6 +4,9 @@
 * v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
 * v3.13 changed search in searchable faker. From now on, by default, it works only from start
 * v3.32 added class .drop-selection-item
+* v4.00 animation of dropdown moved to css, only calculation left (removed properties anim_progress_class & animation_speed)
+*       braille_support default value changed to true
+*       allow_form_reload option added, and changed default to false
 
 ## DEPENDENCIES
 * jQuery <i>(Tested on 2.2.4 and 3.3)</i>
@@ -13,49 +16,48 @@
 * Customizable with options:
 
 ```javascript
-{
-	object_selector: ".faker", //element(s) - works only if called through `specto_faker.init()`, if called as `$([object_selector]).specto_faker()` elements are defined in `$([object_selector])`
-	
-	/* CLASSES */
-	open_class: "open", //class for opened faker
-	init_class: "faker-init", //class for initiated faker
-	anim_class: "faker-animated", //class for animated faker
-	anim_progress_class: "faker-animating", //class while animation in progress
-	focused_class: "faker-focused", //class for focused faker
-	key_events_class: "faker-keyevent", //class for faker with key events
-	searchable_class: "faker-search", //class for searchable faker
-	searchable_from_start_class: "faker-search-start", //class for searchable faker to search from beginning
-	select_single: "faker-sel-single", //class for searchable faker to auto select single filtered option
-	braille_class: "faker-braille", //class for faker that supports non-visual (braille) speach
-	/* options classes */
-	selected_val_class: "active", //class of selected option - default css has display:none
-	disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
-	search_hidden: "rel-search", //class for hidden options - hidden by search
-	nv_helper_class: "non-visual-helper", //class of non-visual input helper
-	
-	/* ANIMATION */
-	animated: false, //is faker animated
-	animation_speed: 400, //updated on each init. (e.g. first init with speed 400, second with 600 -> result both will be animated with 600)
-	count_selected: false, //valid only for animated faker, are selected_val_class counted for animation
-	count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
-	count_manual_val: 0, //valid only for animated faker, animate to specific number of elements
-	
-	/* KEY EVENTS & SEARCHING & SORTING */
-	key_events: false, //do you want keyEvents to work
-	searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
-	search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
-	search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this options and consideres it set to true
-	sortable: false, //do you want on init to be sorted
-	sort_ascending: true,
-	
-	/* METHODS - CALLBACKS */
-	/* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
-	before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value or 0
-	on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
-	on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
-	
-	/* NON-VISUAL (BRAILLE) SUPPORT */
-	braille_support: false, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on -->> example: https://a11y.nicolas-hoffmann.net/autocomplete-list/
+    {
+    object_selector: ".faker", //element(s) - works only if called through `specto_faker.init()`, if called as `$([object_selector]).specto_faker()` elements are defined in `$([object_selector])`
+    
+    /* CLASSES */
+    open_class: "open", //class for opened faker
+    init_class: "faker-init", //class for initiated faker
+    anim_class: "faker-animated", //class for animated faker
+    focused_class: "faker-focused", //class for focused faker
+    key_events_class: "faker-keyevent", //class for faker with key events
+    searchable_class: "faker-search", //class for searchable faker
+    searchable_from_start_class: "faker-search-start", //class for searchable faker to search from beginning
+    select_single: "faker-sel-single", //class for searchable faker to auto select single filtered option
+    braille_class: "faker-braille", //class for faker that supports non-visual (braille) speach
+    /* options classes */
+    selected_val_class: "active", //class of selected option - default css has display:none
+    disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
+    search_hidden: "rel-search", //class for hidden options - hidden by search
+    nv_helper_class: "non-visual-helper", //class of non-visual input helper
+    
+    /* ANIMATION */
+    animated: false, //is faker animated
+    count_selected: false, //valid only for animated faker, are selected_val_class counted for animation
+    count_disables: true, //valid only for animated faker, are disabled_val_class counted for animation
+    count_manual_val: 0, //valid only for animated faker, animate to specific number of elements
+    
+    /* KEY EVENTS & SEARCHING & SORTING */
+    key_events: false, //do you want keyEvents to work
+    searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
+    search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
+    search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this options and consideres it set to true
+    sortable: false, //do you want on init to be sorted
+    sort_ascending: true,
+    
+    /* METHODS - CALLBACKS */
+    /* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
+    before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value
+    on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
+    on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
+    
+    /* NON-VISUAL (BRAILLE) SUPPORT */
+    braille_support: true, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on -->> example: https://a11y.nicolas-hoffmann.net/autocomplete-list/
+    allow_form_reload: false, //do we allow parent form to reload on faker init. this is for plain forms firefox workaround (reset form for proper detection of required fields when ```<select>``` is moved)
 }
 ```
 
