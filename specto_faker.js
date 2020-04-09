@@ -113,7 +113,7 @@ var specto_faker = {
             //dropdown clicks
             specto_faker.fakerSelection(fakr_elm, fakr_settings.on_change, fakr_settings.before_change);
             
-            //nvda (braille) support
+            //parse select
             fakr_elm.find("select").each(function(){
                 has_select = true;
                 $(this).removeClass("faker").off("focus");
@@ -130,9 +130,8 @@ var specto_faker = {
                 specto_faker.animateFaker(specto_faker.returnFakerElementFromChild(this), "openme"); //open and add focused class
             });
             
-            if(fakr_settings.braille_support) { //build aria
-                specto_faker.buildAria(fakr_elm, fakr_settings);
-            }
+            //build aria
+            if(fakr_settings.braille_support) specto_faker.buildAria(fakr_elm, fakr_settings);
             
             
             //key events
@@ -215,9 +214,8 @@ var specto_faker = {
         //update html value
         var v = selectedItem.closest(".drop-selection").prevAll(".drop-value").attr("rel", selectedItem.attr("rel")).find("span").text(selectedItem.text()).parent(); 
         //if searchable, insert new value
-        var is_searchable = specto_faker.isFakerSearchable(fakr_el);
-        if(!extra_settings.leave_search_alone && is_searchable) {
-            specto_faker.update
+        if(!extra_settings.leave_search_alone && specto_faker.isFakerSearchable(fakr_el)) {
+            if(has_aria) specto_faker.clearAriaFilteredList(fakr_el); //clear aria
             var val = specto_faker.getFakerUserValue(fakr_el);
             specto_faker.searchInputSelectText(fakr_el, val); //update value and select
         }
@@ -532,7 +530,7 @@ var specto_faker = {
     },
     /* ARIA */
     buildAria: function(fakr, settings){
-        var newId = specto_faker.makeUniqueId();
+        var newId = specto_faker.makeUniqueIds();
         fakr = $(fakr);
         fakr.attr("role", "combobox")
             .attr("aria-expanded", "false")
@@ -573,7 +571,7 @@ var specto_faker = {
             else self.attr("aria-label", settings.listbox_label).removeAttr("aria-labelledby");
         });
     },
-    makeUniqueId: function(){
+    makeUniqueIds: function(){
         var ii = 0, isUnique = false, ids = {combobox: "", listbox: "", filtered_listbox: ""};
         var prefix = "spfa";
         do {
@@ -589,14 +587,26 @@ var specto_faker = {
     ariaFilteredList: function(fakr, filtered_values, selected_val){
         var htm = $("<div></div>");
         var this_id = $(fakr).attr("id") +"-filtered";
+        var selected_id = "";
         filtered_values.forEach(function(item, ind){
-            htm.append("<li role='option' aria-selected='"+ (filtered_values.key === selected_val ? "true" : "false") +"' id='"+ (this_id +"-"+ ind) +"'>"+ filtered_values.val +"</li>")
+            var selected = "false";
+            var option_id = this_id +"-"+ ind;
+            if(filtered_values.key === selected_val) {
+                selected_id = option_id;
+                selected = "true";
+            }
+            htm.append("<li role='option' aria-selected='"+ selected +"' id='"+ (this_id +"-"+ ind) +"'>"+ filtered_values.val +"</li>")
         });
         
         specto_faker.getFilteredAriaListbox(fakr).append(htm.html());
+        specto_faker.getSearchInput(fakr).attr("aria-activedescendant", selected_id);
     },
-    //TODO clear list when needed ?!
-    clearAriaFilteredList: function(fakr){ specto_faker.getFilteredAriaListbox(fakr).empty(); },
+    //TODO test
+    clearAriaFilteredList: function(fakr){ 
+        specto_faker.getFilteredAriaListbox(fakr).each(function(){ this.innerHTML = ""; });
+        specto_faker.getSearchInput(fakr).attr("aria-activedescendant", "");        
+    },
+    //1. when opened ariaFilteredList needs to populate?
 };
 
 //jquery wrapper
