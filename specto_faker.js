@@ -591,26 +591,30 @@ var specto_faker = {
     /* ARIA */
     buildAria: function(fakr, settings, this_faker_required){
         var newId = specto_faker.makeUniqueIds();
-        fakr.attr("role", "combobox")
+        fakr.attr("role", settings.searchable ? "combobox" : "listbox")
             .attr("aria-expanded", "false")
-            .attr("aria-owns", newId.listbox)
-            .attr("aria-haspopup", "listbox")
-            .attr("id", newId.combobox);
+            .attr("aria-activedescendant", "")
+            //.attr("aria-owns", newId.listbox)
+            .attr("id", newId.combobox)
+            .attr("aria-required", this_faker_required ? "true" : "false");
+        if(settings.searchable) 
+            fakr.attr("aria-haspopup", "listbox")
+                .attr("aria-owns", newId.filtered_listbox);
+        if(settings.label_id) fakr.attr("aria-labelledby", settings.label_id).removeAttr("aria-label");
+        else fakr.attr("aria-label", settings.listbox_label).removeAttr("aria-labelledby");
             
-        fakr.find(".drop-selection").each(function(){
-            var self = $(this);
-            self.attr("role", "listbox")
-                .attr("id", newId.listbox);
-            if(settings.label_id) self.attr("aria-labelledby", settings.label_id).removeAttr("aria-label");
-            else self.attr("aria-label", settings.listbox_label).removeAttr("aria-labelledby");
-            
-            self.attr("aria-required", this_faker_required ? "true" : "false");
-        });
+        /* fakr.find(".drop-selection").each(function(){
+            this.setAttribute("role", "list");
+            this.setAttribute("aria-expanded", "false");
+            this.setAttribute("id", newId.listbox);
+        }); */
         
         fakr.find(".drop-selection-item").each(function(ii){
-            $(this).attr("role", "option")
-                .attr("aria-selected", "false")
-                .attr("id", newId.listbox +"-"+ ii);
+            this.setAttribute("role", "option");
+            this.setAttribute("aria-selected", "false");
+            this.setAttribute("id", newId.listbox +"-"+ ii);
+            //aria-hidden (state)
+            //aria-current (state)
         });
         
         //if searchable, connect aria control to input
@@ -618,16 +622,21 @@ var specto_faker = {
             var helper_listbox = specto_faker.getFilteredAriaListbox(fakr);
             if(helper_listbox.length < 1){
                 var label = settings.label_id ? "aria-labelledby='"+ settings.label_id +"'" : "aria-label='"+ settings.filtered_listbox_label +"'";
-                $(fakr).append("<ul class='filtered-listbox' role='listbox' id='"+ newId.filtered_listbox +"' "+ label +"></ul>");
+                fakr.append("<ul class='filtered-listbox' role='listbox' id='"+ newId.filtered_listbox +"' "+ label +"></ul>");
             }
             else helper_listbox.attr("id", newId.filtered_listbox);
             
-            var self = $(this);
-            self.attr("aria-autocomplete", "both")
-                .attr("aria-controls", newId.listbox)
-                .attr("aria-activedescendant", "");
-            if(settings.label_id) self.attr("aria-labelledby", settings.label_id).removeAttr("aria-label");
-            else self.attr("aria-label", settings.listbox_label).removeAttr("aria-labelledby");
+            this.setAttribute("aria-autocomplete", "both");
+            this.setAttribute("aria-controls", newId.filtered_listbox);
+            this.setAttribute("aria-activedescendant", "");
+            if(settings.label_id) {
+                this.setAttribute("aria-labelledby", settings.label_id);
+                this.removeAttribute("aria-label");
+            }
+            else {
+                this.setAttribute("aria-label", settings.listbox_label);
+                this.removeAttribute("aria-labelledby");
+            }
         });
     },
     makeUniqueIds: function(){
