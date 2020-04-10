@@ -208,7 +208,7 @@ var specto_faker = {
         },
         fakerSelection: function(fakr, after_change_fun, before_change_fun){ //dropdown clicks
             fakr.find(".drop-selection").each(function(){
-                $(this).off().on("click", ".drop-selection-item", function(e){
+                $(this).off("click").on("click", ".drop-selection-item", function(e){
                     if(this.hasAttribute("disabled")) return; //prevent disabled options
                     
                     if(before_change_fun){ //run before change function
