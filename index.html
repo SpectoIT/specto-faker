@@ -61,11 +61,11 @@
 		<div class="row">
 			<form>
 				<div class="col-sm-6">
-					<h4>Faker with custom callbacks (Iraq prevented, alert onchange, custom border on init)</h4>
+					<h4>Faker with custom callbacks (Iraq prevented, console.log onchange, custom border on init)</h4>
 					<select class="faker" default-values id="callback" name="callback"></select>
 				</div>
 				<div class="col-sm-6">
-					<h4>Faker with custom callbacks (Iraq prevented, alert onchange, custom border on init)</h4>
+					<h4>Faker with custom callbacks (Iraq prevented, console.log onchange, custom border on init)</h4>
 					<div class="faker" noselect-faker id="callback2" name="callback2"></div>
 				</div>
 			</form>
@@ -218,7 +218,7 @@
 			specto_faker.init({object_selector: "#callback, #callback2", braille_support: false, before_change: function(newVal, jsEvent){ 
 				return newVal == "IQ" ? false : true;
 			}, on_change: function(newVal, jsEvent){
-				alert("new value: "+ newVal);
+				console.log("new value: "+ newVal);
 			}, on_init: function(fakers){
 				$.each(fakers, function(ind, itm){ $(itm).css("border", "2px solid blue"); });
 			}});

@@ -82,6 +82,7 @@
 * start of non-visual support
 * added search hints (+auto selected first value)
 * recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option (more in index.html)
+* in custom callbacks before_change and on_change make sure that you don't focus another element and then focus back (e.g. alert() focuses on window). this will not close faker (it will be closed and reopened again on focus)
 
 
 ## EXAMPLE USAGE
