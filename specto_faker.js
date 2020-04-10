@@ -103,11 +103,11 @@ var specto_faker = {
             else {
                 fakr_elm.removeClass(specto_faker.config.searchable_class);
                 specto_faker.init_functions.removeSearchInput(fakr_elm); //remove search input if was searchable and isn't any more
+                //drop value & handle clicks
+                specto_faker.init_functions.dropValueClicks(fakr_elm);
             }
             fakr_elm.addClass(specto_faker.config.init_class);
             
-            //drop value & handle clicks
-            specto_faker.init_functions.dropValueClicks(fakr_elm);
 
             //dropdown clicks
             specto_faker.init_functions.fakerSelection(fakr_elm, fakr_settings.on_change, fakr_settings.before_change);
@@ -124,10 +124,10 @@ var specto_faker = {
             if(fakr_settings.braille_support) specto_faker.buildAria(fakr_elm, fakr_settings, this_faker_required);
             
             //key events
-            if(fakr_settings.key_events) fakr_elm.on("keyup", function (event){ specto_faker.keyEvents(this, event); });
+            if(fakr_settings.key_events) fakr_elm.off("keyup").on("keyup", function (event){ specto_faker.keyEvents(this, event); });
             
             //if empty, update first value
-            specto_faker.updateValueOnInit(fakr_elm);
+            specto_faker.init_functions.updateValueOnInit(fakr_elm);
             
         });
         //firefox workaround - reset form for proper detection of required fields
@@ -153,10 +153,13 @@ var specto_faker = {
         appendSearchInput: function(fakr){
             if(!specto_faker.getSearchInput(fakr).length){
                 $(fakr).find(".drop-value").append("<input autocomplete='off' type='text' name='faker-search' class='form-control' tabindex='-1' />"); //prevent autocomplete on input
-                specto_faker.getSearchInput(fakr).off("focus").on("focus", function(){
-                    specto_faker.makeTabIndex(specto_faker.returnFakerElementFromChild(this), "-1"); //enable shift+tab to go back
+                specto_faker.getSearchInput(fakr).off("focus").on("focus", function(e){
+                    var fakr = specto_faker.returnFakerElementFromChild(this);
+                    specto_faker.makeTabIndex(fakr, "-1"); //enable shift+tab to go back
+                    if(!specto_faker.isFakerOpen(fakr)) specto_faker.animateFaker(fakr, "openme");
                     $(this).off("blur").on("blur", function(){
                         specto_faker.makeTabIndex(specto_faker.returnFakerElementFromChild(this), "0"); //restore original focusable element
+                        $(this).off("blur");
                     });
                 });
             }
@@ -194,7 +197,6 @@ var specto_faker = {
         dropValueClicks: function(fakr){
             fakr.find(".drop-value, .drop-handle").each(function(){ 
                 $(this).off("click").click(function(){
-                    
                     if(specto_faker.focus_click_exception) { //mousedown, focus, click: exception on first interaciton
                         specto_faker.focus_click_exception = false;
                         clearTimeout(specto_faker.focus_click_exception_timeout);
@@ -220,6 +222,12 @@ var specto_faker = {
                     if(after_change_fun) after_change_fun(specto_faker.getSelectionValue(this), e); //change function
                 });
             });
+        },
+        updateValueOnInit: function(fakr){
+            if(!fakr.find(".drop-value span").text()) { //has faker selected value?
+                if(fakr.find(".drop-selection .drop-selection-item[selected]").length) specto_faker.updateValue(fakr.find(".drop-selection .drop-selection-item[selected]").first(), "noclick");
+                else specto_faker.updateValue(fakr.find(".drop-selection .drop-selection-item").first(), "noclick");
+            }
         },
     },
     updateValue: function(rel, dimm_click, extra_settings){ //notice - this function doesn't call after change event
@@ -258,12 +266,6 @@ var specto_faker = {
         if(!dimm_click) specto_faker.toggleOpenState(fakr_el);
         else if(extra_settings.manual_close) specto_faker.animateFaker(fakr_el, false, {dont_remove_focus: true});
     },
-    updateValueOnInit: function(fakr){
-        if(!fakr.find(".drop-value span").text()) { //has faker selected value?
-            if(fakr.find(".drop-selection .drop-selection-item[selected]").length) specto_faker.updateValue(fakr.find(".drop-selection .drop-selection-item[selected]").first(), "noclick");
-            else specto_faker.updateValue(fakr.find(".drop-selection .drop-selection-item").first(), "noclick");
-        }
-    },
     firefoxFormBugFox: function(fakr){
         if(fakr.closest("form").length > 0){
             switch(document.readyState){
@@ -291,6 +293,8 @@ var specto_faker = {
     },
     getSelectionValue: function(sel_item){ return $(sel_item).attr("rel"); },
     preventFakerFocusClick: function(fakr){
+        if(specto_faker.isFakerSearchable(fakr)) return; //prevent on searchable fakers, they don't have clicks
+        
         if(specto_faker.focus_click_exception) clearTimeout(specto_faker.focus_click_exception_timeout);
         specto_faker.focus_click_exception = true;
         specto_faker.focus_click_exception_timeout = setTimeout(function(){
