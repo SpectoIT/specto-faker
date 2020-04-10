@@ -28,8 +28,8 @@ var specto_faker = {
         count_manual_val: 0, //valid only for animated faker, animate to specific number of elements
         
         /* KEY EVENTS & SEARCHING & SORTING */
-        key_events: false, //do you want keyEvents to work
-        searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
+        key_events: true, //do you want keyEvents to work - braille_support = true will set this to true regardless
+        searchable: false, //open faker gets input to search for values - valid only if key_events are initiated
         search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
         search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this options and consideres it set to true
         sortable: false, //do you want on init to be sorted
@@ -158,7 +158,9 @@ var specto_faker = {
                     specto_faker.makeTabIndex(fakr, "-1"); //enable shift+tab to go back
                     if(!specto_faker.isFakerOpen(fakr)) specto_faker.animateFaker(fakr, "openme");
                     $(this).off("blur").on("blur", function(){
-                        specto_faker.makeTabIndex(specto_faker.returnFakerElementFromChild(this), "0"); //restore original focusable element
+                        var fakr = specto_faker.returnFakerElementFromChild(this);
+                        specto_faker.makeTabIndex(fakr, "0"); //restore original focusable element
+                        if(!$(document.activeElement).is(fakr)) specto_faker.closeFaker(fakr); //if blured outside of faker
                         $(this).off("blur");
                     });
                 });
@@ -316,7 +318,10 @@ var specto_faker = {
             $(fakr).addClass(specto_faker.config.open_class).addClass(specto_faker.config.focused_class);
             if(specto_faker.isFakerAnimated(fakr)) specto_faker.calcDropSelectionHeight(fakr, openme);
             if(specto_faker.isFakerBrailleSupport(fakr)) $(fakr).attr("aria-expanded", "true");
-            if(specto_faker.isFakerSearchable(fakr)) specto_faker.searchInputSelectText(fakr); //searchable faker select inserted value
+            if(specto_faker.isFakerSearchable(fakr)) {
+                specto_faker.searchInputSelectText(fakr); //searchable faker select inserted value
+                specto_faker.getSearchInput(fakr).focus(); //focus search input
+            }
         }
         else {
             if(specto_faker.isFakerSearchable(fakr)) specto_faker.removeFakerSearchable(fakr, extra_settings.dont_remove_focus); //searchable faker - first operation so that faker isn't yet closed
@@ -516,10 +521,10 @@ var specto_faker = {
     },
     searchInputSelectText: function(fakr, newVal, skip){
         var srch_input = specto_faker.getSearchInput(fakr);
-        if(typeof newVal !== "string") newVal = srch_input.val();
+        if(typeof newVal !== "string") newVal = srch_input[0].value;
         else {
-            srch_input.val(newVal);
-            srch_input.attr("data-val", newVal);
+            srch_input[0].value = newVal;
+            srch_input[0].setAttribute("data-val", newVal);
         }
         srch_input[0].setSelectionRange(skip || 0, newVal.length + 1);
     },

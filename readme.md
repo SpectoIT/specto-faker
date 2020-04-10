@@ -7,6 +7,8 @@
 * v4.00 animation of dropdown moved to css, only height calculation left in js (removed properties anim_progress_class & animation_speed & nv_helper_class)
 *       aria support proper build
 *       braille_support default value changed to true
+*       key_events default value changed to true
+*       searchable default value changed to false
 *       allow_form_reload option added. And changed it's default value to false
 *       added multiple aria options (label_id, listbox_label, filtered_listbox_label, is_required)
 
@@ -43,8 +45,8 @@
     count_manual_val: 0, //valid only for animated faker, animate to specific number of elements
     
     /* KEY EVENTS & SEARCHING & SORTING */
-    key_events: false, //do you want keyEvents to work
-    searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
+    key_events: true, //do you want keyEvents to work - braille_support = true will set this to true regardless
+    searchable: false, //open faker gets input to search for values - valid only if key_events are initiated
     search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
     search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this options and consideres it set to true
     sortable: false, //do you want on init to be sorted
