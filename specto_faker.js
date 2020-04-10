@@ -155,11 +155,11 @@ var specto_faker = {
                 $(fakr).find(".drop-value").append("<input autocomplete='off' type='text' name='faker-search' class='form-control' tabindex='-1' />"); //prevent autocomplete on input
                 specto_faker.getSearchInput(fakr).off("focus").on("focus", function(e){
                     var fakr = specto_faker.returnFakerElementFromChild(this);
-                    specto_faker.makeTabIndex(fakr, "-1"); //enable shift+tab to go back
+                    specto_faker.makeTabIndex(fakr[0], "-1"); //enable shift+tab to go back
                     if(!specto_faker.isFakerOpen(fakr[0])) specto_faker.animateFaker(fakr, "openme");
                     $(this).off("blur").on("blur", function(){
                         var fakr = specto_faker.returnFakerElementFromChild(this);
-                        specto_faker.makeTabIndex(fakr, "0"); //restore original focusable element
+                        specto_faker.makeTabIndex(fakr[0], "0"); //restore original focusable element
                         if(!$(document.activeElement).is(fakr)) specto_faker.closeFaker(fakr); //if blured outside of faker
                         $(this).off("blur");
                     });
@@ -185,7 +185,7 @@ var specto_faker = {
             };
         },
         makeFakerSelectable: function(fakr){
-            specto_faker.makeTabIndex(fakr);
+            specto_faker.makeTabIndex(fakr[0]);
             fakr.off("focus").off("blur").on("focus", function(e){
                 if(!specto_faker.isFakerOpen(this)) { //on focus only open closed fakers
                     specto_faker.preventFakerFocusClick();
@@ -234,10 +234,10 @@ var specto_faker = {
     },
     updateValue: function(rel, dimm_click, extra_settings){ //notice - this function doesn't call after change event
         extra_settings = extra_settings || {};
-        var fakr_el = specto_faker.returnFakerElementFromChild(rel);
-        var has_aria = specto_faker.isFakerBrailleSupport(fakr_el);
-        
         var selectedItem = $(rel);
+        var fakr_el = specto_faker.returnFakerElementFromChild(selectedItem[0]);
+        var has_aria = specto_faker.isFakerBrailleSupport(fakr_el[0]);
+        
         if(selectedItem.length < 1) return; //prevent error
         //deselect currently selected value
         selectedItem.parent().find("."+ specto_faker.config.selected_val_class).each(function(){ 
@@ -262,7 +262,7 @@ var specto_faker = {
         
         //if there is select present, update it's value. And trigger change event
         var selects = selectedItem.closest(".drop-selection").prevAll("select");
-        if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(rel)).change();
+        if(selects.length > 0) $(selects).val(specto_faker.getSelectionValue(selectedItem[0])).change();
         
         
         if(!dimm_click) specto_faker.toggleOpenState(fakr_el);
@@ -285,15 +285,15 @@ var specto_faker = {
         if (rect.top < window.innerHeight) target.scrollIntoView(); */
         //todo buggy
     },
-    getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); },
-    getFakerUserValue: function(fakr){ return $(fakr).find(".drop-value span").text().trim(); },
-    updateFakerValue: function(fakr, val){
+    getFakerValue: function(fakr){ return $(fakr).find(".drop-value").attr("rel"); }, //public function
+    getFakerUserValue: function(fakr){ return $(fakr).find(".drop-value span").text().trim(); }, //public function
+    updateFakerValue: function(fakr, val){ //public function
         var rel = $(fakr).find(".drop-selection .drop-selection-item[rel='"+ val +"']");
         if(rel.length < 1) return false; //not found 
         specto_faker.updateValue(rel, "dont open");
         return true;
     },
-    getSelectionValue: function(sel_item){ return $(sel_item).attr("rel"); },
+    getSelectionValue: function(sel_item){ return sel_item.getAttribute("rel"); },
     preventFakerFocusClick: function(){
         if(specto_faker.focus_click_exception) clearTimeout(specto_faker.focus_click_exception_timeout);
         specto_faker.focus_click_exception = true;
@@ -304,19 +304,19 @@ var specto_faker = {
     isFakerOpen: function(fakr_js){ return fakr_js.classList.contains(specto_faker.config.open_class); },
     isFakerAnimated: function(fakr_js){ return fakr_js.classList.contains(specto_faker.config.anim_class); },
     isFakerSearchable: function(fakr_js){ return fakr_js.classList.contains(specto_faker.config.searchable_class); },
-    isFakerSearchableFromStart: function(fakr){ return $(fakr).hasClass(specto_faker.config.searchable_from_start_class); },
-    isFakerBrailleSupport: function(fakr){ return $(fakr).hasClass(specto_faker.config.braille_class); },
-    returnFakerElementFromChild: function(child){ return $(child).closest("."+ specto_faker.config.init_class); },
-    makeTabIndex: function(elm, index){ $(elm).attr("tabindex", index || "0"); },
-    removeTabIndex: function(elm){ $(elm).removeAttr("tabindex"); }, //check if used anywhere
+    isFakerSearchableFromStart: function(fakr_js){ return fakr_js.classList.contains(specto_faker.config.searchable_from_start_class); },
+    isFakerBrailleSupport: function(fakr_js){ return fakr_js.classList.contains(specto_faker.config.braille_class); },
+    returnFakerElementFromChild: function(child_js){ return $(child_js.closest("."+ specto_faker.config.init_class)); },
+    makeTabIndex: function(elm, index){ elm.setAttribute("tabindex", index || "0"); },
+    removeTabIndex: function(elm){ elm.removeAttribute("tabindex"); }, //not used anywhere yet
     animateFaker: function(fakr_random, openme, extra_settings){
         extra_settings = extra_settings || {};
         var fakr = $(fakr_random);
         
         if(openme) {
             fakr.addClass(specto_faker.config.open_class).addClass(specto_faker.config.focused_class);
-            if(specto_faker.isFakerAnimated(fakr[0])) specto_faker.calcDropSelectionHeight(fakr, openme);
-            if(specto_faker.isFakerBrailleSupport(fakr)) fakr.attr("aria-expanded", "true");
+            if(specto_faker.isFakerAnimated(fakr[0])) specto_faker.calcDropSelectionHeight(fakr[0], openme);
+            if(specto_faker.isFakerBrailleSupport(fakr[0])) fakr.attr("aria-expanded", "true");
             if(specto_faker.isFakerSearchable(fakr[0])) {
                 specto_faker.searchInputSelectText(fakr); //searchable faker select inserted value
                 specto_faker.getSearchInput(fakr).focus(); //focus search input
@@ -325,9 +325,9 @@ var specto_faker = {
         else {
             if(specto_faker.isFakerSearchable(fakr[0])) specto_faker.removeFakerSearchable(fakr, extra_settings.dont_remove_focus); //searchable faker - first operation so that faker isn't yet closed
             fakr.removeClass(specto_faker.config.open_class);
-            if(specto_faker.isFakerAnimated(fakr[0])) specto_faker.calcDropSelectionHeight(fakr, openme);
+            if(specto_faker.isFakerAnimated(fakr[0])) specto_faker.calcDropSelectionHeight(fakr[0], openme);
             if(!extra_settings.dont_remove_focus) fakr.removeClass(specto_faker.config.focused_class);
-            if(specto_faker.isFakerBrailleSupport(fakr)) fakr.attr("aria-expanded", "false");
+            if(specto_faker.isFakerBrailleSupport(fakr[0])) fakr.attr("aria-expanded", "false");
         }
     },
     toggleOpenState: function(fakr){
@@ -335,18 +335,24 @@ var specto_faker = {
         else specto_faker.animateFaker(fakr, "openme");
     },
     closeFaker: function(fakr_random){ specto_faker.animateFaker(fakr_random); },
-    calcDropSelectionHeight: function(fakr, isOpening){
+    calcDropSelectionHeight: function(fakr_js, isOpening){
         if(isOpening) {
-            var selection = $(fakr).find(".drop-selection").css({visibility: "hidden", opacity: "1", height: "0px"}); //hide to calculate proper height + set initial height for animation
+            var selection = fakr_js.querySelector(".drop-selection");
+            //hide to calculate proper height + set initial height for animation
+            selection.style.visibility = "hidden";
+            selection.style.opacity = "1";
+            selection.style.height = "0px";
+            
             var finder_css = ".drop-selection-item" +
                 (specto_faker.config.count_selected ? ":not(."+ specto_faker.config.selected_val_class +")" : "") +
                 (specto_faker.config.count_disables ? ":not(."+ specto_faker.config.disabled_val_class +")" : "");
             var nr_elements = parseInt(specto_faker.config.count_manual_val) > 0 ?
-                parseInt(specto_faker.config.count_manual_val) : $(selection).find(finder_css).length;
+                parseInt(specto_faker.config.count_manual_val) : selection.querySelectorAll(finder_css).length;
                 
-            $(selection).css({visibility: "visible", "height": ($(selection).find(".drop-selection-item").first().outerHeight() * nr_elements) +"px"});
+            selection.style.visibility = "visible";
+            selection.style.height = ($(selection.querySelector(".drop-selection-item")).outerHeight() * nr_elements) +"px";
         }
-        else $(fakr).find(".drop-selection").css({"height": "0px"});
+        else fakr_js.querySelector(".drop-selection").style.height = "0px";
     },
     /* inacitveFakersRemoveFocus: function(){
         $('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.focused_class +':not(.'+ specto_faker.config.open_class +')').each(function(){
@@ -390,7 +396,7 @@ var specto_faker = {
             var select_placeholder = "";
             
             element.find("select").each(function(){ //fill select, if present (and retreive placeholder)
-                select_placeholder = $(this).attr("placeholder") || "";
+                select_placeholder = this.getAttribute("placeholder") || "";
                 $(this).empty();
                 var ins = "";
                 $.each(new_options, function(ind, item){
@@ -409,7 +415,7 @@ var specto_faker = {
                 });
                 
                 if(placeholder_in_data[name_name] || select_placeholder){ //placeholder
-                    ins.find(".drop-selection-item[selected]").each(function(){ $(this).removeAttr("selected"); }); //remove any selected to prevent error
+                    ins.find(".drop-selection-item[selected]").each(function(){ this.removeAttribute("selected"); }); //remove any selected to prevent error
                     //add placeholder
                     if(placeholder_in_data[name_name]) ins.prepend(specto_faker.placeholderDivHtml(placeholder_in_data[name_name]));
                     else if(select_placeholder) ins.prepend(specto_faker.placeholderDivHtml(select_placeholder));
@@ -525,7 +531,7 @@ var specto_faker = {
     },
     filterBySearchInput: function(fakr_js){
         var fakr = $(fakr_js);
-        var has_aria = specto_faker.isFakerBrailleSupport(fakr);
+        var has_aria = specto_faker.isFakerBrailleSupport(fakr_js);
         var filtered_values = [];
         var srch_input = specto_faker.getSearchInput(fakr);
         var srch_val = srch_input.val();
@@ -535,7 +541,7 @@ var specto_faker = {
         
         var cnt = 0;
         var first_found = null;
-        var from_start = has_aria || specto_faker.isFakerSearchableFromStart(fakr);
+        var from_start = has_aria || specto_faker.isFakerSearchableFromStart(fakr_js);
         fakr.find(".drop-selection-item").each(function(){
             var search_pos = this.innerHTML.toLowerCase().search(srch_val);
             if((from_start && search_pos === 0) || (!from_start && search_pos > -1)) { //diff search from start or contains
