@@ -5,12 +5,14 @@
 * v3.13 changed search in searchable faker. From now on, by default, it works only from start
 * v3.32 added class .drop-selection-item
 * v4.00 animation of dropdown moved to css, only height calculation left in js (removed properties anim_progress_class & animation_speed & nv_helper_class)
-*       aria support proper build
-*       braille_support default value changed to true
-*       key_events default value changed to true
-*       searchable default value changed to false
-*       allow_form_reload option added. And changed it's default value to false
-*       added multiple aria options (label_id, listbox_label, filtered_listbox_label, is_required)
+```
+aria support proper build
+braille_support default value changed to true
+key_events default value changed to true
+searchable default value changed to false
+allow_form_reload option added. And changed it's default value to false
+added multiple aria options (label_id, listbox_label, filtered_listbox_label, is_required)
+```
 
 ## DEPENDENCIES
 * jQuery <i>(Tested on 2.2.4 and 3.3)</i>
