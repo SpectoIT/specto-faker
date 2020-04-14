@@ -160,7 +160,7 @@ var specto_faker = {
                     $(this).off("blur").on("blur", function(){
                         var fakr = specto_faker.returnFakerElementFromChild(this);
                         specto_faker.makeTabIndex(fakr[0], "0"); //restore original focusable element
-                        if(document.activeElement !== fakr[0]) specto_faker.closeFaker(fakr); //if blured outside of faker
+                        if(document.activeElement !== fakr[0] && !fakr.has(document.activeElement)) specto_faker.closeFaker(fakr); //if blured outside of faker
                         $(this).off("blur");
                     });
                 }).on("click", function(e){
@@ -225,7 +225,7 @@ var specto_faker = {
                             return;
                         }
                     }
-                    specto_faker.updateValue(this); //update faker value
+                    specto_faker.updateValue(this, false, {return_focus: true}); //update faker value
                     if(after_change_fun) after_change_fun(specto_faker.getSelectionValue(this), e); //change function
                 });
             });
@@ -244,6 +244,7 @@ var specto_faker = {
         var has_aria = specto_faker.isFakerBrailleSupport(fakr_el[0]);
         
         if(selectedItem.length < 1) return; //prevent error
+        if(extra_settings.return_focus) fakr_el.focus();
         //deselect currently selected value
         selectedItem.parent().find("."+ specto_faker.config.selected_val_class).each(function(){ 
             this.classList.remove(specto_faker.config.selected_val_class); 
