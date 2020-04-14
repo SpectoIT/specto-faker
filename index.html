@@ -117,6 +117,21 @@
 		</div>
 		<hr />
 		
+		<!-- SEARCHABLE WITHOUT AUTOSELECT -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>Searchable faker without autoselect</h4>
+					<select class="faker" default-values id="searchableWO" name="searchableWO"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Searchable faker without autoselect</h4>
+					<div class="faker" noselect-faker id="searchableWO2" name="searchableWO2"></div>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
 		<!-- NON_VISUAL SUPPORT -->
 		<div class="row">
 			<form>
@@ -126,7 +141,7 @@
 				</div>
 				<div class="col-sm-6">
 					<h4>NV faker</h4>
-					<div class="faker" noselect-faker id="nvda2" name="nvda2"></div>
+					<div class="faker" noselect-faker id="nvda2" name="nvda2"> &nbsp;</div>
 				</div>
 			</form>
 		</div>
@@ -228,6 +243,8 @@
 			specto_faker.init({object_selector: "#keyevents_anim, #keyevents_anim2", key_events:true, animated: true, braille_support: false, });
 			//SEARCHABLE
 			specto_faker.init({object_selector: "#searchable, #searchable2", key_events:true, searchable: true, braille_support: false, });
+			//SEARCHABLE WITHOUT AUTOSELECT
+			specto_faker.init({object_selector: "#searchableWO, #searchableWO2", key_events:true, searchable: true, search_single: false, braille_support: false, });
 			//NON_VISUAL SUPPORT
 			specto_faker.init({object_selector: "#nvda, #nvda2", }); //key events will be set automatically because braille_support = true
 			//NON_VISUAL SUPPORT WITH SEARCH

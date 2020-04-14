@@ -134,7 +134,7 @@ var specto_faker = {
         if(fakr_settings.allow_form_reload && any_select) specto_faker.firefoxFormBugFox(fakr_elm);
         
         //document clicks - outside of opened fakers, close those fakers
-        if(!specto_faker.initiated) {
+        /* if(!specto_faker.initiated) {
             $(document).mouseup(function (event){
                 $('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
                     if (!$(this).is(event.target) && $(this).has(event.target).length === 0) { 
@@ -142,7 +142,7 @@ var specto_faker = {
                     }
                 });
             });
-        }
+        } */
         
 
         specto_faker.initiated = true;
@@ -160,9 +160,14 @@ var specto_faker = {
                     $(this).off("blur").on("blur", function(){
                         var fakr = specto_faker.returnFakerElementFromChild(this);
                         specto_faker.makeTabIndex(fakr[0], "0"); //restore original focusable element
-                        if(!$(document.activeElement).is(fakr)) specto_faker.closeFaker(fakr); //if blured outside of faker
+                        if(document.activeElement !== fakr[0]) specto_faker.closeFaker(fakr); //if blured outside of faker
                         $(this).off("blur");
                     });
+                }).on("click", function(e){
+                    if(document.activeElement === this){
+                        var fakr = specto_faker.returnFakerElementFromChild(this);
+                        if(!specto_faker.isFakerOpen(fakr[0])) specto_faker.animateFaker(fakr, "openme");
+                    }
                 });
             }
         },
@@ -192,7 +197,7 @@ var specto_faker = {
                     specto_faker.animateFaker(this, "openme");
                 }
             }).on("blur", function(){
-                if(specto_faker.isFakerSearchable(this) && $(document.activeElement).is(specto_faker.getSearchInput(this))) return; //exception
+                if(specto_faker.isFakerSearchable(this) && document.activeElement === specto_faker.getSearchInput(this)[0]) return; //exception
                 specto_faker.closeFaker(this);
             });
         },
@@ -618,7 +623,7 @@ var specto_faker = {
         });
         
         //if searchable, connect aria control to input
-        specto_faker.getSearchInput(fakr).each(function(){
+        if(settings.searchable) specto_faker.getSearchInput(fakr).each(function(){
             var helper_listbox = specto_faker.getFilteredAriaListbox(fakr);
             if(helper_listbox.length < 1){
                 var label = settings.label_id ? "aria-labelledby='"+ settings.label_id +"'" : "aria-label='"+ settings.filtered_listbox_label +"'";
