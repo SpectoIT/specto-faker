@@ -158,9 +158,10 @@ var specto_faker = {
                     specto_faker.makeTabIndex(fakr[0], "-1"); //enable shift+tab to go back
                     if(!specto_faker.isFakerOpen(fakr[0])) specto_faker.animateFaker(fakr, "openme");
                     $(this).off("blur").on("blur", function(){
+                        var active = document.activeElement;
                         var fakr = specto_faker.returnFakerElementFromChild(this);
                         specto_faker.makeTabIndex(fakr[0], "0"); //restore original focusable element
-                        if(document.activeElement !== fakr[0] && !fakr.has(document.activeElement)) specto_faker.closeFaker(fakr); //if blured outside of faker
+                        if(document.activeElement !== fakr[0] && fakr.has(active).length < 1) specto_faker.closeFaker(fakr); //if blured outside of faker
                         $(this).off("blur");
                     });
                 }).on("click", function(e){
