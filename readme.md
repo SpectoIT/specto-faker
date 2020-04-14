@@ -4,9 +4,13 @@
 * v2.0 has changes HTML structure. Element .drop-value gets ```<span>``` inside (needed for searchable faker)
 * v3.13 changed search in searchable faker. From now on, by default, it works only from start
 * v3.32 added class .drop-selection-item
-* v4.00 animation of dropdown moved to css, only calculation left (removed properties anim_progress_class & animation_speed)
+* v4.00 animation of dropdown moved to css, only height calculation left in js (removed properties anim_progress_class & animation_speed & nv_helper_class)
+*       aria support proper build
 *       braille_support default value changed to true
-*       allow_form_reload option added, and changed default to false
+*       key_events default value changed to true
+*       searchable default value changed to false
+*       allow_form_reload option added. And changed it's default value to false
+*       added multiple aria options (label_id, listbox_label, filtered_listbox_label, is_required)
 
 ## DEPENDENCIES
 * jQuery <i>(Tested on 2.2.4 and 3.3)</i>
@@ -16,7 +20,7 @@
 * Customizable with options:
 
 ```javascript
-    {
+{
     object_selector: ".faker", //element(s) - works only if called through `specto_faker.init()`, if called as `$([object_selector]).specto_faker()` elements are defined in `$([object_selector])`
     
     /* CLASSES */
@@ -33,7 +37,6 @@
     selected_val_class: "active", //class of selected option - default css has display:none
     disabled_val_class: "rel-disabled", //class of disabled option - default css has opacity:0.5 and cursor:not-allowed
     search_hidden: "rel-search", //class for hidden options - hidden by search
-    nv_helper_class: "non-visual-helper", //class of non-visual input helper
     
     /* ANIMATION */
     animated: false, //is faker animated
@@ -42,8 +45,8 @@
     count_manual_val: 0, //valid only for animated faker, animate to specific number of elements
     
     /* KEY EVENTS & SEARCHING & SORTING */
-    key_events: false, //do you want keyEvents to work
-    searchable: true, //open faker gets input to search for values - valid only if key_events are initiated
+    key_events: true, //do you want keyEvents to work - braille_support = true will set this to true regardless
+    searchable: false, //open faker gets input to search for values - valid only if key_events are initiated
     search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
     search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this options and consideres it set to true
     sortable: false, //do you want on init to be sorted
@@ -58,6 +61,10 @@
     /* NON-VISUAL (BRAILLE) SUPPORT */
     braille_support: true, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on -->> example: https://a11y.nicolas-hoffmann.net/autocomplete-list/
     allow_form_reload: false, //do we allow parent form to reload on faker init. this is for plain forms firefox workaround (reset form for proper detection of required fields when ```<select>``` is moved)
+    label_id: "", //id of label, to connect to aria controls
+    listbox_label: "Listbox", //default value of listbox label, if label_id is not given
+    filtered_listbox_label: "Filtered listbox", //default value of filtered listbox label, if label_id is not given
+    is_required: false, //if select is not present, this will be used to know if faker is required. if select is present, this option will be taken from select's required atribute
 }
 ```
 
@@ -74,9 +81,10 @@
 * Can allow searching for entered text
 * Can be ordered on init
 * If builded from select, be aware that every further reference to faker <i>(fakr, faker_elm, object_selector, ...)</i> doesn't mean original select, but it's faker <i>(more in examples - Build from select and update options)</i>
-* start of non-visual support (tested with no select present)
+* start of non-visual support
 * added search hints (+auto selected first value)
 * recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option (more in index.html)
+* in custom callbacks before_change and on_change make sure that you don't focus another element and then focus back (e.g. alert() focuses on window). this will not close faker (it will be closed and reopened again on focus)
 
 
 ## EXAMPLE USAGE

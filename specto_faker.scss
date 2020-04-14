@@ -40,6 +40,11 @@ $faker_height: 53px;
 			.drop-value {
 				z-index: 11;
 			}
+            
+            input[name='faker-search'] {
+                z-index: 150;
+                opacity: 1;
+            }
 		}
 	}
 	
@@ -91,8 +96,10 @@ $faker_height: 53px;
 			left: 0;
 			top: 0;
 			height: 100%;
-			z-index: 150;
+			z-index: -1;
 			padding: 0 25px;
+            border: none;
+            opacity: 0;
 		}
 	}
 	
@@ -182,7 +189,7 @@ $faker_height: 53px;
 		option { display: none; }
 	}
 	
-	.non-visual-helper {
+	.filtered-listbox {
 		opacity: 0;
         width: 0px;
 	}
