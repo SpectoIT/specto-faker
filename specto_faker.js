@@ -158,11 +158,14 @@ var specto_faker = {
                     specto_faker.makeTabIndex(fakr[0], "-1"); //enable shift+tab to go back
                     if(!specto_faker.isFakerOpen(fakr[0])) specto_faker.animateFaker(fakr, "openme");
                     $(this).off("blur").on("blur", function(){
-                        var active = document.activeElement;
-                        var fakr = specto_faker.returnFakerElementFromChild(this);
-                        specto_faker.makeTabIndex(fakr[0], "0"); //restore original focusable element
-                        if(document.activeElement !== fakr[0] && fakr.has(active).length < 1) specto_faker.closeFaker(fakr); //if blured outside of faker
-                        $(this).off("blur");
+                        var self = this;
+                        setTimeout(function(){ //set timeout, so that document.activeElement updates properly (prevent bug if clicked on rel)
+                            var active = document.activeElement;
+                            var fakr = specto_faker.returnFakerElementFromChild(self);
+                            specto_faker.makeTabIndex(fakr[0], "0"); //restore original focusable element
+                            if(document.activeElement !== fakr[0] && fakr.has(document.activeElement).length < 1) specto_faker.closeFaker(fakr); //if blured outside of faker
+                            $(self).off("blur");
+                        }, 1);
                     });
                 }).on("click", function(e){
                     if(document.activeElement === this){
@@ -198,7 +201,7 @@ var specto_faker = {
                     specto_faker.animateFaker(this, "openme");
                 }
             }).on("blur", function(){
-                if(specto_faker.isFakerSearchable(this) && document.activeElement === specto_faker.getSearchInput(this)[0]) return; //exception
+                if(specto_faker.isFakerSearchable(this) && $(this).has(document.activeElement).length > 0) return; //exception
                 specto_faker.closeFaker(this);
             });
         },
@@ -559,7 +562,7 @@ var specto_faker = {
             }
             else this.classList.add(specto_faker.config.search_hidden);
         });
-        
+
         if(cnt === 1 && fakr.hasClass(specto_faker.config.select_single)){ //select single option that was left from filtering
             specto_faker.updateValue(first_found, "noclick", {manual_close: true});
         }
