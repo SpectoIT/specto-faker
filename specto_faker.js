@@ -132,18 +132,6 @@ var specto_faker = {
         });
         //firefox workaround - reset form for proper detection of required fields
         if(fakr_settings.allow_form_reload && any_select) specto_faker.firefoxFormBugFox(fakr_elm);
-        
-        //document clicks - outside of opened fakers, close those fakers
-        /* if(!specto_faker.initiated) {
-            $(document).mouseup(function (event){
-                $('.'+ specto_faker.config.init_class +'.'+ specto_faker.config.open_class).each(function(){
-                    if (!$(this).is(event.target) && $(this).has(event.target).length === 0) { 
-                        specto_faker.animateFaker(this);
-                    }
-                });
-            });
-        } */
-        
 
         specto_faker.initiated = true;
         if(fakr_settings.on_init) fakr_settings.on_init(faker_elms); //init callback
@@ -250,13 +238,11 @@ var specto_faker = {
         if(extra_settings.return_focus) fakr_el.focus();
         //deselect currently selected value
         selectedItem.parent().find("."+ specto_faker.config.selected_val_class).each(function(){ 
-            this.classList.remove(specto_faker.config.selected_val_class); 
-            if(has_aria) this.setAttribute("aria-selected", "false");
+            this.classList.remove(specto_faker.config.selected_val_class);
         });
         selectedItem.addClass(specto_faker.config.selected_val_class);
         if(extra_settings.from_key) specto_faker.scrollIntoViewIfNeeded(selectedItem[0]); //scroll into view
         if(has_aria) {
-            selectedItem.attr("aria-selected", "true");
             fakr_el.attr("aria-activedescendant", selectedItem.attr("id"));
         }
         
@@ -325,7 +311,13 @@ var specto_faker = {
             fakr_js.classList.add(specto_faker.config.open_class);
             fakr_js.classList.add(specto_faker.config.focused_class);
             if(specto_faker.isFakerAnimated(fakr_js)) specto_faker.calcDropSelectionHeight(fakr_js, openme);
-            if(specto_faker.isFakerBrailleSupport(fakr_js)) fakr_js.setAttribute("aria-expanded", "true");
+            if(specto_faker.isFakerBrailleSupport(fakr_js)) {
+                fakr_js.setAttribute("aria-expanded", "true");
+                fakr_js.setAttribute("aria-controls", fakr_js.querySelector(".drop-selection").getAttribute("id"));
+                fakr_js.querySelector(".drop-selection").setAttribute("aria-expanded", "true");
+                var current = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
+                if(current) fakr_js.setAttribute("aria-activedescendant", current.getAttribute("id"));
+            }
             if(specto_faker.isFakerSearchable(fakr_js)) {
                 specto_faker.searchInputSelectText(fakr_js); //searchable faker select inserted value
                 specto_faker.getSearchInput(fakr_js).focus(); //focus search input
@@ -336,7 +328,12 @@ var specto_faker = {
             fakr_js.classList.remove(specto_faker.config.open_class);
             if(specto_faker.isFakerAnimated(fakr_js)) specto_faker.calcDropSelectionHeight(fakr_js, openme);
             if(!extra_settings.dont_remove_focus) fakr_js.classList.remove(specto_faker.config.focused_class);
-            if(specto_faker.isFakerBrailleSupport(fakr_js)) fakr_js.setAttribute("aria-expanded", "false");
+            if(specto_faker.isFakerBrailleSupport(fakr_js)) {
+                fakr_js.setAttribute("aria-expanded", "false");
+                fakr_js.setAttribute("aria-controls", "");
+                fakr_js.setAttribute("aria-activedescendant", "");
+                fakr_js.querySelector(".drop-selection").setAttribute("aria-expanded", "false");
+            }
         }
     },
     toggleOpenState: function(fakr_js){
@@ -601,30 +598,30 @@ var specto_faker = {
     /* ARIA */
     buildAria: function(fakr, settings, this_faker_required){
         var newId = specto_faker.makeUniqueIds();
-        fakr.attr("role", settings.searchable ? "combobox" : "listbox")
-            .attr("aria-expanded", "false")
-            .attr("aria-activedescendant", "")
-            //.attr("aria-owns", newId.listbox)
+        fakr.find(".drop-value span").attr("id", newId.labelby);
+        fakr.attr("role", "combobox")
+            .attr("aria-haspopup", "listbox")
             .attr("id", newId.combobox)
+            .attr("aria-describedby", newId.labelby)
             .attr("aria-required", this_faker_required ? "true" : "false");
-        if(settings.searchable) 
-            fakr.attr("aria-haspopup", "listbox")
-                .attr("aria-owns", newId.filtered_listbox);
+        if(settings.searchable) fakr.attr("aria-owns", newId.filtered_listbox);
+        else fakr.attr("aria-controls", "")
+            .attr("aria-autocomplete", "list")
+            .attr("aria-activedescendant", "")
+            .attr("aria-expanded", "false");
+        
         if(settings.label_id) fakr.attr("aria-labelledby", settings.label_id).removeAttr("aria-label");
         else fakr.attr("aria-label", settings.listbox_label).removeAttr("aria-labelledby");
             
-        /* fakr.find(".drop-selection").each(function(){
-            this.setAttribute("role", "list");
+        fakr.find(".drop-selection").each(function(){
+            this.setAttribute("role", "listbox");
             this.setAttribute("aria-expanded", "false");
             this.setAttribute("id", newId.listbox);
-        }); */
+        });
         
         fakr.find(".drop-selection-item").each(function(ii){
             this.setAttribute("role", "option");
-            this.setAttribute("aria-selected", "false");
             this.setAttribute("id", newId.listbox +"-"+ ii);
-            //aria-hidden (state)
-            //aria-current (state)
         });
         
         //if searchable, connect aria control to input
@@ -639,6 +636,7 @@ var specto_faker = {
             this.setAttribute("aria-autocomplete", "both");
             this.setAttribute("aria-controls", newId.filtered_listbox);
             this.setAttribute("aria-activedescendant", "");
+            this.setAttribute("aria-describedby", newId.labelby);
             if(settings.label_id) {
                 this.setAttribute("aria-labelledby", settings.label_id);
                 this.removeAttribute("aria-label");
@@ -650,12 +648,13 @@ var specto_faker = {
         });
     },
     makeUniqueIds: function(){
-        var ii = 0, isUnique = false, ids = {combobox: "", listbox: "", filtered_listbox: ""};
+        var ii = 0, isUnique = false, ids = {combobox: "", listbox: "", filtered_listbox: "", labelby: ""};
         var prefix = "spfa";
         do {
             ii++;
             ids.combobox = prefix + ii +"-combobox";
             ids.listbox = prefix + ii +"-listbox";
+            ids.labelby = prefix + ii +"-labelby";
             ids.filtered_listbox = prefix + ii +"-listboxF";
             isUnique = document.getElementById(ids.combobox) || document.getElementById(ids.listbox) || document.getElementById(ids.filtered_listbox) ? false : true;
         } while (!isUnique)
@@ -667,13 +666,11 @@ var specto_faker = {
         var this_id = $(fakr).attr("id") +"-filtered";
         var selected_id = "";
         filtered_values.forEach(function(item, ind){
-            var selected = "false";
             var option_id = this_id +"-"+ ind;
             if(filtered_values.key === selected_val) {
                 selected_id = option_id;
-                selected = "true";
             }
-            htm.append("<li role='option' aria-selected='"+ selected +"' id='"+ (this_id +"-"+ ind) +"'>"+ filtered_values.val +"</li>")
+            htm.append("<li role='option' id='"+ (this_id +"-"+ ind) +"'>"+ filtered_values.val +"</li>")
         });
         
         specto_faker.getFilteredAriaListbox(fakr).append(htm.html());
