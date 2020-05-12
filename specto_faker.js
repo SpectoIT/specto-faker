@@ -307,32 +307,52 @@ var specto_faker = {
     animateFaker: function(fakr_js, openme, extra_settings){
         extra_settings = extra_settings || {};
         
+        var is_searchable = specto_faker.isFakerSearchable(fakr_js);
         if(openme) {
             fakr_js.classList.add(specto_faker.config.open_class);
             fakr_js.classList.add(specto_faker.config.focused_class);
             if(specto_faker.isFakerAnimated(fakr_js)) specto_faker.calcDropSelectionHeight(fakr_js, openme);
             if(specto_faker.isFakerBrailleSupport(fakr_js)) {
-                fakr_js.setAttribute("aria-expanded", "true");
-                fakr_js.setAttribute("aria-controls", fakr_js.querySelector(".drop-selection").getAttribute("id"));
-                fakr_js.querySelector(".drop-selection").setAttribute("aria-expanded", "true");
+                //fakr_js.setAttribute("aria-expanded", "true");
                 var current = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
-                if(current) fakr_js.setAttribute("aria-activedescendant", current.getAttribute("id"));
+                if(is_searchable) {
+                    var filtered_list = specto_faker.getFilteredAriaListbox(fakr_js);
+                    specto_faker.getSearchInput(fakr_js).each(function(){
+                        this.setAttribute("aria-controls", filtered_list.attr("id"));
+                        filtered_list.attr("aria-expanded", "true");
+                        if(current) this.setAttribute("aria-activedescendant", current.getAttribute("id"));
+                    });
+                }
+                else {
+                    fakr_js.setAttribute("aria-controls", fakr_js.querySelector(".drop-selection").getAttribute("id"));
+                    fakr_js.querySelector(".drop-selection").setAttribute("aria-expanded", "true");
+                    if(current) fakr_js.setAttribute("aria-activedescendant", current.getAttribute("id"));
+                }
             }
-            if(specto_faker.isFakerSearchable(fakr_js)) {
+            if(is_searchable) {
                 specto_faker.searchInputSelectText(fakr_js); //searchable faker select inserted value
                 specto_faker.getSearchInput(fakr_js).focus(); //focus search input
             }
         }
         else {
-            if(specto_faker.isFakerSearchable(fakr_js)) specto_faker.removeFakerSearchable(fakr_js, extra_settings.dont_remove_focus); //searchable faker - first operation so that faker isn't yet closed
+            if(is_searchable) specto_faker.removeFakerSearchable(fakr_js, extra_settings.dont_remove_focus); //searchable faker - first operation so that faker isn't yet closed
             fakr_js.classList.remove(specto_faker.config.open_class);
             if(specto_faker.isFakerAnimated(fakr_js)) specto_faker.calcDropSelectionHeight(fakr_js, openme);
             if(!extra_settings.dont_remove_focus) fakr_js.classList.remove(specto_faker.config.focused_class);
             if(specto_faker.isFakerBrailleSupport(fakr_js)) {
-                fakr_js.setAttribute("aria-expanded", "false");
-                fakr_js.setAttribute("aria-controls", "");
-                fakr_js.setAttribute("aria-activedescendant", "");
-                fakr_js.querySelector(".drop-selection").setAttribute("aria-expanded", "false");
+                //fakr_js.setAttribute("aria-expanded", "false");
+                if(is_searchable) {
+                    specto_faker.getSearchInput(fakr_js).each(function(){
+                        this.setAttribute("aria-controls", "");
+                        this.setAttribute("aria-activedescendant", "");
+                    });
+                    specto_faker.getFilteredAriaListbox(fakr_js).attr("aria-expanded", "false");
+                }
+                else {
+                    fakr_js.setAttribute("aria-controls", "");
+                    fakr_js.setAttribute("aria-activedescendant", "");
+                    fakr_js.querySelector(".drop-selection").setAttribute("aria-expanded", "false");
+                }
             }
         }
     },
@@ -607,8 +627,8 @@ var specto_faker = {
         if(settings.searchable) fakr.attr("aria-owns", newId.filtered_listbox);
         else fakr.attr("aria-controls", "")
             .attr("aria-autocomplete", "list")
-            .attr("aria-activedescendant", "")
-            .attr("aria-expanded", "false");
+            .attr("aria-activedescendant", "");
+            //.attr("aria-expanded", "false");
         
         if(settings.label_id) fakr.attr("aria-labelledby", settings.label_id).removeAttr("aria-label");
         else fakr.attr("aria-label", settings.listbox_label).removeAttr("aria-labelledby");
@@ -629,12 +649,13 @@ var specto_faker = {
             var helper_listbox = specto_faker.getFilteredAriaListbox(fakr);
             if(helper_listbox.length < 1){
                 var label = settings.label_id ? "aria-labelledby='"+ settings.label_id +"'" : "aria-label='"+ settings.filtered_listbox_label +"'";
-                fakr.append("<ul class='filtered-listbox' role='listbox' id='"+ newId.filtered_listbox +"' "+ label +"></ul>");
+                fakr.append("<ul class='filtered-listbox' role='listbox' aria-expanded='false' id='"+ newId.filtered_listbox +"' "+ label +"></ul>");
             }
-            else helper_listbox.attr("id", newId.filtered_listbox);
+            else helper_listbox.attr("id", newId.filtered_listbox).attr("aria-expanded", "false");
             
             this.setAttribute("aria-autocomplete", "both");
-            this.setAttribute("aria-controls", newId.filtered_listbox);
+            //this.setAttribute("aria-controls", newId.filtered_listbox);
+            this.setAttribute("aria-controls", "");
             this.setAttribute("aria-activedescendant", "");
             this.setAttribute("aria-describedby", newId.labelby);
             if(settings.label_id) {
