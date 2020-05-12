@@ -244,6 +244,7 @@ var specto_faker = {
         if(extra_settings.from_key) specto_faker.scrollIntoViewIfNeeded(selectedItem[0]); //scroll into view
         if(has_aria) {
             fakr_el.attr("aria-activedescendant", selectedItem.attr("id"));
+            if(is_searchable) specto_faker.getSearchInput(fakr_el).attr("aria-activedescendant", selectedItem.attr("id"));
         }
         
         //update html value
@@ -313,7 +314,6 @@ var specto_faker = {
             fakr_js.classList.add(specto_faker.config.focused_class);
             if(specto_faker.isFakerAnimated(fakr_js)) specto_faker.calcDropSelectionHeight(fakr_js, openme);
             if(specto_faker.isFakerBrailleSupport(fakr_js)) {
-                //fakr_js.setAttribute("aria-expanded", "true");
                 var current = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
                 if(is_searchable) {
                     var filtered_list = specto_faker.getFilteredAriaListbox(fakr_js);
@@ -340,7 +340,6 @@ var specto_faker = {
             if(specto_faker.isFakerAnimated(fakr_js)) specto_faker.calcDropSelectionHeight(fakr_js, openme);
             if(!extra_settings.dont_remove_focus) fakr_js.classList.remove(specto_faker.config.focused_class);
             if(specto_faker.isFakerBrailleSupport(fakr_js)) {
-                //fakr_js.setAttribute("aria-expanded", "false");
                 if(is_searchable) {
                     specto_faker.getSearchInput(fakr_js).each(function(){
                         this.setAttribute("aria-controls", "");
@@ -688,13 +687,13 @@ var specto_faker = {
         var selected_id = "";
         filtered_values.forEach(function(item, ind){
             var option_id = this_id +"-"+ ind;
-            if(filtered_values.key === selected_val) {
+            if(item.key === selected_val) {
                 selected_id = option_id;
             }
-            htm.append("<li role='option' id='"+ (this_id +"-"+ ind) +"'>"+ filtered_values.val +"</li>")
+            htm.append("<li role='option' id='"+ (this_id +"-"+ ind) +"'>"+ item.val +"</li>")
         });
         
-        specto_faker.getFilteredAriaListbox(fakr).append(htm.html());
+        specto_faker.getFilteredAriaListbox(fakr).empty().append(htm.html());
         specto_faker.getSearchInput(fakr).attr("aria-activedescendant", selected_id);
     },
     //TODO test
