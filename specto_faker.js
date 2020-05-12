@@ -233,6 +233,7 @@ var specto_faker = {
         var selectedItem = $(rel);
         var fakr_el = specto_faker.returnFakerElementFromChild(selectedItem[0]);
         var has_aria = specto_faker.isFakerBrailleSupport(fakr_el[0]);
+        var is_searchable = specto_faker.isFakerSearchable(fakr_el[0]);
         
         if(selectedItem.length < 1) return; //prevent error
         if(extra_settings.return_focus) fakr_el.focus();
@@ -250,7 +251,7 @@ var specto_faker = {
         //update html value
         selectedItem.closest(".drop-selection").prevAll(".drop-value").attr("rel", selectedItem.attr("rel")).find("span").text(selectedItem.text()); 
         //if searchable, insert new value
-        if(!extra_settings.leave_search_alone && specto_faker.isFakerSearchable(fakr_el[0])) {
+        if(!extra_settings.leave_search_alone && is_searchable) {
             if(has_aria) specto_faker.clearAriaFilteredList(fakr_el); //clear aria
             var val = specto_faker.getFakerUserValue(fakr_el);
             specto_faker.searchInputSelectText(fakr_el, val); //update value and select
@@ -652,7 +653,7 @@ var specto_faker = {
             }
             else helper_listbox.attr("id", newId.filtered_listbox).attr("aria-expanded", "false");
             
-            this.setAttribute("aria-autocomplete", "both");
+            this.setAttribute("aria-autocomplete", "list");
             //this.setAttribute("aria-controls", newId.filtered_listbox);
             this.setAttribute("aria-controls", "");
             this.setAttribute("aria-activedescendant", "");
