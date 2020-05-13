@@ -150,16 +150,18 @@ var specto_faker = {
                         var self = this;
                         setTimeout(function(){ //set timeout, so that document.activeElement updates properly (prevent bug if clicked on rel)
                             var fakr_js = specto_faker.returnFakerElementFromChild(self)[0];
-                            specto_faker.makeTabIndex(fakr_js, "0"); //restore original focusable element
+                            specto_faker.makeTabIndex(fakr_js); //restore original focusable element
                             if(document.activeElement !== fakr_js && !fakr_js.contains(document.activeElement)) specto_faker.closeFaker(fakr_js); //if blured outside of faker
                             $(self).off("blur");
                         }, 1);
                     });
                 }).on("click", function(e){
-                    if(document.activeElement === this){
-                        var fakr_js = specto_faker.returnFakerElementFromChild(this)[0];
-                        if(!specto_faker.isFakerOpen(fakr_js)) specto_faker.animateFaker(fakr_js, "openme");
-                    }
+                    setTimeout(function(){
+                        if(document.activeElement === this){
+                            var fakr_js = specto_faker.returnFakerElementFromChild(this)[0];
+                            if(!specto_faker.isFakerOpen(fakr_js)) specto_faker.animateFaker(fakr_js, "openme");
+                        }
+                    }, 1);
                 });
             }
         },
@@ -472,14 +474,13 @@ var specto_faker = {
                 if(specto_faker.isFakerOpen(fakr_js)) specto_faker.selection.previous(fakr_js);
                 break;
             case 9: //tab
-            case 8: //backspace
             case 46: //delete
                 //todo refresh filtered inputs if needed (prevent auto selection?)
             case 16: //shift
                 break;
             default:
                 var ch = String.fromCharCode(key);
-                if(specto_faker.isCharAplhanumeric(ch)){ //alphanumeric
+                if(key === 8 || specto_faker.isCharAplhanumeric(ch)){ //backspace or alphanumeric
                     if(!specto_faker.isFakerSearchable(fakr_js)) specto_faker.selection.tochar(fakr_js, ch.toLowerCase());
                     else specto_faker.filterBySearchInput(fakr_js);
                 }
