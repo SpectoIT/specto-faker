@@ -150,6 +150,7 @@
 .faker .filtered-listbox {
   opacity: 0;
   width: 0px;
+  display: none;
 }
 .faker .drop-value:hover, .faker.open .drop-value {
   color: #959698;
