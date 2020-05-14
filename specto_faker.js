@@ -261,21 +261,26 @@ var specto_faker = {
             this.classList.remove(specto_faker.config.selected_val_class);
         });
         selectedItem.addClass(specto_faker.config.selected_val_class);
-        if(extra_settings.from_key) specto_faker.scrollIntoViewIfNeeded(selectedItem[0]); //scroll into view
-        if(has_aria) {
-            if(is_searchable) {
-                specto_faker.getSearchInput(fakr_el).attr("aria-activedescendant", extra_settings.up_down ? specto_faker.getFilteredAriaListbox(fakr_el).find("[rel='"+ selectedItem.attr("rel") +"']") : "");
-            }
-            else fakr_el.attr("aria-activedescendant", selectedItem.attr("id"));
-        }
+        //if(extra_settings.from_key) specto_faker.scrollIntoViewIfNeeded(selectedItem[0]); //scroll into view
+        
         
         //update html value
         selectedItem.closest(".drop-selection").prevAll(".drop-value").attr("rel", selectedItem.attr("rel")).find("span").text(selectedItem.text()); 
         //if searchable, insert new value
         if(!extra_settings.leave_search_alone && is_searchable) {
-            if(has_aria) specto_faker.clearAriaFilteredList(fakr_el); //clear aria
             var val = specto_faker.getFakerUserValue(fakr_el);
             specto_faker.searchInputSelectText(fakr_el, val); //update value and select
+        }
+        
+        //aria
+        if(has_aria) {
+            if(is_searchable) {
+                var selected_key = selectedItem.attr("rel");
+                if(extra_settings.up_down) specto_faker.traverseFilteredSelection(fakr_el, selected_key);
+                else specto_faker.removeActiveFilteredSelection(fakr_el);
+                specto_faker.setFilteredActiveDescendant(fakr_el, selected_key);
+            }
+            else fakr_el.attr("aria-activedescendant", selectedItem.attr("id"));
         }
         
         //if there is select present, update it's value. And trigger change event
@@ -340,16 +345,17 @@ var specto_faker = {
                 if(is_searchable) {
                     var filtered_list_id = specto_faker.getFilteredAriaListbox(fakr_js).attr("id");
                     specto_faker.getSearchInput(fakr_js).each(function(){
-                        if(this.getAttribute("aria-owns") !== filtered_list_id) this.setAttribute("aria-owns", filtered_list_id);
+                        //this.setAttribute("aria-controls", specto_faker.getFilteredAriaListbox(fakr_js).attr("id"));
                         this.setAttribute("aria-expanded", "true");
+                        var selected_option = specto_faker.getFilteredAriaListbox(fakr_js).find("[rel='"+ specto_faker.getFakerValue(fakr_js) +"']");
+                        this.setAttribute("aria-activedescendant", selected_option ? selected_option.attr("id") : "");
                     });
                 }
                 else {
                     fakr_js.setAttribute("aria-controls", fakr_js.querySelector(".drop-selection").getAttribute("id"));
                     fakr_js.setAttribute("aria-expanded", "true");
-                    //var selected_option = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
-                    var selected_option = specto_faker.getFilteredAriaListbox(fakr_js).find("[rel='"+ specto_faker.getFakerValue(fakr_js) +"']");
-                    fakr_js.setAttribute("aria-activedescendant", selected_option ? selected_option.attr("id") : "");
+                    var selected_option = fakr_js.querySelector("[rel='"+ specto_faker.getFakerValue(fakr_js) +"']");
+                    fakr_js.setAttribute("aria-activedescendant", selected_option ? selected_option.getAttribute("id") : "");
                 }
             }
             if(is_searchable) {
@@ -365,8 +371,9 @@ var specto_faker = {
             if(specto_faker.isFakerBrailleSupport(fakr_js)) {
                 if(is_searchable) {
                     specto_faker.getSearchInput(fakr_js).each(function(){
+                        //this.setAttribute("aria-controls", "");
                         this.setAttribute("aria-expanded", "false");
-                        this.removeAttribute("aria-owns");
+                        this.setAttribute("aria-activedescendant", "");
                     });
                 }
                 else {
@@ -682,6 +689,7 @@ var specto_faker = {
             this.setAttribute("aria-autocomplete", "both");
             this.setAttribute("aria-activedescendant", "");
             this.setAttribute("aria-expanded", "false");
+            this.setAttribute("aria-controls", newId.filtered_listbox);
             if(settings.label_id) {
                 this.setAttribute("aria-labelledby", settings.label_id);
                 this.removeAttribute("aria-label");
@@ -709,7 +717,6 @@ var specto_faker = {
             
             fakr.find(".drop-selection").each(function(){
                 this.setAttribute("role", "listbox");
-                //this.setAttribute("aria-expanded", "false");
                 this.setAttribute("id", newId.listbox);
             });
         }
@@ -758,13 +765,24 @@ var specto_faker = {
     },
     ariaFilteredListPrefix: function(id_name){ return id_name +"-filtered-"; },
     //TODO test
-    clearAriaFilteredList: function(fakr){ 
-        //specto_faker.getSearchInput(fakr).attr("aria-activedescendant", "");    
+    clearAriaFilteredList: function(fakr){    
         specto_faker.buildFilteredAriaHelper(fakr);
-        specto_faker.setFilteredActiveDescendant(fakr);
     },
-    setFilteredActiveDescendant: function(fakr){
-        specto_faker.getSearchInput(fakr).attr("aria-activedescendant", specto_faker.getFilteredAriaListbox(fakr).find("[rel='"+ specto_faker.getFakerValue(fakr) +"']").attr("id"));   
+    setFilteredActiveDescendant: function(fakr, newVal){
+        specto_faker.getSearchInput(fakr).attr(
+            "aria-activedescendant",
+            specto_faker.getFilteredAriaListbox(fakr).find("[rel='"+ (newVal ? newVal : specto_faker.getFakerValue(fakr)) +"']").attr("id")
+        );
+    },
+    traverseFilteredSelection: function(fakr, selectedKey){
+        specto_faker.getFilteredAriaListbox(fakr).find("li").each(function(){
+            this.setAttribute("aria-selected", this.getAttribute("rel") === selectedKey ? "true" : false);
+        });
+    },
+    removeActiveFilteredSelection: function(fakr){
+        specto_faker.getFilteredAriaListbox(fakr).find("li").each(function(){
+            this.removeAttribute("aria-selected");
+        }); 
     },
 };
 
