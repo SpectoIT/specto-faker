@@ -579,7 +579,7 @@ var specto_faker = {
                     filtered_values.push(item);
                     fakr_js.querySelector(".drop-selection-item[rel='"+ item.key +"']").classList.remove(specto_faker.config.search_hidden);
                     cnt++;
-                    if(!first_found) first_found = document.querySelector(".drop-selection-item[rel='"+ item.key +"']");
+                    if(!first_found) first_found = fakr_js.querySelector(".drop-selection-item[rel='"+ item.key +"']");
                 }
                 else fakr_js.querySelector(".drop-selection-item[rel='"+ item.key +"']").classList.add(specto_faker.config.search_hidden);
             });
