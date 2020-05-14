@@ -323,6 +323,7 @@ var specto_faker = {
                     var filtered_list = specto_faker.getFilteredAriaListbox(fakr_js);
                     specto_faker.getSearchInput(fakr_js).each(function(){
                         filtered_list.attr("aria-expanded", "true");
+                        this.setAttribute("aria-owns", filtered_list.attr("id"));
                         if(current) this.setAttribute("aria-activedescendant", current.getAttribute("id"));
                     });
                 }
@@ -346,6 +347,7 @@ var specto_faker = {
                 if(is_searchable) {
                     specto_faker.getSearchInput(fakr_js).each(function(){
                         this.setAttribute("aria-activedescendant", "");
+                        this.removeAttribute("aria-owns");
                     });
                     specto_faker.getFilteredAriaListbox(fakr_js).attr("aria-expanded", "false");
                 }
@@ -640,8 +642,7 @@ var specto_faker = {
             .attr("id", newId.combobox)
             .attr("aria-required", this_faker_required ? "true" : "false");
         if(settings.searchable) {
-            fakr.attr("aria-owns", newId.filtered_listbox)
-            .attr("aria-expanded", "false");
+            //fakr.attr("aria-owns", newId.filtered_listbox);
         }
         else {
             fakr.attr("aria-controls", "")
@@ -680,8 +681,10 @@ var specto_faker = {
             }
             else helper_listbox.attr("id", newId.filtered_listbox).attr("aria-expanded", "false");
             
-            this.setAttribute("aria-autocomplete", "both");
-            this.setAttribute("aria-controls", newId.filtered_listbox);
+            this.setAttribute("id", newId.search);
+            this.setAttribute("role", "combobox");
+            this.setAttribute("aria-haspopup", "listbox");
+            this.setAttribute("aria-autocomplete", "list");
             this.setAttribute("aria-activedescendant", "");
             if(settings.label_id) {
                 this.setAttribute("aria-labelledby", settings.label_id);
@@ -715,6 +718,7 @@ var specto_faker = {
             ids.combobox = prefix + ii +"-combobox";
             ids.listbox = prefix + ii +"-listbox";
             ids.labelby = prefix + ii +"-labelby";
+            ids.search = prefix + ii +"-search";
             ids.filtered_listbox = prefix + ii +"-listboxF";
             isUnique = document.getElementById(ids.combobox) || document.getElementById(ids.listbox) || document.getElementById(ids.filtered_listbox) ? false : true;
         } while (!isUnique)
