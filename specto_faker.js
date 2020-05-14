@@ -263,14 +263,8 @@ var specto_faker = {
         selectedItem.addClass(specto_faker.config.selected_val_class);
         //if(extra_settings.from_key) specto_faker.scrollIntoViewIfNeeded(selectedItem[0]); //scroll into view
         
-        
         //update html value
         selectedItem.closest(".drop-selection").prevAll(".drop-value").attr("rel", selectedItem.attr("rel")).find("span").text(selectedItem.text()); 
-        //if searchable, insert new value
-        if(!extra_settings.leave_search_alone && is_searchable) {
-            var val = specto_faker.getFakerUserValue(fakr_el);
-            specto_faker.searchInputSelectText(fakr_el, val); //update value and select
-        }
         
         //aria
         if(has_aria) {
@@ -281,6 +275,12 @@ var specto_faker = {
                 specto_faker.setFilteredActiveDescendant(fakr_el, selected_key);
             }
             else fakr_el.attr("aria-activedescendant", selectedItem.attr("id"));
+        }
+        
+        //if searchable, insert new value
+        if(!extra_settings.leave_search_alone && is_searchable) {
+            var val = specto_faker.getFakerUserValue(fakr_el);
+            specto_faker.searchInputSelectText(fakr_el, val); //update value and select
         }
         
         //if there is select present, update it's value. And trigger change event
