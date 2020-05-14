@@ -263,7 +263,9 @@ var specto_faker = {
         selectedItem.addClass(specto_faker.config.selected_val_class);
         if(extra_settings.from_key) specto_faker.scrollIntoViewIfNeeded(selectedItem[0]); //scroll into view
         if(has_aria) {
-            if(is_searchable) specto_faker.getSearchInput(fakr_el).attr("aria-activedescendant", specto_faker.getFilteredAriaListbox(fakr_el).find("[rel='"+ selectedItem.attr("rel") +"']"));
+            if(is_searchable) {
+                specto_faker.getSearchInput(fakr_el).attr("aria-activedescendant", extra_settings.up_down ? specto_faker.getFilteredAriaListbox(fakr_el).find("[rel='"+ selectedItem.attr("rel") +"']") : "");
+            }
             else fakr_el.attr("aria-activedescendant", selectedItem.attr("id"));
         }
         
@@ -347,7 +349,7 @@ var specto_faker = {
                     fakr_js.setAttribute("aria-expanded", "true");
                     //var selected_option = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
                     var selected_option = specto_faker.getFilteredAriaListbox(fakr_js).find("[rel='"+ specto_faker.getFakerValue(fakr_js) +"']");
-                    fakr_js.setAttribute("aria-activedescendant", selected_option ? selected_option.getAttribute("id") : "");
+                    fakr_js.setAttribute("aria-activedescendant", selected_option ? selected_option.attr("id") : "");
                 }
             }
             if(is_searchable) {
@@ -515,26 +517,26 @@ var specto_faker = {
             if(selected) {
                 var sel = $(selected);
                 var nextEl = sel.nextAll().filter(specto_faker.selection.filter_fn).first();
-                if(nextEl.length > 0) specto_faker.updateValue(nextEl, "noclick", {from_key: true});
+                if(nextEl.length > 0) specto_faker.updateValue(nextEl, "noclick", {from_key: true, up_down: true});
                 else {
                     var prevs = sel.prevAll().filter(specto_faker.selection.filter_fn).last();
-                    if(prevs.length > 0) specto_faker.updateValue(prevs, "noclick", {from_key: true});
+                    if(prevs.length > 0) specto_faker.updateValue(prevs, "noclick", {from_key: true, up_down: true});
                 }
             }
-            else specto_faker.updateValue($(fakr_js).find(".drop-selection-item").filter(specto_faker.selection.filter_fn).first(), "noclick", {from_key: true});
+            else specto_faker.updateValue($(fakr_js).find(".drop-selection-item").filter(specto_faker.selection.filter_fn).first(), "noclick", {from_key: true, up_down: true});
         },
         previous: function(fakr_js){ //move to prevoius option
             var selected = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
             if(selected) {
                 var sel = $(selected);
                 var prevEl = sel.prevAll().filter(specto_faker.selection.filter_fn).first();
-                if(prevEl.length > 0) specto_faker.updateValue(prevEl, "noclick", {from_key: true});
+                if(prevEl.length > 0) specto_faker.updateValue(prevEl, "noclick", {from_key: true, up_down: true});
                 else {
                     var nexts = sel.nextAll().filter(specto_faker.selection.filter_fn);
-                    if(nexts.length > 0) specto_faker.updateValue(nexts.last(), "noclick", {from_key: true});
+                    if(nexts.length > 0) specto_faker.updateValue(nexts.last(), "noclick", {from_key: true, up_down: true});
                 }
             }
-            else specto_faker.updateValue($(fakr_js).find(".drop-selection-item").filter(specto_faker.selection.filter_fn).last(), "noclick", {from_key: true});
+            else specto_faker.updateValue($(fakr_js).find(".drop-selection-item").filter(specto_faker.selection.filter_fn).last(), "noclick", {from_key: true, up_down: true});
         },
         tochar: function(fakr_js, ch){ //move to char
             var is_already = false;
@@ -677,7 +679,7 @@ var specto_faker = {
             this.setAttribute("id", newId.search);
             this.setAttribute("role", "combobox");
             this.setAttribute("aria-haspopup", "listbox");
-            this.setAttribute("aria-autocomplete", "list");
+            this.setAttribute("aria-autocomplete", "both");
             this.setAttribute("aria-activedescendant", "");
             this.setAttribute("aria-expanded", "false");
             if(settings.label_id) {
