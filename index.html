@@ -247,8 +247,8 @@
 			specto_faker.init({object_selector: "#searchableWO, #searchableWO2", key_events:true, searchable: true, search_single: false, braille_support: false, });
 			//NON_VISUAL SUPPORT
 			specto_faker.init({object_selector: "#nvda, #nvda2", }); //key events will be set automatically because braille_support = true
-			//NON_VISUAL SUPPORT WITH SEARCH
-			specto_faker.init({object_selector: "#nvdaSrch, #nvdaSrch2", searchable: true, }); //key events will be set automatically
+			//NON_VISUAL SUPPORT WITH SEARCH + VALID
+			specto_faker.init({object_selector: "#nvdaSrch, #nvdaSrch2", searchable: true, is_required: true }); //key events will be set automatically
 			
 			//UPDATE VALUES AND GET VALUE BUTTONS
 			var fakr_setting = {key_events:true, searchable: true,};
