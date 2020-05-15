@@ -50,7 +50,7 @@ added multiple aria options (label_id, listbox_label, filtered_listbox_label, is
     key_events: true, //do you want keyEvents to work - braille_support = true will set this to true regardless
     searchable: false, //open faker gets input to search for values - valid only if key_events are initiated
     search_single: true, //if faker is searchable, after filtering, do check if there is only one valid option and if yes, select it
-    search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this options and consideres it set to true
+    search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this option and consideres it set to true
     sortable: false, //do you want on init to be sorted
     sort_ascending: true,
     
@@ -64,8 +64,7 @@ added multiple aria options (label_id, listbox_label, filtered_listbox_label, is
     braille_support: true, //does faker support braille speach - tested with NVDA - if set to true, key_events will be automatically turned on -->> example: https://a11y.nicolas-hoffmann.net/autocomplete-list/
     allow_form_reload: false, //do we allow parent form to reload on faker init. this is for plain forms firefox workaround (reset form for proper detection of required fields when ```<select>``` is moved)
     label_id: "", //id of label, to connect to aria controls
-    listbox_label: "Listbox", //default value of listbox label, if label_id is not given
-    filtered_listbox_label: "Filtered listbox", //default value of filtered listbox label, if label_id is not given
+    listbox_label: "Custom label for listbox", //default value of listbox label, if label_id is not given
     is_required: false, //if select is not present, this will be used to know if faker is required. if select is present, this option will be taken from select's required atribute
 }
 ```
@@ -83,7 +82,7 @@ added multiple aria options (label_id, listbox_label, filtered_listbox_label, is
 * Can allow searching for entered text
 * Can be ordered on init
 * If builded from select, be aware that every further reference to faker <i>(fakr, faker_elm, object_selector, ...)</i> doesn't mean original select, but it's faker <i>(more in examples - Build from select and update options)</i>
-* start of non-visual support
+* non-visual support
 * added search hints (+auto selected first value)
 * recommended that you don't get select value by ```$("select").val()```, but with ```specto_faker.getFakerValue(faker)```. E.g. oninit if select has placeholder and wasn't changed, it'll have value of first option (more in index.html)
 * in custom callbacks before_change and on_change make sure that you don't focus another element and then focus back (e.g. alert() focuses on window). this will not close faker (it will be closed and reopened again on focus)
