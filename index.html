@@ -46,12 +46,12 @@
 		<div class="row">
 			<form>
 				<div class="col-sm-6">
-					<h4>Animated faker - with custom animation effects</h4>
-					<select class="faker" default-values id="plain_anim" name="plain_anim"></select>
+					<h4>Animated faker - with custom animation effects and placeholder</h4>
+					<select class="faker" default-values id="plain_anim" name="plain_anim" placeholder="Izberi"></select>
 				</div>
 				<div class="col-sm-6">
-					<h4>Animated faker - with custom animation effects</h4>
-					<div class="faker" noselect-faker id="plain_anim2" name="plain_anim2"></div>
+					<h4>Animated faker - with custom animation effects and placeholder</h4>
+					<div class="faker" noselect-faker id="plain_anim2" name="plain_anim2" placeholder="Izberi"></div>
 				</div>
 			</form>
 		</div>
@@ -61,11 +61,11 @@
 		<div class="row">
 			<form>
 				<div class="col-sm-6">
-					<h4>Faker with custom callbacks (Iraq prevented, alert onchange, custom border on init)</h4>
+					<h4>Faker with custom callbacks (Iraq prevented, console.log onchange, custom border on init)</h4>
 					<select class="faker" default-values id="callback" name="callback"></select>
 				</div>
 				<div class="col-sm-6">
-					<h4>Faker with custom callbacks (Iraq prevented, alert onchange, custom border on init)</h4>
+					<h4>Faker with custom callbacks (Iraq prevented, console.log onchange, custom border on init)</h4>
 					<div class="faker" noselect-faker id="callback2" name="callback2"></div>
 				</div>
 			</form>
@@ -117,6 +117,21 @@
 		</div>
 		<hr />
 		
+		<!-- SEARCHABLE WITHOUT AUTOSELECT -->
+		<div class="row">
+			<form>
+				<div class="col-sm-6">
+					<h4>Searchable faker without autoselect</h4>
+					<select class="faker" default-values id="searchableWO" name="searchableWO"></select>
+				</div>
+				<div class="col-sm-6">
+					<h4>Searchable faker without autoselect</h4>
+					<div class="faker" noselect-faker id="searchableWO2" name="searchableWO2"></div>
+				</div>
+			</form>
+		</div>
+		<hr />
+		
 		<!-- NON_VISUAL SUPPORT -->
 		<div class="row">
 			<form>
@@ -126,7 +141,7 @@
 				</div>
 				<div class="col-sm-6">
 					<h4>NV faker</h4>
-					<div class="faker" noselect-faker id="nvda2" name="nvda2"></div>
+					<div class="faker" noselect-faker id="nvda2" name="nvda2"> &nbsp;</div>
 				</div>
 			</form>
 		</div>
@@ -183,7 +198,7 @@
 					event.preventDefault();
 				});
 			});
-			var countries = {BE:"Belize",CA:"Kanada",KZ:"Kazahstan",JM:"Jamajka",JP:"Japonska",IQ:"Iraq",LV:"Latvija",LT:"Litva"};
+			var countries = {BE:"Belize",CA:"Kanada",KZ:"Kazahstan",JM:"Jamajka",JP:"Japonska",IQ:"Iraq",LV:"Latvija",LT:"Litva",D:"Nemčija"};
 			//fill default selects
 			$("select[default-values]").each(function(){
 				var self = this;
@@ -198,8 +213,9 @@
 				$(this).append("<div class='drop-value' rel=''><span></span></div>");
 				$(this).append("<div class='drop-handle'>&nbsp;</div>");
 				$(this).append("<div class='drop-selection'></div>");
+                if(self.hasAttribute("placeholder")) $(self).find(".drop-selection").append("<div class='drop-selection-item rel-disabled' rel='' disabled>"+ self.getAttribute("placeholder") +"</div>");
 				$.each(countries, function(ind, item){
-					$(self).find(".drop-selection").append("<div rel='"+ ind +"'>"+ item +"</div>");
+					$(self).find(".drop-selection").append("<div class='drop-selection-item' rel='"+ ind +"'>"+ item +"</div>");
 				});
 			});
 			
@@ -210,27 +226,29 @@
 			
 			
 			//PLAIN
-			specto_faker.init({object_selector: "#plain, #plain2"});
+			specto_faker.init({object_selector: "#plain, #plain2", braille_support: false});
 			//ANIMATED
-			specto_faker.init({object_selector: "#plain_anim, #plain_anim2", animated: true, animation_speed: 1500, count_selected: true, count_disables: false});
+			specto_faker.init({object_selector: "#plain_anim, #plain_anim2", animated: true, animation_speed: 1500, count_selected: true, count_disables: false, braille_support: false});
 			//CUSTOM CALLBACKS
-			specto_faker.init({object_selector: "#callback, #callback2", before_change: function(newVal, jsEvent){ 
+			specto_faker.init({object_selector: "#callback, #callback2", braille_support: false, before_change: function(newVal, jsEvent){ 
 				return newVal == "IQ" ? false : true;
 			}, on_change: function(newVal, jsEvent){
-				alert("new value: "+ newVal);
+				console.log("new value: "+ newVal);
 			}, on_init: function(fakers){
 				$.each(fakers, function(ind, itm){ $(itm).css("border", "2px solid blue"); });
 			}});
 			//KEY EVENTS
-			specto_faker.init({object_selector: "#keyevents, #keyevents2", key_events:true, searchable: false, });
+			specto_faker.init({object_selector: "#keyevents, #keyevents2", key_events:true, braille_support: false, });
 			//KEY EVENTS + ANIMATED
-			specto_faker.init({object_selector: "#keyevents_anim, #keyevents_anim2", key_events:true, searchable: false, animated: true, });
+			specto_faker.init({object_selector: "#keyevents_anim, #keyevents_anim2", key_events:true, animated: true, braille_support: false, });
 			//SEARCHABLE
-			specto_faker.init({object_selector: "#searchable, #searchable2", key_events:true, searchable: true, });
+			specto_faker.init({object_selector: "#searchable, #searchable2", key_events:true, searchable: true, braille_support: false, });
+			//SEARCHABLE WITHOUT AUTOSELECT
+			specto_faker.init({object_selector: "#searchableWO, #searchableWO2", key_events:true, searchable: true, search_single: false, braille_support: false, });
 			//NON_VISUAL SUPPORT
-			specto_faker.init({object_selector: "#nvda, #nvda2", braille_support: true, }); //key events will be set automatically
-			//NON_VISUAL SUPPORT WITH SEARCH
-			specto_faker.init({object_selector: "#nvdaSrch, #nvdaSrch2", braille_support: true, searchable: true, }); //key events will be set automatically
+			specto_faker.init({object_selector: "#nvda, #nvda2", }); //key events will be set automatically because braille_support = true
+			//NON_VISUAL SUPPORT WITH SEARCH + VALID
+			specto_faker.init({object_selector: "#nvdaSrch, #nvdaSrch2", searchable: true, is_required: true }); //key events will be set automatically
 			
 			//UPDATE VALUES AND GET VALUE BUTTONS
 			var fakr_setting = {key_events:true, searchable: true,};

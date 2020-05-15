@@ -40,16 +40,27 @@ $faker_height: 53px;
 			.drop-value {
 				z-index: 11;
 			}
+            
+            input[name='faker-search'] {
+                z-index: 150;
+            }
 		}
+        
+        .drop-value span { display: none; }
 	}
 	
-	
-	&.faker-focused .drop-value {
-		border-color: $faker_focused_value_border_shadow;
-		outline: 0;
-		-webkit-box-shadow: inset 0 1px 1px rgba($faker_focused_value_shadow_startcolor,.075), 0 0 8px rgba($faker_focused_value_border_shadow ,.6);
-		box-shadow: inset 0 1px 1px rgba($faker_focused_value_shadow_startcolor,.075), 0 0 8px rgba($faker_focused_value_border_shadow ,.6);
-	}
+	&.faker-focused {
+        .drop-value {
+            border-color: $faker_focused_value_border_shadow;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba($faker_focused_value_shadow_startcolor,.075), 0 0 8px rgba($faker_focused_value_border_shadow ,.6);
+            box-shadow: inset 0 1px 1px rgba($faker_focused_value_shadow_startcolor,.075), 0 0 8px rgba($faker_focused_value_border_shadow ,.6);
+        }
+        
+        &.faker-braille {
+            .drop-handle { display: none; }
+        }
+    }
 	
 	&.open, &.faker-animating {
 		.drop-selection {
@@ -92,8 +103,9 @@ $faker_height: 53px;
 			left: 0;
 			top: 0;
 			height: 100%;
-			z-index: 150;
+			z-index: -1;
 			padding: 0 25px;
+            border: none;
 		}
 	}
 	
@@ -140,7 +152,7 @@ $faker_height: 53px;
 		width: 100%;
 		z-index: 9;
 		
-		div[rel] {
+		.drop-selection-item {
 			font-weight: 300;
 			height: 40px;
 			letter-spacing: 0.1em;
@@ -165,6 +177,14 @@ $faker_height: 53px;
 			}
 		}
 	}
+    
+    &.faker-animated .drop-selection {
+        -webkit-transition: height 0.4s ease-in;
+        -moz-transition: height 0.4s ease-in;
+        -o-transition: height 0.4s ease-in;
+        -ms-transition: height 0.4s ease-in;
+        transition: height 0.4s ease-in;
+    }
 	
 	select {
 		display: block;
@@ -175,14 +195,16 @@ $faker_height: 53px;
 		option { display: none; }
 	}
 	
-	.non-visual-helper {
+	.filtered-listbox {
 		opacity: 0;
+        width: 0px;
+        display: none;
 	}
 }
 
 .faker .drop-value:hover, .faker.open .drop-value {color: $faker_opened_value_color;}
 
 
-.faker-small .faker .faker .drop-selection {
+.faker-small .faker .drop-selection {
 	max-height: 200px;
 }
