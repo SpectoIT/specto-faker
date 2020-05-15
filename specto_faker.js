@@ -46,7 +46,6 @@ var specto_faker = {
         allow_form_reload: false, //do we allow parent form to reload on faker init. this is for plain forms firefox workaround (reset form for proper detection of required fields when ```<select>``` is moved)
         label_id: "", //id of label, to connect to aria controls
         listbox_label: "Custom label for listbox", //default value of listbox label, if label_id is not given
-        filtered_listbox_label: "Custom label for filtered listbox", //default value of filtered listbox label, if label_id is not given
         is_required: false, //if select is not present, this will be used to know if faker is required. if select is present, this option will be taken from select's required atribute
     },
     memory: {},
@@ -268,13 +267,16 @@ var specto_faker = {
         
         //aria
         if(has_aria) {
+            var is_valid = selectedItem.attr("rel");
             if(is_searchable) {
                 var selected_key = selectedItem.attr("rel");
                 if(extra_settings.up_down) specto_faker.traverseFilteredSelection(fakr_el, selected_key);
                 else specto_faker.removeActiveFilteredSelection(fakr_el);
                 specto_faker.setFilteredActiveDescendant(fakr_el, selected_key);
+                specto_faker.getSearchInput(fakr_el).attr("aria-invalid", is_valid ? "false" : "true");
             }
-            else fakr_el.attr("aria-activedescendant", selectedItem.attr("id"));
+            else fakr_el.attr("aria-activedescendant", selectedItem.attr("id"))
+                .attr("aria-invalid", is_valid ? "false" : "true");
         }
         
         //if searchable, insert new value
@@ -678,14 +680,14 @@ var specto_faker = {
         if(settings.searchable) specto_faker.getSearchInput(fakr).each(function(){
             var helper_listbox = specto_faker.getFilteredAriaListbox(fakr);
             if(helper_listbox.length < 1){
-                var label = settings.label_id ? "aria-labelledby='"+ settings.label_id +"'" : "aria-label='"+ settings.filtered_listbox_label +"'";
-                fakr.append("<ul class='filtered-listbox' role='listbox' id='"+ newId.filtered_listbox +"' "+ label +"></ul>");
+                fakr.append("<ul class='filtered-listbox' role='listbox' id='"+ newId.filtered_listbox +"'></ul>");
             }
             else helper_listbox.attr("id", newId.filtered_listbox);
             
             this.setAttribute("id", newId.search);
             this.setAttribute("role", "combobox");
             this.setAttribute("aria-haspopup", "listbox");
+            this.setAttribute("aria-required", this_faker_required ? "true" : "false")
             this.setAttribute("aria-autocomplete", "both");
             this.setAttribute("aria-activedescendant", "");
             this.setAttribute("aria-expanded", "false");
