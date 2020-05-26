@@ -235,13 +235,39 @@ var specto_faker = {
                     if(after_change_fun) after_change_fun(specto_faker.getSelectionValue(this), e); //change function
                 });
             });
+            
+            //register change functions
+            if(before_change_fun) fakr.on("beforeChange", function(e){
+                if(!before_change_fun(specto_faker.getFakerValue(this), e)) { //prevent click
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return false;
+                }
+                return true;
+            });
+            else fakr.on("beforeChange", function(){ return true; });
+            
+            if(after_change_fun) fakr.on("afterChange", function(e){
+                after_change_fun(specto_faker.getFakerValue(this), e);
+            });
+            else fakr.on("afterChange", function(){});
         },
         updateValueOnInit: function(fakr){
             if(!fakr.find(".drop-value span").text()) { //has faker selected value?
-                if(fakr.find(".drop-selection-item[selected]").length) specto_faker.updateValue(fakr.find(".drop-selection-item[selected]").first(), "noclick");
-                else specto_faker.updateValue(fakr.find(".drop-selection-item").first(), "noclick");
+                var selectedItem = fakr.find(".drop-selection-item[selected]");
+                
+                if(selectedItem.length) specto_faker.triggerChangeEventsAndUpdateValue(selectedItem.first(), "noclick");
+                else specto_faker.triggerChangeEventsAndUpdateValue(fakr.find(".drop-selection-item").first(), "noclick");
             }
         },
+    },
+    triggerChangeEventsAndUpdateValue: function(rel_jquery, dimm_click, extra_settings){
+        var fakr = specto_faker.returnFakerElementFromChild(rel_jquery[0]);
+        fakr.triggerHandler("beforeChange"); //cannot prevent going further
+        
+        specto_faker.updateValue(rel_jquery, dimm_click, extra_settings);
+        fakr.triggerHandler("afterChange");
+        return true;
     },
     updateValue: function(rel, dimm_click, extra_settings){ //notice - this function doesn't call after change event
         extra_settings = extra_settings || {};
@@ -314,8 +340,8 @@ var specto_faker = {
     getFakerUserValue: function(fakr){ return $(fakr).find(".drop-value span").text().trim(); }, //public function
     updateFakerValue: function(fakr, val){ //public function
         var rel = $(fakr).find(".drop-selection .drop-selection-item[rel='"+ val +"']");
-        if(rel.length < 1) return false; //not found 
-        specto_faker.updateValue(rel, "dont open");
+        if(rel.length < 1) return false; //not found
+        specto_faker.triggerChangeEventsAndUpdateValue(rel, "dont open");
         return true;
     },
     getSelectionValue: function(sel_item){ return sel_item.getAttribute("rel"); },
@@ -526,26 +552,26 @@ var specto_faker = {
             if(selected) {
                 var sel = $(selected);
                 var nextEl = sel.nextAll().filter(specto_faker.selection.filter_fn).first();
-                if(nextEl.length > 0) specto_faker.updateValue(nextEl, "noclick", {from_key: true, up_down: true});
+                if(nextEl.length > 0) specto_faker.triggerChangeEventsAndUpdateValue(nextEl, "noclick", {from_key: true, up_down: true});
                 else {
                     var prevs = sel.prevAll().filter(specto_faker.selection.filter_fn).last();
-                    if(prevs.length > 0) specto_faker.updateValue(prevs, "noclick", {from_key: true, up_down: true});
+                    if(prevs.length > 0) specto_faker.triggerChangeEventsAndUpdateValue(prevs, "noclick", {from_key: true, up_down: true});
                 }
             }
-            else specto_faker.updateValue($(fakr_js).find(".drop-selection-item").filter(specto_faker.selection.filter_fn).first(), "noclick", {from_key: true, up_down: true});
+            else specto_faker.triggerChangeEventsAndUpdateValue($(fakr_js).find(".drop-selection-item").filter(specto_faker.selection.filter_fn).first(), "noclick", {from_key: true, up_down: true});
         },
         previous: function(fakr_js){ //move to prevoius option
             var selected = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
             if(selected) {
                 var sel = $(selected);
                 var prevEl = sel.prevAll().filter(specto_faker.selection.filter_fn).first();
-                if(prevEl.length > 0) specto_faker.updateValue(prevEl, "noclick", {from_key: true, up_down: true});
+                if(prevEl.length > 0) specto_faker.triggerChangeEventsAndUpdateValue(prevEl, "noclick", {from_key: true, up_down: true});
                 else {
                     var nexts = sel.nextAll().filter(specto_faker.selection.filter_fn);
-                    if(nexts.length > 0) specto_faker.updateValue(nexts.last(), "noclick", {from_key: true, up_down: true});
+                    if(nexts.length > 0) specto_faker.triggerChangeEventsAndUpdateValue(nexts.last(), "noclick", {from_key: true, up_down: true});
                 }
             }
-            else specto_faker.updateValue($(fakr_js).find(".drop-selection-item").filter(specto_faker.selection.filter_fn).last(), "noclick", {from_key: true, up_down: true});
+            else specto_faker.triggerChangeEventsAndUpdateValue($(fakr_js).find(".drop-selection-item").filter(specto_faker.selection.filter_fn).last(), "noclick", {from_key: true, up_down: true});
         },
         tochar: function(fakr_js, ch){ //move to char
             var is_already = false;
@@ -557,12 +583,12 @@ var specto_faker = {
             if(is_already){ //not first time
                 var start_proper = $(selected).nextAll().filter(function(){ return this.innerHTML.slice(0,1).toLowerCase() == ch && !this.classList.contains(specto_faker.config.search_hidden); }).first();
                 if(start_proper.length < 1) is_already = false;
-                else specto_faker.updateValue(start_proper, "noclick", {from_key: true});
+                else specto_faker.triggerChangeEventsAndUpdateValue(start_proper, "noclick", {from_key: true});
             }
             
             if(!is_already) { //first time - or no more matching elements, so start again from beginning
                 $(fakr_js).find(".drop-selection-item").filter(function(){ return this.innerHTML.slice(0,1).toLowerCase() == ch && !this.classList.contains(specto_faker.config.search_hidden); }).first().each(function(){
-                    specto_faker.updateValue(this, "noclick", {from_key: true});
+                    specto_faker.triggerChangeEventsAndUpdateValue($(this), "noclick", {from_key: true});
                 });
             }
         },
@@ -624,12 +650,12 @@ var specto_faker = {
         });
 
         if(cnt === 1 && fakr.hasClass(specto_faker.config.select_single)){ //select single option that was left from filtering
-            specto_faker.updateValue(first_found, "noclick", {manual_close: true});
+            specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {manual_close: true});
         }
         else if (has_aria) {
             if(cnt){ //if there is an element to select             
                 specto_faker.searchInputSelectText(fakr, first_found.innerHTML, srch_val.length);
-                specto_faker.updateValue(first_found, "noclick", {leave_search_alone: true});
+                specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {leave_search_alone: true});
                 specto_faker.ariaFilteredList(fakr, filtered_values, first_found.getAttribute("rel"));
             }
             else specto_faker.clearAriaFilteredList(fakr);
