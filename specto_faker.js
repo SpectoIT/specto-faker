@@ -34,6 +34,7 @@ var specto_faker = {
         search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this option and consideres it set to true
         sortable: false, //do you want on init to be sorted
         sort_ascending: true,
+        set_on_start: true, //should script set first value on initialization
         
         /* METHODS - CALLBACKS */
         /* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
@@ -129,7 +130,7 @@ var specto_faker = {
             if(fakr_settings.key_events) fakr_elm.off("keyup").on("keyup", function (event){ specto_faker.keyEvents(this, event); });
             
             //if empty, update first value
-            specto_faker.init_functions.updateValueOnInit(fakr_elm);
+            if(fakr_settings.set_on_start) specto_faker.init_functions.updateValueOnInit(fakr_elm);
             
         });
         //firefox workaround - reset form for proper detection of required fields

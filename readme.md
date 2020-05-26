@@ -53,6 +53,7 @@ added multiple aria options (label_id, listbox_label, filtered_listbox_label, is
     search_only_from_start: false, //if faker is searchable, do you want to search only values that start with searched value? - braille_support ignores this option and consideres it set to true
     sortable: false, //do you want on init to be sorted
     sort_ascending: true,
+    set_on_start: true, //should script set first value on initialization
     
     /* METHODS - CALLBACKS */
     /* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
