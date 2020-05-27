@@ -37,8 +37,6 @@ var specto_faker = {
         set_on_start: true, //should script set first value on initialization
         
         /* METHODS - CALLBACKS */
-        /* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
-        before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value
         on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
         on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
         
@@ -116,7 +114,7 @@ var specto_faker = {
             
 
             //dropdown clicks
-            specto_faker.init_functions.fakerSelection(fakr_elm, fakr_settings.on_change, fakr_settings.before_change);
+            specto_faker.init_functions.fakerSelection(fakr_elm, fakr_settings.on_change);
             
             //parse select
             var parsed_select_elm = specto_faker.init_functions.parseSelect(fakr_elm, is_faker_selectable);
@@ -220,34 +218,17 @@ var specto_faker = {
                 });
             });
         },
-        fakerSelection: function(fakr, after_change_fun, before_change_fun){ //dropdown clicks
+        fakerSelection: function(fakr, after_change_fun){ //dropdown clicks
             fakr.find(".drop-selection").each(function(){
                 $(this).off("click").on("click", ".drop-selection-item", function(e){
                     if(this.hasAttribute("disabled")) return; //prevent disabled options
-                    
-                    if(before_change_fun){ //run before change function
-                        if(!before_change_fun(specto_faker.getSelectionValue(this), e)) { //prevent click
-                            e.preventDefault();
-                            e.stopPropagation();
-                            return;
-                        }
-                    }
+
                     specto_faker.updateValue(this, false, {return_focus: true}); //update faker value
                     if(after_change_fun) after_change_fun(specto_faker.getSelectionValue(this), e); //change function
                 });
             });
             
             //register change functions
-            if(before_change_fun) fakr.on("beforeChange", function(e){
-                if(!before_change_fun(specto_faker.getFakerValue(this), e)) { //prevent click
-                    e.preventDefault();
-                    e.stopPropagation();
-                    return false;
-                }
-                return true;
-            });
-            else fakr.on("beforeChange", function(){ return true; });
-            
             if(after_change_fun) fakr.on("afterChange", function(e){
                 after_change_fun(specto_faker.getFakerValue(this), e);
             });
@@ -300,16 +281,21 @@ var specto_faker = {
                 if(extra_settings.up_down) specto_faker.traverseFilteredSelection(fakr_el, selected_key);
                 else specto_faker.removeActiveFilteredSelection(fakr_el);
                 specto_faker.setFilteredActiveDescendant(fakr_el, selected_key);
-                specto_faker.getSearchInput(fakr_el).attr("aria-invalid", is_valid ? "false" : "true");
+                
+                var searchInput = specto_faker.getSearchInput(fakr_el);
+                if(searchInput.attr("aria-required") === "true") searchInput.attr("aria-invalid", is_valid ? "false" : "true");
             }
-            else fakr_el.attr("aria-activedescendant", selectedItem.attr("id"))
-                .attr("aria-invalid", is_valid ? "false" : "true");
+            else {
+                fakr_el.attr("aria-activedescendant", selectedItem.attr("id"));
+                if(fakr_el.attr("aria-required") === "true") fakr_el.attr("aria-invalid", is_valid ? "false" : "true");
+            }
         }
         
         //if searchable, insert new value
         if(!extra_settings.leave_search_alone && is_searchable) {
             var val = specto_faker.getFakerUserValue(fakr_el);
-            specto_faker.searchInputSelectText(fakr_el, val); //update value and select
+            var can_be_selected =  specto_faker.isFakerOpen(fakr_el[0]) && dimm_click;
+            specto_faker.searchInputSelectText(fakr_el, val, 0, !can_be_selected); //update value and select
         }
         
         //if there is select present, update it's value. And trigger change event
@@ -603,14 +589,14 @@ var specto_faker = {
         
         if(dont_remove_focus) fakr_js.querySelector(".drop-value input[name='faker-search']").focus();
     },
-    searchInputSelectText: function(fakr_random, newVal, skip){
+    searchInputSelectText: function(fakr_random, newVal, skip, skipSelection){
         var srch_input = specto_faker.getSearchInput(fakr_random);
         if(typeof newVal !== "string") newVal = srch_input[0].value;
         else {
             srch_input[0].value = newVal;
             srch_input[0].setAttribute("data-val", newVal);
         }
-        srch_input[0].setSelectionRange(skip || 0, newVal.length + 1);
+        if(!skipSelection) srch_input[0].setSelectionRange(skip || 0, newVal.length + 1);
     },
     filterBySearchInput: function(fakr_js){
         var fakr = $(fakr_js);
