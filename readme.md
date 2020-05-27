@@ -13,6 +13,7 @@ searchable default value changed to false
 allow_form_reload option added. And changed it's default value to false
 added multiple aria options (label_id, listbox_label, filtered_listbox_label, is_required)
 ```
+* v4.2.2 removed beforeChange function becuase it's incompatible with search
 
 ## DEPENDENCIES
 * jQuery <i>(Tested on 2.2.4 and 3.3)</i>
