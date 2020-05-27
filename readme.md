@@ -57,8 +57,6 @@ added multiple aria options (label_id, listbox_label, filtered_listbox_label, is
     set_on_start: true, //should script set first value on initialization
     
     /* METHODS - CALLBACKS */
-    /* if you use before_change function you must return a value which correlates to boolean 'true', otherwise change is prevented */
-    before_change: function(newVal, jsEvent){ return newVal; }, //callback function before value has changed - by default it prevents clicks on elements without value
     on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
     on_init: null, //callback when faker(s) is(are) initiated //e.g. function(fakers){ }
     
