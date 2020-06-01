@@ -244,11 +244,8 @@ var specto_faker = {
         },
     },
     triggerChangeEventsAndUpdateValue: function(rel_jquery, dimm_click, extra_settings){
-        var fakr = specto_faker.returnFakerElementFromChild(rel_jquery[0]);
-        fakr.triggerHandler("beforeChange"); //cannot prevent going further
-        
         specto_faker.updateValue(rel_jquery, dimm_click, extra_settings);
-        fakr.triggerHandler("afterChange");
+        specto_faker.returnFakerElementFromChild(rel_jquery[0]).triggerHandler("afterChange");
         return true;
     },
     updateValue: function(rel, dimm_click, extra_settings){ //notice - this function doesn't call after change event
@@ -734,6 +731,20 @@ var specto_faker = {
                 this.setAttribute("role", "listbox");
                 this.setAttribute("id", newId.listbox);
             });
+        }
+    },
+    rebuildMemory: function(fakr_random){ //public function
+        var fakr = $(fakr);
+        if(specto_faker.isFakerBrailleSupport(fakr[0])) {
+            var allValues = [];
+            var id = fakr.attr("id").replace(/\-combobox/, "");
+            fakr.find(".drop-selection-item").each(function(ii){
+                allValues.push({
+                    key: this.getAttribute("rel"),
+                    val: this.innerHTML
+                });
+            });
+            specto_faker.memory[id] = allValues; //save to memory
         }
     },
     buildFilteredAriaHelper: function(fakr){
