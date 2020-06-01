@@ -734,7 +734,7 @@ var specto_faker = {
         }
     },
     rebuildMemory: function(fakr_random){ //public function
-        var fakr = $(fakr);
+        var fakr = $(fakr_random);
         if(specto_faker.isFakerBrailleSupport(fakr[0])) {
             var allValues = [];
             var id = fakr.attr("id").replace(/\-combobox/, "");
