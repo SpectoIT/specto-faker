@@ -437,7 +437,7 @@ var specto_faker = {
                 var display = $(this).text();
                 var is_sel = typeof $(this).attr("selected") === "string";
                 if(is_sel) placeholder = ""; //prevent placeholder if any option is selected
-                $(fakr_html).find(".drop-selection").append("<div class='drop-selection-item' rel='"+ ($(this).attr("value") || display) +"'"+ (typeof $(this).attr("disabled") === "string" ? " disabled='disabled' class='"+ specto_faker.config.disabled_val_class +"'" : "") + (is_sel ? " selected='selected'" : "") +">"+display+"</div>");
+                $(fakr_html).find(".drop-selection").append("<div class='drop-selection-item "+ (typeof $(this).attr("disabled") === "string" ? specto_faker.config.disabled_val_class +"' disabled='disabled" : "") +"' rel='"+ ($(this).attr("value") || display) +"'"+ (is_sel ? " selected='selected'" : "") +">"+display+"</div>");
             });
             $(fakr_html).prepend(elem.clone(true)); //append original select
             if(placeholder) {
