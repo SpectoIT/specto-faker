@@ -200,6 +200,10 @@ $faker_height: 53px;
         width: 0px;
         display: none;
 	}
+    
+    &:focus {
+		outline: none;
+    }
 }
 
 .faker .drop-value:hover, .faker.open .drop-value {color: $faker_opened_value_color;}
