@@ -67,7 +67,6 @@ $faker_height: 53px;
 			border-bottom: 1px solid $drop_selection_border;
 			display: block;
 			height: auto;
-			max-height: 400px;
 			opacity: 1;
 			overflow: auto;
 			border-left: 1px solid $drop_selection_border;
@@ -150,6 +149,7 @@ $faker_height: 53px;
 		position: absolute;
 		top: $faker_height;
 		width: 100%;
+        max-height: 400px;
 		z-index: 9;
 		
 		.drop-selection-item {
