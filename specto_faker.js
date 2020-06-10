@@ -513,15 +513,13 @@ var specto_faker = {
                 if(specto_faker.isFakerOpen(fakr_js)) specto_faker.selection.previous(fakr_js);
                 break;
             case 9: //tab
-            case 46: //delete
-                //todo refresh filtered inputs if needed (prevent auto selection?)
             case 16: //shift
                 break;
             default:
                 var ch = String.fromCharCode(key);
-                if(key === 8 || specto_faker.isCharAplhanumeric(ch)){ //backspace or alphanumeric
+                if(key === 8 || key === 46 || specto_faker.isCharAplhanumeric(ch)){ //backspace, delete or alphanumeric
                     if(!specto_faker.isFakerSearchable(fakr_js)) specto_faker.selection.tochar(fakr_js, ch.toLowerCase());
-                    else specto_faker.filterBySearchInput(fakr_js);
+                    else specto_faker.filterBySearchInput(fakr_js, key);
                 }
                 break;
         }
@@ -595,7 +593,7 @@ var specto_faker = {
         }
         if(!skipSelection) srch_input[0].setSelectionRange(skip || 0, newVal.length + 1);
     },
-    filterBySearchInput: function(fakr_js){
+    filterBySearchInput: function(fakr_js, pressed_key_code){
         var fakr = $(fakr_js);
         var has_aria = specto_faker.isFakerBrailleSupport(fakr_js);
         var filtered_values = [];
@@ -638,9 +636,9 @@ var specto_faker = {
         }
         else if (has_aria) {
             if(cnt){ //if there is an element to select             
-                specto_faker.searchInputSelectText(fakr, first_found.innerHTML, srch_val.length);
+                if(pressed_key_code !== 8 && pressed_key_code !== 46) specto_faker.searchInputSelectText(fakr, first_found.innerHTML, srch_val.length); //don't meddle with search input if deleting
                 specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {leave_search_alone: true});
-                specto_faker.ariaFilteredList(fakr, filtered_values, first_found.getAttribute("rel"));
+                specto_faker.ariaFilteredList(fakr, filtered_values, first_found.getAttribute("rel")); //make new aria list 
             }
             else specto_faker.clearAriaFilteredList(fakr);
         }
