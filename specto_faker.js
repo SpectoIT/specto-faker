@@ -249,13 +249,13 @@ var specto_faker = {
         return true;
     },
     updateValue: function(rel, dimm_click, extra_settings){ //notice - this function doesn't call after change event
-        extra_settings = extra_settings || {};
         var selectedItem = $(rel);
+        if(selectedItem.length < 1) return; //prevent error
+        extra_settings = extra_settings || {};
         var fakr_el = specto_faker.returnFakerElementFromChild(selectedItem[0]);
         var has_aria = specto_faker.isFakerBrailleSupport(fakr_el[0]);
         var is_searchable = specto_faker.isFakerSearchable(fakr_el[0]);
         
-        if(selectedItem.length < 1) return; //prevent error
         if(extra_settings.return_focus) {
             if(is_searchable) specto_faker.getSearchInput(this.parentNode).focus();
             else fakr_el.focus();
@@ -302,6 +302,22 @@ var specto_faker = {
         
         if(!dimm_click) specto_faker.toggleOpenState(fakr_el[0]);
         else if(extra_settings.manual_close) specto_faker.animateFaker(fakr_el[0], false, {dont_remove_focus: true});
+    },
+    setNoneValue: function(fakr_js){ //for now used only for searchable fakers
+        var placeholder = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.disabled_val_class);
+        if(placeholder) specto_faker.triggerChangeEventsAndUpdateValue($(placeholder), "noclick");
+        else {
+            var selected = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
+            if(selected) selected.classList.remove(specto_faker.config.selected_val_class);
+        }
+        
+        fakr_js.querySelector(".drop-value").setAttribute("rel", "");
+        var search_input = specto_faker.getSearchInput(fakr_js);
+        search_input.attr("aria-activedescendant", "");
+        if(search_input.attr("aria-required") === "true") search_input.attr("aria-invalid", "true");
+        
+        var selects = fakr_js.querySelector("select");
+        if(selects.length > 0) $(selects).val("").change();
     },
     firefoxFormBugFox: function(fakr){
         if(fakr.closest("form").length > 0){
@@ -640,7 +656,10 @@ var specto_faker = {
                 specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {leave_search_alone: true});
                 specto_faker.ariaFilteredList(fakr, filtered_values, first_found.getAttribute("rel")); //make new aria list 
             }
-            else specto_faker.clearAriaFilteredList(fakr);
+            else {
+                specto_faker.setNoneValue(fakr_js);
+                specto_faker.clearAriaFilteredList(fakr);
+            }
         }
     },
     sortValues: function(fakr, ascending){
@@ -771,7 +790,7 @@ var specto_faker = {
         return ids;
     },
     parseIdPrefix: function(id){ return id.replace(/\-.+$/g, ""); },
-    getFilteredAriaListbox: function(fakr){ return $(fakr).find(".filtered-listbox"); },
+    getFilteredAriaListbox: function(fakr_random){ return $(fakr_random).find(".filtered-listbox"); },
     ariaFilteredList: function(fakr, filtered_values, selected_val){
         var htm = "";
         var this_id = specto_faker.ariaFilteredListPrefix($(fakr).attr("id"));
@@ -803,8 +822,8 @@ var specto_faker = {
             this.setAttribute("aria-selected", this.getAttribute("rel") === selectedKey ? "true" : false);
         });
     },
-    removeActiveFilteredSelection: function(fakr){
-        specto_faker.getFilteredAriaListbox(fakr).find("li").each(function(){
+    removeActiveFilteredSelection: function(fakr_random){
+        specto_faker.getFilteredAriaListbox(fakr_random).find("li").each(function(){
             this.removeAttribute("aria-selected");
         }); 
     },
