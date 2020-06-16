@@ -305,7 +305,10 @@ var specto_faker = {
     },
     setNoneValue: function(fakr_js){ //for now used only for searchable fakers
         var placeholder = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.disabled_val_class);
-        if(placeholder) specto_faker.triggerChangeEventsAndUpdateValue($(placeholder), "noclick");
+        if(placeholder) {
+            specto_faker.triggerChangeEventsAndUpdateValue($(placeholder), "noclick");
+            specto_faker.searchInputSelectText(fakr_js);
+        }
         else {
             var selected = fakr_js.querySelector(".drop-selection-item."+ specto_faker.config.selected_val_class);
             if(selected) selected.classList.remove(specto_faker.config.selected_val_class);
