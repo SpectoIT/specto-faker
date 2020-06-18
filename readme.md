@@ -55,6 +55,7 @@ added multiple aria options (label_id, listbox_label, filtered_listbox_label, is
     sortable: false, //do you want on init to be sorted
     sort_ascending: true,
     set_on_start: true, //should script set first value on initialization
+    search_debouce: 350, //input keyup delay in miliseconds
     
     /* METHODS - CALLBACKS */
     on_change: null, //callback function after value has changed //e.g. function(newVal, jsEvent){}
@@ -88,6 +89,7 @@ added multiple aria options (label_id, listbox_label, filtered_listbox_label, is
 * in custom callbacks before_change and on_change make sure that you don't focus another element and then focus back (e.g. alert() focuses on window). this will not close faker (it will be closed and reopened again on focus)
 * before change function and keyed/searchable faker are not compatible (key stroke cannot be canceled, or gets stuck on specific value)
 * if drop-selection-items are updated without faker refresh (angular requirement), make sure that you update memory with saved values. Call ```specto_faker.rebuildMemory(faker)```
+* searchable faker has new option for keyup delay ```search_debouce```
 
 ## EXAMPLE USAGE
 
