@@ -392,7 +392,7 @@ var specto_faker = {
                 }
             }
             if(is_searchable) {
-                specto_faker.searchInputSelectText(fakr_js); //searchable faker select inserted value
+                if(!extra_settings.dont_select) specto_faker.searchInputSelectText(fakr_js); //searchable faker select inserted value
                 specto_faker.getSearchInput(fakr_js).focus(); //focus search input
             }
         }
@@ -539,7 +539,7 @@ var specto_faker = {
             default:
                 var ch = String.fromCharCode(key);
                 if(key === 8 || key === 46 || specto_faker.isCharAplhanumeric(ch)){ //backspace, delete or alphanumeric
-                    if(!specto_faker.isFakerOpen(fakr_js)) specto_faker.animateFaker(fakr_js, true); //open if closed
+                    if(!specto_faker.isFakerOpen(fakr_js)) specto_faker.animateFaker(fakr_js, true, {dont_select: true}); //open if closed
                     
                     if(!specto_faker.isFakerSearchable(fakr_js)) specto_faker.selection.tochar(fakr_js, ch.toLowerCase());
                     else specto_faker.filterBySearchInput(fakr_js, key);
