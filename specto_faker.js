@@ -544,7 +544,7 @@ var specto_faker = {
                     if(!specto_faker.isFakerSearchable(fakr_js)) specto_faker.selection.tochar(fakr_js, ch.toLowerCase());
                     else {
                         if(specto_faker.timoutKeyEvent) clearTimeout(specto_faker.timoutKeyEvent);
-                        setTimeout(function(){ //debounce filtering
+                        specto_faker.timoutKeyEvent = setTimeout(function(){ //debounce filtering
                             specto_faker.filterBySearchInput(fakr_js, key);
                         }, specto_faker.config.search_debouce);
                     }
