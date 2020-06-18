@@ -344,7 +344,7 @@ specto_faker.updateOptions(first_faker, [{
 
 ```javascript
 //update value programatically
-specto_faker.updateFakerValue(to_change_value);
+specto_faker.updateFakerValue(faker, to_change_value);
 
 ```
 
