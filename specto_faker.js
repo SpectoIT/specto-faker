@@ -542,12 +542,7 @@ var specto_faker = {
                     if(!specto_faker.isFakerOpen(fakr_js)) specto_faker.animateFaker(fakr_js, true); //open if closed
                     
                     if(!specto_faker.isFakerSearchable(fakr_js)) specto_faker.selection.tochar(fakr_js, ch.toLowerCase());
-                    else {
-                        if(specto_faker.timoutKeyEvent) clearTimeout(specto_faker.timoutKeyEvent);
-                        specto_faker.timoutKeyEvent = setTimeout(function(){ //debounce filtering
-                            specto_faker.filterBySearchInput(fakr_js, key);
-                        }, specto_faker.config.search_debouce);
-                    }
+                    else specto_faker.filterBySearchInput(fakr_js, key);
                 }
                 break;
         }
@@ -664,14 +659,19 @@ var specto_faker = {
             else this.classList.add(specto_faker.config.search_hidden);
         });
 
+        if(specto_faker.timoutKeyEvent) clearTimeout(specto_faker.timoutKeyEvent);
         if(cnt === 1 && fakr.hasClass(specto_faker.config.select_single)){ //select single option that was left from filtering
-            specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {manual_close: true});
+            specto_faker.timoutKeyEvent = setTimeout(function(){ //debounce filtering
+                specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {manual_close: true});
+            }, specto_faker.config.search_debouce);
         }
         else if (has_aria) {
-            if(cnt){ //if there is an element to select             
-                if(pressed_key_code !== 8 && pressed_key_code !== 46) specto_faker.searchInputSelectText(fakr, first_found.innerHTML, srch_val.length); //don't meddle with search input if deleting
-                specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {leave_search_alone: true});
-                specto_faker.ariaFilteredList(fakr, filtered_values, first_found.getAttribute("rel")); //make new aria list 
+            if(cnt){ //if there is an element to select
+                specto_faker.timoutKeyEvent = setTimeout(function(){ //debounce filtering            
+                    if(pressed_key_code !== 8 && pressed_key_code !== 46) specto_faker.searchInputSelectText(fakr, first_found.innerHTML, srch_val.length); //don't meddle with search input if deleting
+                    specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {leave_search_alone: true});
+                    specto_faker.ariaFilteredList(fakr, filtered_values, first_found.getAttribute("rel")); //make new aria list 
+                }, specto_faker.config.search_debouce);
             }
             else {
                 specto_faker.setNoneValue(fakr_js);
