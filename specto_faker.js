@@ -370,6 +370,8 @@ var specto_faker = {
         
         var is_searchable = specto_faker.isFakerSearchable(fakr_js);
         if(openme) {
+            if(fakr_js.classList.contains(specto_faker.config.open_class)) return;
+            
             fakr_js.classList.add(specto_faker.config.open_class);
             fakr_js.classList.add(specto_faker.config.focused_class);
             if(specto_faker.isFakerAnimated(fakr_js)) specto_faker.calcDropSelectionHeight(fakr_js, openme);
@@ -397,6 +399,8 @@ var specto_faker = {
             }
         }
         else {
+            if(!fakr_js.classList.contains(specto_faker.config.open_class)) return;
+            
             if(is_searchable) specto_faker.removeFakerSearchable(fakr_js, extra_settings.dont_remove_focus); //searchable faker - first operation so that faker isn't yet closed
             fakr_js.classList.remove(specto_faker.config.open_class);
             if(specto_faker.isFakerAnimated(fakr_js)) specto_faker.calcDropSelectionHeight(fakr_js, openme);
@@ -668,7 +672,9 @@ var specto_faker = {
         else if (has_aria) {
             if(cnt){ //if there is an element to select
                 specto_faker.timoutKeyEvent = setTimeout(function(){ //debounce filtering            
-                    if(pressed_key_code !== 8 && pressed_key_code !== 46) specto_faker.searchInputSelectText(fakr, first_found.innerHTML, srch_val.length); //don't meddle with search input if deleting
+                    if(pressed_key_code !== 8 && pressed_key_code !== 46) { //don't meddle with search input if deleting
+                        specto_faker.searchInputSelectText(fakr, first_found.innerHTML, srch_val.length);
+                    }
                     specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {leave_search_alone: true});
                     specto_faker.ariaFilteredList(fakr, filtered_values, first_found.getAttribute("rel")); //make new aria list 
                 }, specto_faker.config.search_debouce);
@@ -728,7 +734,7 @@ var specto_faker = {
         if(settings.searchable) specto_faker.getSearchInput(fakr).each(function(){
             var helper_listbox = specto_faker.getFilteredAriaListbox(fakr);
             if(helper_listbox.length < 1){
-                fakr.append("<ul class='filtered-listbox' role='listbox' id='"+ newId.filtered_listbox +"'></ul>");
+                fakr.append("<ul class='filtered-listbox' role='listbox' id='"+ newId.filtered_listbox +"' tabindex='-1'></ul>");
             }
             else helper_listbox.attr("id", newId.filtered_listbox);
             
