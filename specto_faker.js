@@ -231,10 +231,10 @@ var specto_faker = {
             });
             
             //register change functions
-            if(after_change_fun) fakr.on("afterChange", function(e){
+            if(after_change_fun) fakr.off("afterChange").on("afterChange", function(e){
                 after_change_fun(specto_faker.getFakerValue(this), e);
             });
-            else fakr.on("afterChange", function(){});
+            else fakr.off("afterChange").on("afterChange", function(){});
         },
         updateValueOnInit: function(fakr){
             if(!fakr.find(".drop-value span").text()) { //has faker selected value?
