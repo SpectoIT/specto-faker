@@ -690,7 +690,7 @@ var specto_faker = {
             }
         }
     },
-    setSearchSkipAttribute: function(search_input_js, val){ search_input_js.setAttribute("data-skip", newVal); },
+    setSearchSkipAttribute: function(search_input_js, val){ search_input_js.setAttribute("data-skip", val); },
     sortValues: function(fakr, ascending){
         
         var all = [];
