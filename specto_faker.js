@@ -318,7 +318,7 @@ var specto_faker = {
         
         fakr_js.querySelector(".drop-value").setAttribute("rel", "");
         var search_input = specto_faker.getSearchInput(fakr_js);
-        search_input.attr("aria-activedescendant", "");
+        search_input.attr("data-skip", "").attr("aria-activedescendant", "");
         if(search_input.attr("aria-required") === "true") search_input.attr("aria-invalid", "true");
         
         var selects = fakr_js.querySelector("select");
