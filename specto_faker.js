@@ -620,9 +620,9 @@ var specto_faker = {
         }
         if(!skipSelection) {
             srch_input[0].setSelectionRange(skip || 0, newVal.length + 1);
-            srch_input[0].setAttribute("data-skip", newVal.substr(0, skip || newVal.length)); //mark which text was acctually entered
+            specto_faker.setSearchSkipAttribute(srch_input[0], newVal.substr(0, skip || newVal.length)); //mark which text was acctually entered
         }
-        else srch_input[0].setAttribute("data-skip", newVal);
+        else specto_faker.setSearchSkipAttribute(srch_input[0], newVal);
     },
     filterBySearchInput: function(fakr_js, pressed_key_code){
         var fakr = $(fakr_js);
@@ -675,6 +675,7 @@ var specto_faker = {
                     if(pressed_key_code !== 8 && pressed_key_code !== 46) { //don't meddle with search input if deleting
                         specto_faker.searchInputSelectText(fakr, first_found.innerHTML, srch_val.length);
                     }
+                    else specto_faker.setSearchSkipAttribute(srch_input[0], srch_val);
                     specto_faker.triggerChangeEventsAndUpdateValue($(first_found), "noclick", {leave_search_alone: true});
                     specto_faker.ariaFilteredList(fakr, filtered_values, first_found.getAttribute("rel")); //make new aria list 
                 }, specto_faker.config.search_debouce);
@@ -689,6 +690,7 @@ var specto_faker = {
             }
         }
     },
+    setSearchSkipAttribute: function(search_input_js, val){ search_input_js.setAttribute("data-skip", newVal); },
     sortValues: function(fakr, ascending){
         
         var all = [];
