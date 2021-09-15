@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="generator" content="Bootply" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-	
+
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 	<link href="specto_faker.css" rel="stylesheet" type="text/css">
 
@@ -16,17 +16,17 @@
 	<style>
 		hr { border-width: thick; }
 	</style>
-	
+
 </head>
 
 <body>
-	<div class="container">   
-		
+	<div class="container">
+
 		<div class="row">
 			<div class="col-sm-6"><h3>WITH SELECT</h3></div>
 			<div class="col-sm-6"><h3>WITHOUT SELECT</h3></div>
 		</div>
-		
+
 		<!-- PLAIN -->
 		<div class="row">
 			<form>
@@ -41,7 +41,7 @@
 			</form>
 		</div>
 		<hr />
-		
+
 		<!-- ANIMATED -->
 		<div class="row">
 			<form>
@@ -56,7 +56,7 @@
 			</form>
 		</div>
 		<hr />
-		
+
 		<!-- CUSTOM CALLBACKS -->
 		<div class="row">
 			<form>
@@ -71,7 +71,7 @@
 			</form>
 		</div>
 		<hr />
-		
+
 		<!-- KEY EVENTS -->
 		<div class="row">
 			<form>
@@ -86,7 +86,7 @@
 			</form>
 		</div>
 		<hr />
-		
+
 		<!-- KEY EVENTS + ANIMATED -->
 		<div class="row">
 			<form>
@@ -101,7 +101,7 @@
 			</form>
 		</div>
 		<hr />
-		
+
 		<!-- SEARCHABLE -->
 		<div class="row">
 			<form>
@@ -116,7 +116,7 @@
 			</form>
 		</div>
 		<hr />
-		
+
 		<!-- SEARCHABLE WITHOUT AUTOSELECT -->
 		<div class="row">
 			<form>
@@ -131,7 +131,7 @@
 			</form>
 		</div>
 		<hr />
-		
+
 		<!-- NON_VISUAL SUPPORT -->
 		<div class="row">
 			<form>
@@ -146,7 +146,7 @@
 			</form>
 		</div>
 		<hr />
-		
+
 		<!-- NON_VISUAL SUPPORT WITH SEARCH -->
 		<div class="row">
 			<form>
@@ -161,8 +161,8 @@
 			</form>
 		</div>
 		<hr />
-		
-		
+
+
 		<!-- UPDATE VALUES AND GET VALUE BUTTONS -->
 		<div class="row text-center">
 			<form>
@@ -175,7 +175,7 @@
 					<div class="faker" noselect-faker id="btns2" name="btns2"></div>
 				</div>
 			</form>
-			
+
 			<div class="btn-group">
 				<button class="btn" id="upd">Update values</button>
 				<button class="btn" id="getVal">Get value</button>
@@ -183,22 +183,22 @@
 			</div>
 		</div>
 		<hr />
-		
-		
-		
+
+
+
 	</div>
-	
+
 	<script>
-		
+
 		$(document).ready(function(){
-			
+
 			//prevent all forms to be sent
 			$("form").each(function(){
 				$(this).submit(function(event){
 					event.preventDefault();
 				});
 			});
-			var countries = {BE:"Belize",CA:"Kanada",KZ:"Kazahstan",JM:"Jamajka",JP:"Japonska",IQ:"Iraq",LV:"Latvija",LT:"Litva",D:"Nemčija"};
+			var countries = {BE:"Belize",CA:"Kanada",KZ:"Kazahstan",JM:"Jamajka",JP:"Japonska",IQ:"Iraq",LV:"Latvija",LT:"Litva",D:"Nemčija",SL:"Slovenija",HR:"Hrvaška",IT:"Italija",BIH:"BIH",RS:"Srbija",RU:"Rusija"};
 			//fill default selects
 			$("select[default-values]").each(function(){
 				var self = this;
@@ -208,7 +208,7 @@
 			});
 			//fill default fakers with no select
 			$("div[noselect-faker]").each(function(){
-				
+
 				var self = this;
 				$(this).append("<div class='drop-value' rel=''><span></span></div>");
 				$(this).append("<div class='drop-handle'>&nbsp;</div>");
@@ -218,19 +218,19 @@
 					$(self).find(".drop-selection").append("<div class='drop-selection-item' rel='"+ ind +"'>"+ item +"</div>");
 				});
 			});
-			
-			
+
+
 			/* *** */
 			/* START OF SPECTO_FAKER INIT */
 			/* *** */
-			
-			
+
+
 			//PLAIN
 			specto_faker.init({object_selector: "#plain, #plain2", braille_support: false});
 			//ANIMATED
 			specto_faker.init({object_selector: "#plain_anim, #plain_anim2", animated: true, animation_speed: 1500, count_selected: true, count_disables: false, braille_support: false});
 			//CUSTOM CALLBACKS
-			specto_faker.init({object_selector: "#callback, #callback2", braille_support: false, before_change: function(newVal, jsEvent){ 
+			specto_faker.init({object_selector: "#callback, #callback2", braille_support: false, before_change: function(newVal, jsEvent){
 				return newVal == "IQ" ? false : true;
 			}, on_change: function(newVal, jsEvent){
 				console.log("new value: "+ newVal);
@@ -249,7 +249,7 @@
 			specto_faker.init({object_selector: "#nvda, #nvda2", }); //key events will be set automatically because braille_support = true
 			//NON_VISUAL SUPPORT WITH SEARCH + VALID
 			specto_faker.init({object_selector: "#nvdaSrch, #nvdaSrch2", searchable: true, is_required: true }); //key events will be set automatically
-			
+
 			//UPDATE VALUES AND GET VALUE BUTTONS
 			var fakr_setting = {key_events:true, searchable: true,};
 			var upd_fakers = $("#btns, #btns2").specto_faker(fakr_setting); //all faker elements are returned in array
@@ -269,8 +269,8 @@
 					console.log(specto_faker.getFakerUserValue(upd_faker));
 				});
 			});
-			
-			
+
+
 		});
 	</script>
 </body>
